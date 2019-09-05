@@ -1,56 +1,77 @@
 import re
 
 
-def parse():
+def parse_input():
     input_file = open("input.txt", "r")
 
     result = []
 
     for line in input_file:
         obj = {}
+        # we only accept blocks of info starting with [radix], this also ignores comments
+        if line.startswith("[radix]"):
+            # define local variables
+            x_original = None
+            y_original = None
+            m_original = None
 
-        if line.startswith("#"):
-            print("skip")
-            continue
-        elif line.startswith("[radix]"):
+            # parse radix and operation, which are always present
             radix = int(line.split()[1])
-            operation_original = input_file.readline()
-            x_original = input_file.readline()
-            y_original = input_file.readline()
+            operation = input_file.readline()[1:-2]
 
-            operation = re.findall(r'\[([^\[\]]*)\]', operation_original)[0]
-            x = x_original.split()[1]
-            y = y_original.split()[1]
+            # Parse rest
+            for current_line in input_file:
+                if current_line == '\n':
+                    break
 
-            answer = input_file.readline().split()[1]
+                key = current_line.split()[0][1:-1]
 
-            int_to_array(x, radix)
-            int_to_array(y, radix)
+                if key == 'x':
+                    x_original = current_line[:-1]
+                elif key == 'y':
+                    y_original = current_line[:-1]
+                elif key == 'm':
+                    m_original = current_line[:-1]
 
-            obj['operation_original'] = operation_original
-            obj['x_original'] = x_original
-            obj['y_original'] = y_original
-
+            # insert values into return object
             obj['radix'] = radix
             obj['operation'] = operation
-            obj['x'] = x
-            obj['y'] = y
+
+            if x_original:
+                x = x_original.split()[1]
+                x_array = int_to_array(x, radix)
+                obj['x_original'] = x_original
+                obj['x'] = x_array
+            if y_original:
+                y = y_original.split()[1]
+                y_array = int_to_array(y, radix)
+                obj['y_original'] = y_original
+                obj['y'] = y_array
+            if m_original:
+                m = m_original.split()[1]
+                m_array = int_to_array(m, radix)
+                obj['m_original'] = m_original
+                obj['m'] = m_array
 
             result.append(obj)
+        # if the block doesn't start with [radix], we keep going until we find a line that does.
         else:
-            print("nothing here")
+            continue
 
-        print(obj)
-
-
-# print(int('149bf28597ae40bbfdd09', 16))
+        print_output(obj)
 
 
 def print_output(sol):
     print('[radix]  {}'.format(sol['radix']))
-    print(sol['operation_original'])
-    print(sol['x_original'])
-    print(sol['y_original'])
+    print('[{}]'.format(sol['operation']))
+    if 'x_original' in sol:
+        print(sol['x_original'])
+    if 'y_original' in sol:
+        print(sol['y_original'])
+    if 'm_original' in sol:
+        print(sol['m_original'])
+
+    print()
 
 
 def int_to_array(s, radix):
@@ -58,9 +79,9 @@ def int_to_array(s, radix):
     for digit in s:
         result.append(int(digit, radix))
     result.reverse()
-    print(result)
+    return result
 
 
-parse()
+parse_input()
 
 # print_output({'radix': 2})
