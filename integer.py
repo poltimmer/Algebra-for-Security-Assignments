@@ -1,6 +1,3 @@
-import re
-
-
 def parse_input():
     input_file = open("input.txt", "r")
 
@@ -38,20 +35,17 @@ def parse_input():
             obj['operation'] = operation
 
             if x_original:
-                x = x_original.split()[1]
-                x_array = int_to_array(x, radix)
+                x = number_to_array(x_original.split()[1], radix)
                 obj['x_original'] = x_original
-                obj['x'] = x_array
+                obj['x'] = x
             if y_original:
-                y = y_original.split()[1]
-                y_array = int_to_array(y, radix)
+                y = number_to_array(y_original.split()[1], radix)
                 obj['y_original'] = y_original
-                obj['y'] = y_array
+                obj['y'] = y
             if m_original:
-                m = m_original.split()[1]
-                m_array = int_to_array(m, radix)
+                m = number_to_array(m_original.split()[1], radix)
                 obj['m_original'] = m_original
-                obj['m'] = m_array
+                obj['m'] = m
 
             result.append(obj)
         # if the block doesn't start with [radix], we keep going until we find a line that does.
@@ -70,18 +64,45 @@ def print_output(sol):
         print(sol['y_original'])
     if 'm_original' in sol:
         print(sol['m_original'])
-
+    if 'answer' in sol:
+        print('[answer] {}'.format(array_to_number(sol['answer'])))
+    # break line
     print()
 
 
-def int_to_array(s, radix):
+def number_to_array(n, radix):
     result = []
-    for digit in s:
+    for digit in n:
         result.append(int(digit, radix))
     result.reverse()
     return result
 
 
-parse_input()
+def array_to_number(a):  # doesn't need radix, as input array is array of ints that CAN be larger than 9
+    result = ''
+    a.reverse()
+    for digit in a:
+        result += dec_to_string(digit)
+    return result
 
-# print_output({'radix': 2})
+
+# takes a single digit, represented as an int (could be higher than 10) and returns it as a string character,
+# allowing up to base 16.
+def dec_to_string(n):
+    if n < 10:
+        return str(n)
+    elif n == 10:
+        return "a"
+    elif n == 11:
+        return "b"
+    elif n == 12:
+        return "c"
+    elif n == 13:
+        return "d"
+    elif n == 14:
+        return "e"
+    elif n == 15:
+        return "f"
+
+
+parse_input()
