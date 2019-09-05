@@ -70,6 +70,7 @@ def print_output(sol):
     print()
 
 
+# converts a string number of base [radix] to an array of integers, still of base [radix]
 def number_to_array(n, radix):
     result = []
     for digit in n:
@@ -78,7 +79,9 @@ def number_to_array(n, radix):
     return result
 
 
-def array_to_number(a):  # doesn't need radix, as input array is array of ints that CAN be larger than 9
+# does the opposite of number_to_array
+# doesn't need radix, as input array is an array of integers that can be larger than 9
+def array_to_number(a):
     result = ''
     a.reverse()
     for digit in a:
