@@ -114,6 +114,42 @@ def dec_to_string(n):
 parse_input()
 
 
+def addition(x, y, radix)
+    m = len(x)
+    n = len(y)
+    c = 0
+
+    for i in range(0, max(m, n) - 1):
+        x[i]+y[i]+c = z[i]
+        if z[i] >= radix:
+            z[i] = z[i] - radix
+            c = 1
+        else
+            c = 0
+    if c = 1:
+        k = max(m, n) + 1
+        z[k] = 1
+    else k = max(m, n)
+    
+return reversed(z[k])
+
+def substraction(x, y, radix)
+    c = 0
+
+    for i in range(0, len(x) - 1):
+        x[i]-y[i]-c = z[i]
+        if z[i] < 0:
+            z[i] = z[i] + radix
+            c = 1
+        else
+            c = 0
+    k = m
+    while k => 2 & z[k] = 0:
+        k = k-1
+        
+return reversed(z[k])
+
+
 # recursively returns the product of x and y, where x and y are arrays of numbers, to represent a number of base radix
 def karatsuba(x, y, radix):
     # base
