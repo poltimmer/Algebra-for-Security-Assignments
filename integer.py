@@ -1,3 +1,6 @@
+from math import ceil
+
+
 def parse_input():
     input_file = open("input.txt", "r")
 
@@ -109,3 +112,28 @@ def dec_to_string(n):
 
 
 parse_input()
+
+
+# recursively returns the product of x and y, where x and y are arrays of numbers, to represent a number of base radix
+def karatsuba(x, y, radix):
+    # base
+    if x < radix and y < radix:
+        # TODO: modify multiplication for list of numbers
+        return x * y
+
+    # SPLIT
+    n = ceil(max(x.length(), y.length()) / 2)
+    split = radix ** n
+
+    # splitting numbers is easy because we are dealing with lists of numbers
+    x_hi = x[n:]
+    x_lo = x[:n]
+    y_hi = y[n:]
+    y_lo = x[:n]
+
+    a = karatsuba(x_hi, y_hi, radix)
+    c = karatsuba(x_lo, y_lo, radix)
+    b = karatsuba(x_hi + x_lo, y_hi + y_lo, radix) - c - a  # TODO: modify addition and subtraction for list of numbers
+
+    # again, we are dealing with lists, so we don't need to multiply by any radix
+    return a + b + c
