@@ -122,7 +122,7 @@ def add(x, y, radix):
     z = []  # The return list
 
     for i in range(0, max(m, n)):
-        z.append(x[i] + y[i] + c)  # Add to end of list (z[i])
+        z.append(x[i] + y[i] + c)  # Add to end of list (z[i]) TODO: deal with different length lists
         if z[i] >= radix:
             z[i] = z[i] - radix
             c = 1
@@ -143,7 +143,7 @@ def subtract(x, y, radix):
     z = []  # The return list
 
     for i in range(0, m):
-        z.append(x[i] - y[i] - c)  # Add to end of list (z[i])
+        z.append(x[i] - y[i] - c)  # Add to end of list (z[i]) TODO: deal with different length lists
         if z[i] < 0:
             z[i] = z[i] + radix
             c = 1
