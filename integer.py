@@ -222,7 +222,7 @@ def mod_add(x, y, m):
     else:
         z = z - m
 
-    return (z "mod" m)
+    return z
 
 
 def mod_sub(x, y, m):
@@ -237,7 +237,7 @@ def mod_sub(x, y, m):
     else:
         z = z + m
 
-    return (z "mod" m)
+    return z
 
 
 def mod_mult(x, y, m):
@@ -250,7 +250,10 @@ def mod_mult(x, y, m):
     while z => m:
          z = z - m
 
-    return (z "mod" n)
+    return z
+
+def reduce(x, y, radix):
+    pass
 
 
 #
