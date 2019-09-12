@@ -209,6 +209,50 @@ def karatsuba(x, y, radix):
     return a + b + c
 
 
+def mod_add(x, y, m):
+
+    reduce(x, m, radix) #reduce x to modulo m
+    reduce(y, m, radix) #reduce y to modulo m
+
+
+    z = x + y
+
+    if z < m:
+        z = z
+    else:
+        z = z - m
+
+    return (z "mod" m)
+
+
+def mod_sub(x, y, m):
+
+    reduce(x, m, radix)
+    reduce(y, m, radix)
+
+    z = x - y
+
+    if z => 0:
+        z = z
+    else:
+        z = z + m
+
+    return (z "mod" m)
+
+
+def mod_mult(x, y, m):
+
+    reduce(x, m, radix)
+    reduce(y, m, radix)
+
+    z = x*y
+
+    while z => m:
+         z = z - m
+
+    return (z "mod" n)
+
+
 #
 # def euclid_gcd(x, y, radix):
 #     while is_greater_than(y, [0]):
