@@ -113,6 +113,13 @@ def dec_to_string(n):
 
 
 def add(x, y, radix):
+    # Sanitise input
+    while len(x) > len(y):
+        y.append(0)
+
+    while len(y) > len(x):
+        x.append(0)
+
     # Definitions
     m = len(x)
     n = len(y)
@@ -134,6 +141,22 @@ def add(x, y, radix):
 
 
 def subtract(x, y, radix):
+    # Sanitise input
+    invert_solution = False
+    # The algorithm requires x to be greater than y. If this is not the case, we swap x and y and invert the outcome,
+    # resulting in a correct solution
+    if is_greater_than(y, x):
+        invert_solution = True
+        temp = x
+        x = y
+        y = temp
+
+    while len(x) > len(y):
+        y.append(0)
+
+    while len(y) > len(x):
+        x.append(0)
+
     # Definitions
     m = len(x)
     n = len(y)
@@ -151,7 +174,11 @@ def subtract(x, y, radix):
     while z[-1] == 0:  # Remove leading zeroes
         z.pop()
 
-    return z
+    if invert_solution:
+        return invert(z)
+    else:
+        return z
+
 
 def mult(x, y, radix):
     m = len(x)
@@ -183,6 +210,17 @@ def karatsuba(x, y, radix):
         # TODO: modify multiplication for list of numbers
         return x * y
 
+    # Sanitise input
+    while len(x) > len(y):
+        y.append(0)
+
+    while len(y) > len(x):
+        x.append(0)
+
+    if len(x) % 2 == 1:
+        x.append(0)
+        y.append(0)
+
     # SPLIT
     n = ceil(max(x.length(), y.length()) / 2)
     split = radix ** n
@@ -199,6 +237,7 @@ def karatsuba(x, y, radix):
 
     # again, we are dealing with lists, so we don't need to multiply by any radix
     return a + b + c
+
 
 #
 # def euclid_gcd(x, y, radix):
