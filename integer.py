@@ -74,44 +74,6 @@ def print_output(sol):
     print()
 
 
-# converts a string number of base [radix] to an array of integers, still of base [radix]
-def number_to_array(n, radix):
-    result = []
-    for digit in n:
-        result.append(int(digit, radix))
-    result.reverse()
-    return result
-
-
-# does the opposite of number_to_array
-# doesn't need radix, as input array is an array of integers that can be larger than 9
-def array_to_number(a):
-    result = ''
-    a.reverse()
-    for digit in a:
-        result += dec_to_string(digit)
-    return result
-
-
-# takes a single digit, represented as an int (could be higher than 10) and returns it as a string character,
-# allowing up to base 16.
-def dec_to_string(n):
-    if n < 10:
-        return str(n)
-    elif n == 10:
-        return "a"
-    elif n == 11:
-        return "b"
-    elif n == 12:
-        return "c"
-    elif n == 13:
-        return "d"
-    elif n == 14:
-        return "e"
-    elif n == 15:
-        return "f"
-
-
 def add(x, y, radix):
     # Sanitise input
     while len(x) > len(y):
@@ -271,6 +233,44 @@ def invert(x):
     for number in x:
         result.append(-number)
     return result
+
+
+# converts a string number of base [radix] to an array of integers, still of base [radix]
+def number_to_array(n, radix):
+    result = []
+    for digit in n:
+        result.append(int(digit, radix))
+    result.reverse()
+    return result
+
+
+# does the opposite of number_to_array
+# doesn't need radix, as input array is an array of integers that can be larger than 9
+def array_to_number(a):
+    result = ''
+    a.reverse()
+    for digit in a:
+        result += dec_to_string(digit)
+    return result
+
+
+# takes a single digit, represented as an int (could be higher than 10) and returns it as a string character,
+# allowing up to base 16.
+def dec_to_string(n):
+    if n < 10:
+        return str(n)
+    elif n == 10:
+        return "a"
+    elif n == 11:
+        return "b"
+    elif n == 12:
+        return "c"
+    elif n == 13:
+        return "d"
+    elif n == 14:
+        return "e"
+    elif n == 15:
+        return "f"
 
 
 parse_input()
