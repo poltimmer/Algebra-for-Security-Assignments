@@ -111,9 +111,6 @@ def dec_to_string(n):
         return "f"
 
 
-parse_input()
-
-
 def add(x, y, radix):
     # Definitions
     m = len(x)
@@ -179,3 +176,6 @@ def karatsuba(x, y, radix):
 
     # again, we are dealing with lists, so we don't need to multiply by any radix
     return a + b + c
+
+if __name__ == "__main__":
+    parse_input()
