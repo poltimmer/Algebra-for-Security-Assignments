@@ -1,4 +1,5 @@
 from math import ceil
+from math import floor
 
 
 def parse_input():
@@ -151,6 +152,28 @@ def subtract(x, y, radix):
         z.pop()
 
     return z
+
+def mult(x, y, radix):
+    m = len(x)
+    n = len(y)
+    c = 0
+    k = 0
+    z = [0] * (m + n)
+
+    for i in range(0, m):
+        c = 0
+        for j in range(0, n):
+            t = z[i + j] + x[i] * y[j] + c
+            c = floor(t / radix)
+            z[i + j] = t - c * radix
+        z[i + n] = c
+
+    if z[m + n - 1] == 0:
+        k = m + n - 2
+    else:
+        k = m + n - 1
+
+    return z[:k + 1]
 
 
 # recursively returns the product of x and y, where x and y are arrays of numbers, to represent a number of base radix
