@@ -200,5 +200,38 @@ def karatsuba(x, y, radix):
     # again, we are dealing with lists, so we don't need to multiply by any radix
     return a + b + c
 
-if __name__ == "__main__":
-    parse_input()
+#
+# def euclid_gcd(x, y, radix):
+#     while is_greater_than(y, [0]):
+#         r = x
+#         while is_greater_than(r, y):
+#             r = subtract(r, y, radix)
+#     return True
+
+
+# Returns boolean whether x is greater than y, where x and y are numbers in list representation, with the digit of
+# lowest significance being first in the list.
+def is_greater_than(x, y):
+    for a, b in zip(reversed(x), reversed(y)):
+        if a > b:
+            return True
+        elif a < b:
+            return False
+    return False
+
+
+def is_equal(x, y):
+    for a, b in zip(x, y):
+        if a != b:
+            return False
+    return True
+
+
+def invert(x):
+    result = []
+    for number in x:
+        result.append(-number)
+    return result
+
+
+parse_input()
