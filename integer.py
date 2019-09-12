@@ -52,6 +52,10 @@ def parse_input():
                 obj['m'] = m
 
             result.append(obj)
+            print(obj)
+            solution = karatsuba(obj['x'], obj['y'], obj['radix'])
+            print('SOLUTION!!!!!!!!!!!!!!!!')
+            print(solution)
         # if the block doesn't start with [radix], we keep going until we find a line that does.
         else:
             continue
@@ -168,9 +172,9 @@ def mult(x, y, radix):
 # recursively returns the product of x and y, where x and y are arrays of numbers, to represent a number of base radix
 def karatsuba(x, y, radix):
     # base
-    if x < radix and y < radix:
+    if is_greater_than([radix], x) and is_greater_than([radix], y):
         # TODO: modify multiplication for list of numbers
-        return x * y
+        return mult(x, y, radix)
 
     # Sanitise input
     while len(x) > len(y):
@@ -184,7 +188,7 @@ def karatsuba(x, y, radix):
         y.append(0)
 
     # SPLIT
-    n = ceil(max(x.length(), y.length()) / 2)
+    n = ceil(max(len(x), len(y)) / 2)
     split = radix ** n
 
     # splitting numbers is easy because we are dealing with lists of numbers
@@ -195,7 +199,10 @@ def karatsuba(x, y, radix):
 
     a = karatsuba(x_hi, y_hi, radix)
     c = karatsuba(x_lo, y_lo, radix)
-    b = karatsuba(x_hi + x_lo, y_hi + y_lo, radix) - c - a  # TODO: modify addition and subtraction for list of numbers
+    x_hi_lo_sum = add(x_hi, x_lo, radix)
+    y_hi_lo_sum = add(y_hi, y_lo, radix)
+    # b = ((x_hi + x_lo) * (y_hi + y_lo)) - c - a
+    b = subtract(subtract(karatsuba(x_hi_lo_sum, y_hi_lo_sum, radix), c, radix), a, radix)
 
     # again, we are dealing with lists, so we don't need to multiply by any radix
     return a + b + c
