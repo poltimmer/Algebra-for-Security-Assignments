@@ -209,7 +209,7 @@ def karatsuba(x, y, radix):
     return a + b + c
 
 
-def mod_add(x, y, m):
+def mod_add(x, y, radix, m):
 
     reduce(x, m, radix) #reduce x to modulo m
     reduce(y, m, radix) #reduce y to modulo m
@@ -225,14 +225,14 @@ def mod_add(x, y, m):
     return z
 
 
-def mod_sub(x, y, m):
+def mod_sub(x, y, radix, m):
 
     reduce(x, m, radix)
     reduce(y, m, radix)
 
     z = x - y
 
-    if z => 0:
+    if z >= 0:
         z = z
     else:
         z = z + m
@@ -240,14 +240,14 @@ def mod_sub(x, y, m):
     return z
 
 
-def mod_mult(x, y, m):
+def mod_mult(x, y, radix, m):
 
     reduce(x, m, radix)
     reduce(y, m, radix)
 
     z = x*y
 
-    while z => m:
+    while z >= m:
          z = z - m
 
     return z
