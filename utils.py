@@ -1,6 +1,11 @@
 # Returns boolean whether x is greater than y, where x and y are numbers in list representation, with the digit of
 # lowest significance being first in the list.
 def is_greater_than(x, y):
+    while len(x) > len(y):
+        y.append(0)
+    while len(y) > len(x):
+        x.append(0)
+
     for a, b in zip(reversed(x), reversed(y)):
         if a > b:
             return True
