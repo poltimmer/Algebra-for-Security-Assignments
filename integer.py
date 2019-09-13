@@ -1,6 +1,7 @@
 from math import ceil
 from math import floor
 from utils import *
+from time import sleep
 
 
 def parse_input():
@@ -53,6 +54,7 @@ def parse_input():
                 y = number_to_array(y_original.split()[1], radix)
                 obj['y_original'] = y_original
                 obj['y'] = y
+                
             if m_original:
                 m = number_to_array(m_original.split()[1], radix)
                 obj['m_original'] = m_original
@@ -76,6 +78,7 @@ def choose_operation(obj):
     op = obj['operation']
     x = obj['x']
     y = obj['y']
+
     radix = obj['radix']
     if op == 'karatsuba':
         return karatsuba(x, y, radix)
@@ -85,6 +88,8 @@ def choose_operation(obj):
         return subtract(x, y, radix)
     elif op == 'multiply':
         return mult(x, y, radix)
+    elif op == 'euclid':
+        return euclid_gcd(x, y, radix)
     else:
         return [1]
 
@@ -166,8 +171,9 @@ def subtract(x, y, radix):
         else:
             c = 0
 
-    while z[-1] == 0:  # Remove leading zeroes
-        z.pop()
+    if is_greater_than(z, [0]):
+        while z[-1] == 0:  # Remove leading zeroes
+            z.pop()
 
     if invert_solution:
         return invert(z)
@@ -293,39 +299,58 @@ def reduce(x, y, radix):
 
     return q and r
 
+def test_func(x, y, radix):
+    counter = [0]
+    ytemp = y
+
+    while is_greater_than(x, ytemp):
+        counter = add(counter, [1], radix)
+        ytemp = add(ytemp, y, radix)
+
+        if is_equal(x, ytemp):
+            counter = add(counter, [1], radix)
+            return counter
+
+
+    return counter
 
 def euclid_gcd(x, y, radix):
-    # while is_greater_than(y, [0]):
-    #     r = x
-    #     while is_greater_than(r, y):
-    #         r = subtract(r, y, radix)
-    # return True
-    c = [0, 1, 0, 0]
-    d = [0, 0, 1, 0]
-    xp = abs(x)
-    yp = abs(y)
-    while yp > 0:
-        q = floor(xp/yp)
-        r = xp - q*yp
+    c = [[0], [1], [0], [0]]
+    d = [[0], [0], [1], [0]]
+    xp = x # TODO: Must both be the absolute value!
+    yp = y
+
+    while is_greater_than(yp, [0]):
+        q = test_func(xp, yp, radix)
+        r = subtract(xp, mult(q, yp, radix), radix)
+
         xp = yp
         yp = r
-        c[3] = c[1]-q*c[2]; d[3] = d[1]-q*d[2]
+
+        c[3] = subtract(c[1], mult(q, c[2], radix), radix)
+        d[3] = subtract(d[1], mult(q, d[2], radix), radix)
         c[1] = c[2]; d[1] = d[2]
         c[2] = c[3]; d[2] = d[3]
+
     gcd = xp
 
-    if x >= 0:
+    if is_greater_than(gcd, [0]):
+        while gcd[-1] == 0:  # Remove leading zeroes
+            gcd.pop()
+
+    if 1 >= 0: # TODO: Must be changed to x >= 0 once negatives work
         c = c[1] 
     else: 
         c = -1 * c[1]
 
-    if y >= 0:
+    if 1 >= 0: # TODO: Must be changed to y >= 0 once negatives work
         d = d[1] 
     else:
         d = -1 * d[1]
 
     print(gcd, c, d)
+    return gcd
 
 
-# euclid_gcd(63, 39, 10)
 parse_input()
+
