@@ -4,7 +4,11 @@ from utils import *
 
 
 def parse_input():
-    input_file = open("input.txt", "r")
+    try:
+        input_file = open("example.txt", "r")
+    except:
+        print("input file not found")
+        return
 
     result = []
 
@@ -34,6 +38,8 @@ def parse_input():
                     y_original = current_line[:-1]
                 elif key == 'm':
                     m_original = current_line[:-1]
+                elif key == 'answer':  # TODO: remove
+                    obj['answer_original'] = current_line[:-1]
 
             # insert values into return object
             obj['radix'] = radix
@@ -53,10 +59,12 @@ def parse_input():
                 obj['m'] = m
 
             result.append(obj)
-            print(obj)
-            solution = karatsuba(obj['x'], obj['y'], obj['radix'])
+            # print(obj)
+            # solution = karatsuba(obj['x'], obj['y'], obj['radix'])
+            solution = choose_operation(obj)
             print('SOLUTION!!!!!!!!!!!!!!!!')
             print(solution)
+            obj['answer'] = solution
         # if the block doesn't start with [radix], we keep going until we find a line that does.
         else:
             continue
@@ -64,7 +72,25 @@ def parse_input():
         print_output(obj)
 
 
+def choose_operation(obj):
+    op = obj['operation']
+    x = obj['x']
+    y = obj['y']
+    radix = obj['radix']
+    if op == 'karatsuba':
+        return karatsuba(x, y, radix)
+    elif op == 'add':
+        return add(x, y, radix)
+    elif op == 'subtract':
+        return subtract(x, y, radix)
+    elif op == 'multiply':
+        return mult(x, y, radix)
+    else:
+        return [1]
+
+
 def print_output(sol):
+    # print(sol)
     print('[radix]  {}'.format(sol['radix']))
     print('[{}]'.format(sol['operation']))
     if 'x_original' in sol:
@@ -75,6 +101,8 @@ def print_output(sol):
         print(sol['m_original'])
     if 'answer' in sol:
         print('[answer] {}'.format(array_to_number(sol['answer'])))
+    if 'answer_original' in sol:  # TODO: remove
+        print(sol['answer_original'] + ' original')
     # break line
     print()
 
@@ -210,10 +238,8 @@ def karatsuba(x, y, radix):
 
 
 def mod_add(x, y, radix, m):
-
-    reduce(x, m, radix) #reduce x to modulo m
-    reduce(y, m, radix) #reduce y to modulo m
-
+    reduce(x, m, radix)  # reduce x to modulo m
+    reduce(y, m, radix)  # reduce y to modulo m
 
     z = x + y
 
@@ -226,7 +252,6 @@ def mod_add(x, y, radix, m):
 
 
 def mod_sub(x, y, radix, m):
-
     reduce(x, m, radix)
     reduce(y, m, radix)
 
@@ -241,32 +266,19 @@ def mod_sub(x, y, radix, m):
 
 
 def mod_mult(x, y, radix, m):
-
     reduce(x, m, radix)
     reduce(y, m, radix)
 
-    z = x*y
+    z = x * y
 
     while z >= m:
-         z = z - m
+        z = z - m
 
     return z
 
+
 def reduce(x, y, radix):
-        m = len(x)
-        n = len(y)
-        x_array_number = x
-        r = x
-        k = m - n + 1
-        q = []
-        for l in range(0, k):
-            q.append(0)
-
-        for i in reversed(range(0, k - 1)):
-            q[i] = floor(int(array_to_number(x_array_number)) / int(array_to_number(radix ** i * y)))
-            r = subtract(r, mult([q[i] * radix ** i], y, radix), radix)
-
-        return q and r
+    pass
 
 
 def euclid_gcd(a, b, radix):

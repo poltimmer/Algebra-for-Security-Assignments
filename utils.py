@@ -27,6 +27,8 @@ def invert(x):
 def number_to_array(n, radix):
     result = []
     for digit in n:
+        if digit == '-':  # TODO: implement negative numbers
+            continue
         result.append(int(digit, radix))
     result.reverse()
     return result
