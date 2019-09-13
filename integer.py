@@ -269,12 +269,39 @@ def reduce(x, y, radix):
         return q and r
 
 
-#
-# def euclid_gcd(x, y, radix):
-#     while is_greater_than(y, [0]):
-#         r = x
-#         while is_greater_than(r, y):
-#             r = subtract(r, y, radix)
-#     return True
+def euclid_gcd(a, b, radix):
+    # while is_greater_than(y, [0]):
+    #     r = x
+    #     while is_greater_than(r, y):
+    #         r = subtract(r, y, radix)
+    # return True
+    x = [0, 1, 0, 0]
+    y = [0, 0, 1, 0]
+    ap = abs(a)
+    bp = abs(b)
+    while bp > 0:
+        q = floor(ap/bp)
+        r = ap - q*bp
+        ap = bp
+        bp = r
+        x[3] = x[1]-q*x[2]; y[3] = y[1]-q*y[2]
+        x[1] = x[2]; y[1] = y[2]
+        x[2] = x[3]; y[2] = y[3]
+    d = ap
+
+    if a >= 0:
+        x = x[1] 
+    else: 
+        x = -1 * x[1]
+
+    if b >= 0:
+        y = y[1] 
+    else:
+        y = -1 * y[1]
+
+    print(d)
+
+
+
 
 parse_input()
