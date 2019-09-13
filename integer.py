@@ -1,14 +1,19 @@
-from math import ceil
-from math import floor
-from utils import *
+from math import ceil, floor
 from time import sleep
+
+from utils import (array_to_number, invert, is_equal, is_greater_than,
+                   number_to_array)
+
+INPUTFILE = "example.txt"
 
 
 def parse_input():
     try:
-        input_file = open("example.txt", "r")
+        input_file = open(INPUTFILE, "r")
     except:
-        print("input file not found")
+        print(
+            "Input file {} not found in current dirctory. Make sure the file is in the same directory!"
+        ).format(INPUTFILE)
         return
 
     result = []
@@ -54,7 +59,7 @@ def parse_input():
                 y = number_to_array(y_original.split()[1], radix)
                 obj['y_original'] = y_original
                 obj['y'] = y
-                
+
             if m_original:
                 m = number_to_array(m_original.split()[1], radix)
                 obj['m_original'] = m_original
@@ -95,7 +100,6 @@ def choose_operation(obj):
 
 
 def print_output(sol):
-    # print(sol)
     print('[radix]  {}'.format(sol['radix']))
     print('[{}]'.format(sol['operation']))
     if 'x_original' in sol:
@@ -127,7 +131,9 @@ def add(x, y, radix):
     z = []  # The return list
 
     for i in range(0, max(m, n)):
-        z.append(x[i] + y[i] + c)  # Add to end of list (z[i]) TODO: deal with different length lists
+        z.append(
+            x[i] + y[i] + c
+        )  # Add to end of list (z[i]) TODO: deal with different length lists
         if z[i] >= radix:
             z[i] = z[i] - radix
             c = 1
@@ -164,7 +170,9 @@ def subtract(x, y, radix):
     z = []  # The return list
 
     for i in range(0, m):
-        z.append(x[i] - y[i] - c)  # Add to end of list (z[i]) TODO: deal with different length lists
+        z.append(
+            x[i] - y[i] - c
+        )  # Add to end of list (z[i]) TODO: deal with different length lists
         if z[i] < 0:
             z[i] = z[i] + radix
             c = 1
@@ -224,7 +232,7 @@ def karatsuba(x, y, radix):
 
     # SPLIT
     n = ceil(max(len(x), len(y)) / 2)
-    split = radix ** n
+    split = radix**n
 
     # splitting numbers is easy because we are dealing with lists of numbers
     x_hi = x[n:]
@@ -237,7 +245,9 @@ def karatsuba(x, y, radix):
     x_hi_lo_sum = add(x_hi, x_lo, radix)
     y_hi_lo_sum = add(y_hi, y_lo, radix)
     # b = ((x_hi + x_lo) * (y_hi + y_lo)) - c - a
-    b = subtract(subtract(karatsuba(x_hi_lo_sum, y_hi_lo_sum, radix), c, radix), a, radix)
+    b = subtract(
+        subtract(karatsuba(x_hi_lo_sum, y_hi_lo_sum, radix), c, radix), a,
+        radix)
 
     # again, we are dealing with lists, so we don't need to multiply by any radix
     return a + b + c
@@ -294,12 +304,15 @@ def reduce(x, y, radix):
         q.append(0)
 
     for i in reversed(range(0, k - 1)):
-        q[i] = floor(int(array_to_number(x_array_number)) / int(array_to_number(radix ** i * y)))
-        r = subtract(r, mult([q[i] * radix ** i], y, radix), radix)
+        q[i] = floor(
+            int(array_to_number(x_array_number)) /
+            int(array_to_number(radix**i * y)))
+        r = subtract(r, mult([q[i] * radix**i], y, radix), radix)
 
     return q and r
 
-def test_func(x, y, radix):
+
+def divide(x, y, radix):
     counter = [0]
     ytemp = y
 
@@ -311,17 +324,17 @@ def test_func(x, y, radix):
             counter = add(counter, [1], radix)
             return counter
 
-
     return counter
+
 
 def euclid_gcd(x, y, radix):
     c = [[0], [1], [0], [0]]
     d = [[0], [0], [1], [0]]
-    xp = x # TODO: Must both be the absolute value!
+    xp = x  # TODO: Must both be the absolute value!
     yp = y
 
     while is_greater_than(yp, [0]):
-        q = test_func(xp, yp, radix)
+        q = divide(xp, yp, radix)
         r = subtract(xp, mult(q, yp, radix), radix)
 
         xp = yp
@@ -329,8 +342,10 @@ def euclid_gcd(x, y, radix):
 
         c[3] = subtract(c[1], mult(q, c[2], radix), radix)
         d[3] = subtract(d[1], mult(q, d[2], radix), radix)
-        c[1] = c[2]; d[1] = d[2]
-        c[2] = c[3]; d[2] = d[3]
+        c[1] = c[2]
+        d[1] = d[2]
+        c[2] = c[3]
+        d[2] = d[3]
 
     gcd = xp
 
@@ -338,13 +353,13 @@ def euclid_gcd(x, y, radix):
         while gcd[-1] == 0:  # Remove leading zeroes
             gcd.pop()
 
-    if 1 >= 0: # TODO: Must be changed to x >= 0 once negatives work
-        c = c[1] 
-    else: 
+    if 1 >= 0:  # TODO: Must be changed to x >= 0 once negatives work
+        c = c[1]
+    else:
         c = -1 * c[1]
 
-    if 1 >= 0: # TODO: Must be changed to y >= 0 once negatives work
-        d = d[1] 
+    if 1 >= 0:  # TODO: Must be changed to y >= 0 once negatives work
+        d = d[1]
     else:
         d = -1 * d[1]
 
@@ -352,5 +367,5 @@ def euclid_gcd(x, y, radix):
     return gcd
 
 
-parse_input()
-
+if __name__ == "__main__":
+    parse_input()
