@@ -5,6 +5,7 @@ from utils import (array_to_number, invert, is_equal, is_greater_than,
                    number_to_array)
 
 INPUTFILE = "example.txt"
+OUTPUTFILE = "output.txt"
 
 
 def parse_input():
@@ -16,8 +17,6 @@ def parse_input():
         ).format(INPUTFILE)
         return
 
-    result = []
-
     for line in input_file:
         obj = {}
         # we only accept blocks of info starting with [radix], this also ignores comments
@@ -28,8 +27,8 @@ def parse_input():
             m_original = None
 
             # parse radix and operation, which are always present
-            radix = int(line.split()[1])
-            operation = input_file.readline()[1:-2]
+            obj['radix'] = int(line.split()[1])
+            obj['operation'] = input_file.readline()[1:-2]
 
             # Parse rest
             for current_line in input_file:
@@ -47,31 +46,22 @@ def parse_input():
                 elif key == 'answer':  # TODO: remove
                     obj['answer_original'] = current_line[:-1]
 
-            # insert values into return object
-            obj['radix'] = radix
-            obj['operation'] = operation
-
             if x_original:
-                x = number_to_array(x_original.split()[1], radix)
+                x = number_to_array(x_original.split()[1], obj['radix'])
                 obj['x_original'] = x_original
                 obj['x'] = x
             if y_original:
-                y = number_to_array(y_original.split()[1], radix)
+                y = number_to_array(y_original.split()[1], obj['radix'])
                 obj['y_original'] = y_original
                 obj['y'] = y
 
             if m_original:
-                m = number_to_array(m_original.split()[1], radix)
+                m = number_to_array(m_original.split()[1], obj['radix'])
                 obj['m_original'] = m_original
                 obj['m'] = m
 
-            result.append(obj)
-            # print(obj)
-            # solution = karatsuba(obj['x'], obj['y'], obj['radix'])
-            solution = choose_operation(obj)
+            obj = choose_operation(obj)
             print('SOLUTION!!!!!!!!!!!!!!!!')
-            print(solution)
-            obj['answer'] = solution
         # if the block doesn't start with [radix], we keep going until we find a line that does.
         else:
             continue
@@ -86,17 +76,19 @@ def choose_operation(obj):
 
     radix = obj['radix']
     if op == 'karatsuba':
-        return karatsuba(x, y, radix)
+        obj['answer'] = karatsuba(x, y, radix)
     elif op == 'add':
-        return add(x, y, radix)
+        obj['answer'] = add(x, y, radix)
     elif op == 'subtract':
-        return subtract(x, y, radix)
+        obj['answer'] = subtract(x, y, radix)
     elif op == 'multiply':
-        return mult(x, y, radix)
+        obj['answer'] = mult(x, y, radix)
     elif op == 'euclid':
-        return euclid_gcd(x, y, radix)
+        obj['answ-d'], obj['answ-a'], obj['answ-b'] = euclid_gcd(x, y, radix)
     else:
-        return [1]
+        obj['answer'] = [1]
+
+    return obj
 
 
 def print_output(sol):
@@ -108,8 +100,17 @@ def print_output(sol):
         print(sol['y_original'])
     if 'm_original' in sol:
         print(sol['m_original'])
-    if 'answer' in sol:
-        print('[answer] {}'.format(array_to_number(sol['answer'])))
+
+    if sol['operation'] != 'euclid':
+        if 'answer' in sol:
+            print('[answer] {}'.format(array_to_number(sol['answer'])))
+    else:
+        if 'answ-d' in sol:
+            print('[answ-d] {}'.format(array_to_number(sol['answ-d'])))
+        if 'answ-a' in sol:
+            print('[answ-a] {}'.format(array_to_number(sol['answ-a'])))
+        if 'answ-b' in sol:
+            print('[answ-b] {}'.format(array_to_number(sol['answ-b'])))
     if 'answer_original' in sol:  # TODO: remove
         print(sol['answer_original'] + ' original')
     # break line
@@ -364,7 +365,7 @@ def euclid_gcd(x, y, radix):
         d = -1 * d[1]
 
     print(gcd, c, d)
-    return gcd
+    return gcd, c, d
 
 
 if __name__ == "__main__":
