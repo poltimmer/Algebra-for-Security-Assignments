@@ -70,9 +70,9 @@ def parse_input():
 
 
 def choose_operation(obj):
-    op = obj['operation']
-    x = obj['x']
-    y = obj['y']
+    op = obj.get('operation')
+    x = obj.get('x')
+    y = obj.get('y')
 
     radix = obj['radix']
     if op == 'karatsuba':
@@ -314,6 +314,10 @@ def reduce(x, y, radix):
 
 
 def divide(x, y, radix):
+    '''
+    Custom division method that counts the amount of additions before the denominator exceeds the numerator.
+    Returns floor(x/y)
+    '''
     counter = [0]
     ytemp = y
 
@@ -364,7 +368,6 @@ def euclid_gcd(x, y, radix):
     else:
         d = -1 * d[1]
 
-    print(gcd, c, d)
     return gcd, c, d
 
 
