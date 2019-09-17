@@ -7,14 +7,20 @@ from utils import (array_to_number, invert, is_equal, is_greater_than,
 INPUTFILE = "example.txt"
 OUTPUTFILE = "output.txt"
 
+x_neg = False
+y_neg = False
+
 
 def parse_input():
+    global x_neg
+    global y_neg
+
     try:
         input_file = open(INPUTFILE, "r")
     except:
         print(
             "Input file {} not found in current dirctory. Make sure the file is in the same directory!"
-        ).format(INPUTFILE)
+            .format(INPUTFILE))
         return
 
     for line in input_file:
@@ -50,10 +56,15 @@ def parse_input():
                 x = number_to_array(x_original.split()[1], obj['radix'])
                 obj['x_original'] = x_original
                 obj['x'] = x
+                if '-' in x_original:
+                    x_neg = True
+
             if y_original:
                 y = number_to_array(y_original.split()[1], obj['radix'])
                 obj['y_original'] = y_original
                 obj['y'] = y
+                if '-' in y_original:
+                    y_neg = True
 
             if m_original:
                 m = number_to_array(m_original.split()[1], obj['radix'])
@@ -126,12 +137,10 @@ def add(x, y, radix):
         x.append(0)
 
     # Definitions
-    m = len(x)
-    n = len(y)
     c = 0
     z = []  # The return list
 
-    for i in range(0, max(m, n)):
+    for i in range(0, len(x)):
         z.append(
             x[i] + y[i] + c
         )  # Add to end of list (z[i]) TODO: deal with different length lists
@@ -165,12 +174,10 @@ def subtract(x, y, radix):
         x.append(0)
 
     # Definitions
-    m = len(x)
-    n = len(y)
     c = 0
     z = []  # The return list
 
-    for i in range(0, m):
+    for i in range(0, len(x)):
         z.append(
             x[i] - y[i] - c
         )  # Add to end of list (z[i]) TODO: deal with different length lists
@@ -191,6 +198,11 @@ def subtract(x, y, radix):
 
 
 def mult(x, y, radix):
+    invert_outcome = False
+
+    if x_neg != y_neg:
+        invert_outcome = True
+
     m = len(x)
     n = len(y)
     c = 0
@@ -210,7 +222,10 @@ def mult(x, y, radix):
     else:
         k = m + n - 1
 
-    return z[:k + 1]
+    z = z[:k + 1]
+    if invert_outcome:
+        return invert(z)
+    return z
 
 
 # recursively returns the product of x and y, where x and y are arrays of numbers, to represent a number of base radix
@@ -250,8 +265,13 @@ def karatsuba(x, y, radix):
         subtract(karatsuba(x_hi_lo_sum, y_hi_lo_sum, radix), c, radix), a,
         radix)
 
+    z = a + b + c
+    return z
+    if is_greater_than(z, [0]):
+        while z[-1] == 0:  # Remove leading zeroes
+            z.pop()
     # again, we are dealing with lists, so we don't need to multiply by any radix
-    return a + b + c
+    return z
 
 
 def mod_add(x, y, radix, m):

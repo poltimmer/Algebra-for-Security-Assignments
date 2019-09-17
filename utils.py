@@ -36,6 +36,7 @@ def number_to_array(n, radix):
             continue
         result.append(int(digit, radix))
     result.reverse()
+
     return result
 
 
@@ -44,6 +45,9 @@ def number_to_array(n, radix):
 def array_to_number(a):
     result = ''
     a.reverse()
+    if a[0] < 0:
+        result += '-'
+
     for digit in a:
         result += dec_to_string(digit)
     return result
@@ -52,6 +56,7 @@ def array_to_number(a):
 # takes a single digit, represented as an int (could be higher than 10) and returns it as a string character,
 # allowing up to base 16.
 def dec_to_string(n):
+    n = abs(n)
     if n < 10:
         return str(n)
     elif n == 10:
