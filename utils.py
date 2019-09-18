@@ -30,12 +30,17 @@ def invert(x):
 
 # converts a string number of base [radix] to an array of integers, still of base [radix]
 def number_to_array(n, radix):
+    invert_outcome = False
     result = []
     for digit in n:
         if digit == '-':  # TODO: implement negative numbers
+            invert_outcome = True
             continue
         result.append(int(digit, radix))
     result.reverse()
+
+    if invert_outcome:
+        return invert(result)
 
     return result
 
@@ -71,3 +76,5 @@ def dec_to_string(n):
         return "e"
     elif n == 15:
         return "f"
+    else:
+        return 'E'

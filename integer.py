@@ -27,6 +27,8 @@ def parse_input():
         obj = {}
         # we only accept blocks of info starting with [radix], this also ignores comments
         if line.startswith("[radix]"):
+            x_neg = False
+            y_neg = False
             # define local variables
             x_original = None
             y_original = None
@@ -199,9 +201,14 @@ def subtract(x, y, radix):
 
 def mult(x, y, radix):
     invert_outcome = False
-
     if x_neg != y_neg:
         invert_outcome = True
+
+    if x[0] < 0:
+        x = invert(x)
+
+    if y[0] < 0:
+        y = invert(y)
 
     m = len(x)
     n = len(y)
@@ -224,7 +231,7 @@ def mult(x, y, radix):
 
     z = z[:k + 1]
     if invert_outcome:
-        return invert(z)
+        z = invert(z)
     return z
 
 
@@ -365,8 +372,10 @@ def euclid_gcd(x, y, radix):
         xp = yp
         yp = r
 
-        c[3] = subtract(c[1], mult(q, c[2], radix), radix)
-        d[3] = subtract(d[1], mult(q, d[2], radix), radix)
+        t1 = mult(q, c[2], radix)
+        t2 = mult(q, d[2], radix)
+        c[3] = subtract(c[1], t1, radix)
+        d[3] = subtract(d[1], t2, radix)
         c[1] = c[2]
         d[1] = d[2]
         c[2] = c[3]
