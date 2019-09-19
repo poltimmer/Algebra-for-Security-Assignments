@@ -4,7 +4,7 @@ from time import sleep
 from utils import (array_to_number, invert, is_equal, is_greater_than,
                    is_negative, number_to_array)
 
-INPUTFILE = "test.txt"
+INPUTFILE = "example.txt"
 OUTPUTFILE = "output.txt"
 
 x_neg = False
@@ -131,23 +131,6 @@ def print_output(sol):
 
 
 def add(x, y, radix):
-    invert_outcome = False
-    # If both x and y are negative, then invert, calculate and invert
-    if is_negative(x) and is_negative(y):
-        x = invert(x)
-        y = invert(y)
-        invert_outcome = True
-
-    if is_negative(x) and not is_negative(y):
-        x = invert(x)
-        z = subtract(x, y, radix)
-        return invert(z)
-
-    if not is_negative(x) and is_negative(y):
-        y = invert(y)
-        z = subtract(y, x, radix)
-        return invert(z)
-
     # Sanitise input
     while len(x) > len(y):
         y.append(0)
@@ -163,7 +146,7 @@ def add(x, y, radix):
         z.append(
             x[i] + y[i] + c
         )  # Add to end of list (z[i]) TODO: deal with different length lists
-        if z[i] >= radix or z[i] <= -radix:
+        if z[i] >= radix:
             z[i] = z[i] - radix
             c = 1
         else:
@@ -172,26 +155,12 @@ def add(x, y, radix):
     if c == 1:  # Add final carry
         z.append(1)
 
-    if invert_outcome:
-        z = invert(z)
-
     return z
 
 
 def subtract(x, y, radix):
     # Sanitise input
     invert_solution = False
-
-    if is_negative(x) and not is_negative(y):
-        x = invert(x)
-        z = add(x, y, radix)
-        return invert(z)
-
-    if not is_negative(x) and is_negative(y):
-        y = invert(y)
-        z = add(x, y, radix)
-        return z
-
     # The algorithm requires x to be greater than y. If this is not the case, we swap x and y and invert the outcome,
     # resulting in a correct solution
     if is_greater_than(y, x):
@@ -356,12 +325,17 @@ def reduce(x, y, radix):
     n = len(y)
     r = x
     k = m - n + 1
+    q = []
+    for l in range(0, k):
+        q.append(0)
 
     for i in reversed(range(0, k - 1)):
-        while is_greater_than(r, y):
-            r = subtract(r, y, radix)
+        q[i] = floor(
+            int(array_to_number(r)) /
+            int(array_to_number(radix**i * y)))
+        r = subtract(r, mult([q[i] * radix**i], y, radix), radix)
 
-    return r
+    return q and r
 
 
 def divide(x, y, radix):
