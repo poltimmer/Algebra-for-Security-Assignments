@@ -4,7 +4,11 @@ from time import sleep
 from utils import (array_to_number, invert, is_equal, is_greater_than,
                    is_negative, number_to_array)
 
+<<<<<<< Updated upstream
 INPUTFILE = "test1.txt"
+=======
+INPUTFILE = "test.txt"
+>>>>>>> Stashed changes
 OUTPUTFILE = "output.txt"
 
 x_neg = False
@@ -178,7 +182,6 @@ def add(x, y, radix):
     if invert_outcome:
         z = invert(z)
 
-
     return z
 
 
@@ -288,6 +291,8 @@ def karatsuba(x, y, radix):
     # base
     if is_greater_than([radix], x) and is_greater_than([radix], y):
         # TODO: modify multiplication for list of numbers
+        if invert_outcome:
+            return invert(mult(x, y, radix))
         return mult(x, y, radix)
 
     # Sanitise input
