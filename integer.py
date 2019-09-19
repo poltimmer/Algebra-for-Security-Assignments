@@ -4,11 +4,7 @@ from time import sleep
 from utils import (array_to_number, invert, is_equal, is_greater_than,
                    is_negative, number_to_array)
 
-<<<<<<< Updated upstream
-INPUTFILE = "test1.txt"
-=======
 INPUTFILE = "test.txt"
->>>>>>> Stashed changes
 OUTPUTFILE = "output.txt"
 
 x_neg = False
