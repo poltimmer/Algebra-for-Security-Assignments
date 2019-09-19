@@ -356,16 +356,12 @@ def reduce(x, y, radix):
     n = len(y)
     r = x
     k = m - n + 1
-    q = []
-    for l in range(0, k):
-        q.append(0)
 
     for i in reversed(range(0, k - 1)):
-        q[i] = floor(
-            int(array_to_number(r)) / int(array_to_number(radix**i * y)))
-        r = subtract(r, mult([q[i] * radix**i], y, radix), radix)
+        while is_greater_than(r, y):
+            r = subtract(r, y, radix)
 
-    return q and r
+    return r
 
 
 def divide(x, y, radix):
