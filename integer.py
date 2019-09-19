@@ -273,7 +273,6 @@ def karatsuba(x, y, radix):
         radix)
 
     z = a + b + c
-    return z
     if is_greater_than(z, [0]):
         while z[-1] == 0:  # Remove leading zeroes
             z.pop()

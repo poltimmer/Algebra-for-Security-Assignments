@@ -78,3 +78,7 @@ def dec_to_string(n):
         return "f"
     else:
         return 'E'
+
+
+def is_negative(x):
+    return is_greater_than([0], x)
