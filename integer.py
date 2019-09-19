@@ -375,12 +375,12 @@ def reduce(x, m, radix):
     if is_negative(m):
         m = invert(m)
 
-    if is_negative(x) and not is_negative(m):
+    if is_negative(x):
         r = [0]
         while is_greater_than(r, x):
             r = subtract(r, m, radix)
         r = subtract(x, r, radix)
-    elif not is_negative(x) and not is_negative(m):
+    else:
         r = x
         while is_greater_than(r, m):
             r = subtract(r, m, radix)
