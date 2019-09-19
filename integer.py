@@ -131,6 +131,23 @@ def print_output(sol):
 
 
 def add(x, y, radix):
+    invert_outcome = False
+    # If both x and y are negative, then invert, calculate and invert
+    if is_negative(x) and is_negative(y):
+        x = invert(x)
+        y = invert(y)
+        invert_outcome = True
+
+    if is_negative(x) and not is_negative(y):
+        x = invert(x)
+        z = subtract(x, y, radix)
+        return invert(z)
+
+    if not is_negative(x) and is_negative(y):
+        y = invert(y)
+        z = subtract(y, x, radix)
+        return invert(z)
+
     # Sanitise input
     while len(x) > len(y):
         y.append(0)
@@ -155,12 +172,27 @@ def add(x, y, radix):
     if c == 1:  # Add final carry
         z.append(1)
 
+    if invert_outcome:
+        z = invert(z)
+
+
     return z
 
 
 def subtract(x, y, radix):
     # Sanitise input
     invert_solution = False
+
+    if is_negative(x) and not is_negative(y):
+        x = invert(x)
+        z = add(x, y, radix)
+        return invert(z)
+
+    if not is_negative(x) and is_negative(y):
+        y = invert(y)
+        z = add(x, y, radix)
+        return z
+
     # The algorithm requires x to be greater than y. If this is not the case, we swap x and y and invert the outcome,
     # resulting in a correct solution
     if is_greater_than(y, x):
