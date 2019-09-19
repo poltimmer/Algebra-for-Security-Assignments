@@ -4,7 +4,7 @@ from time import sleep
 from utils import (array_to_number, invert, is_equal, is_greater_than,
                    is_negative, number_to_array)
 
-INPUTFILE = "example.txt"
+INPUTFILE = "test1.txt"
 OUTPUTFILE = "output.txt"
 
 x_neg = False
@@ -98,7 +98,7 @@ def choose_operation(obj):
     elif op == 'multiply':
         obj['answer'] = mult(x, y, radix)
     elif op == 'reduce':
-        obj['answer'] = reduce(x, y, radix)
+        obj['answer'] = reduce(x, m, radix)
     elif op == 'euclid':
         obj['answ-d'], obj['answ-a'], obj['answ-b'] = euclid_gcd(x, y, radix)
     else:
@@ -371,6 +371,9 @@ def mod_mult(x, y, radix, m):
 
 
 def reduce(x, m, radix):
+    if is_negative(m):
+        m = invert(m)
+
     if is_negative(x) and not is_negative(m):
         r = [0]
         while is_greater_than(r, x):
