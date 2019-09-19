@@ -96,6 +96,8 @@ def choose_operation(obj):
         obj['answer'] = subtract(x, y, radix)
     elif op == 'multiply':
         obj['answer'] = mult(x, y, radix)
+    elif op == 'reduce':
+        obj['answer'] = reduce(x, y, radix)
     elif op == 'euclid':
         obj['answ-d'], obj['answ-a'], obj['answ-b'] = euclid_gcd(x, y, radix)
     else:
@@ -370,21 +372,16 @@ def mod_mult(x, y, radix, m):
 
 
 def reduce(x, y, radix):
-    m = len(x)
-    n = len(y)
     r = x
-    k = m - n + 1
-    q = []
-    for l in range(0, k):
-        q.append(0)
 
-    for i in reversed(range(0, k - 1)):
-        q[i] = floor(
-            int(array_to_number(r)) /
-            int(array_to_number(radix**i * y)))
-        r = subtract(r, mult([q[i] * radix**i], y, radix), radix)
+    while is_greater_than(r, y):
+        r = subtract(r, y, radix)
 
-    return q and r
+    if is_greater_than(r, [0]):
+        while r[-1] == 0:  # Remove leading zeroes
+            r.pop()
+
+    return r
 
 
 def divide(x, y, radix):

@@ -46,6 +46,34 @@
 [y]      -67890
 [answer] 55545
 
+#
+
+[radix]  10
+[subtract]
+[x]      67890
+[y]      12345
+[answer] 55545
+
+[radix]  10
+[subtract]
+[x]      67890
+[y]      -12345
+[answer] 80235
+
+[radix]  10
+[subtract]
+[x]      -67890
+[y]      12345
+[answer] -80235
+
+[radix]  10
+[subtract]
+[x]      -67890
+[y]      -12345
+[answer] -55545
+
+#
+
 [radix]  10
 [multiply]
 [x]      12345
