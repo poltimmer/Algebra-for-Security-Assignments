@@ -4,7 +4,7 @@ from time import sleep
 from utils import (array_to_number, invert, is_equal, is_greater_than,
                    is_negative, number_to_array)
 
-INPUTFILE = "example.txt"
+INPUTFILE = "test.txt"
 OUTPUTFILE = "output.txt"
 
 x_neg = False
@@ -181,6 +181,17 @@ def add(x, y, radix):
 def subtract(x, y, radix):
     # Sanitise input
     invert_solution = False
+
+    if is_negative(x) and not is_negative(y):
+        x = invert(x)
+        z = add(x, y, radix)
+        return invert(z)
+
+    if not is_negative(x) and is_negative(y):
+        y = invert(y)
+        z = add(x, y, radix)
+        return z
+
     # The algorithm requires x to be greater than y. If this is not the case, we swap x and y and invert the outcome,
     # resulting in a correct solution
     if is_greater_than(y, x):
