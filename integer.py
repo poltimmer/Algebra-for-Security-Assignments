@@ -223,9 +223,8 @@ def subtract(x, y, radix):
         else:
             c = 0
 
-    if is_greater_than(z, [0]):
-        while z[-1] == 0:  # Remove leading zeroes
-            z.pop()
+    while z[-1] == 0 and len(z) > 1:  # Remove leading zeroes
+        z.pop()
 
     if invert_solution:
         return invert(z)
@@ -321,9 +320,8 @@ def karatsuba(x, y, radix):
         radix)
 
     z = a + b + c
-    if is_greater_than(z, [0]):
-        while z[-1] == 0:  # Remove leading zeroes
-            z.pop()
+    while z[-1] == 0 and len(z) > 1:  # Remove leading zeroes
+        z.pop()
     # again, we are dealing with lists, so we don't need to multiply by any radix
     if invert_outcome:
         return invert(z)
@@ -377,9 +375,8 @@ def reduce(x, y, radix):
     while is_greater_than(r, y):
         r = subtract(r, y, radix)
 
-    if is_greater_than(r, [0]):
-        while r[-1] == 0:  # Remove leading zeroes
-            r.pop()
+    while r[-1] == 0 and len(r) > 1:  # Remove leading zeroes
+        r.pop()
 
     return r
 
@@ -427,9 +424,8 @@ def euclid_gcd(x, y, radix):
 
     gcd = xp
 
-    if is_greater_than(gcd, [0]):
-        while gcd[-1] == 0:  # Remove leading zeroes
-            gcd.pop()
+    while gcd[-1] == 0 and len(gcd) > 1:  # Remove leading zeroes
+        gcd.pop()
 
     if 1 >= 0:  # TODO: Must be changed to x >= 0 once negatives work
         c = c[1]
