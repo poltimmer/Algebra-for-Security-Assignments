@@ -86,6 +86,7 @@ def choose_operation(obj):
     op = obj.get('operation')
     x = obj.get('x')
     y = obj.get('y')
+    m = obj.get('m')
 
     radix = obj['radix']
     if op == 'karatsuba':
@@ -369,14 +370,20 @@ def mod_mult(x, y, radix, m):
     return z
 
 
-def reduce(x, y, radix):
-    r = x
+def reduce(x, m, radix):
+    if is_negative(x) and not is_negative(m):
+        r = [0]
+        while is_greater_than(r, x):
+            r = subtract(r, m, radix)
+        r = subtract(x, r, radix)
+    elif not is_negative(x) and not is_negative(m):
+        r = x
+        while is_greater_than(r, m):
+            r = subtract(r, m, radix)
 
-    while is_greater_than(r, y):
-        r = subtract(r, y, radix)
-
-    while r[-1] == 0 and len(r) > 1:  # Remove leading zeroes
-        r.pop()
+    if is_greater_than(r, [0]):
+        while r[-1] == 0:  # Remove leading zeroes
+            r.pop()
 
     return r
 
