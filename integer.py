@@ -233,14 +233,16 @@ def subtract(x, y, radix):
 
 def mult(x, y, radix):
     invert_outcome = False
-    if x_neg != y_neg:
-        invert_outcome = True
-
-    if x[0] < 0:
+    if is_negative(x) and is_negative(y):
         x = invert(x)
-
-    if y[0] < 0:
         y = invert(y)
+        invert_outcome = False
+    elif is_negative(x):
+        x = invert(x)
+        invert_outcome = True
+    elif is_negative(y):
+        y = invert(y)
+        invert_outcome = True
 
     m = len(x)
     n = len(y)
@@ -269,6 +271,18 @@ def mult(x, y, radix):
 
 # recursively returns the product of x and y, where x and y are arrays of numbers, to represent a number of base radix
 def karatsuba(x, y, radix):
+    invert_outcome = False
+    if is_negative(x) and is_negative(y):
+        x = invert(x)
+        y = invert(y)
+        invert_outcome = False
+    elif is_negative(x):
+        x = invert(x)
+        invert_outcome = True
+    elif is_negative(y):
+        y = invert(y)
+        invert_outcome = True
+
     # base
     if is_greater_than([radix], x) and is_greater_than([radix], y):
         # TODO: modify multiplication for list of numbers
@@ -309,7 +323,10 @@ def karatsuba(x, y, radix):
         while z[-1] == 0:  # Remove leading zeroes
             z.pop()
     # again, we are dealing with lists, so we don't need to multiply by any radix
-    return z
+    if invert_outcome:
+        return invert(z)
+    else:
+        return z
 
 
 def mod_add(x, y, radix, m):
