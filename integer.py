@@ -324,7 +324,6 @@ def mod_mult(x, y, radix, m):
 def reduce(x, y, radix):
     m = len(x)
     n = len(y)
-    x_array_number = x
     r = x
     k = m - n + 1
     q = []
@@ -333,7 +332,7 @@ def reduce(x, y, radix):
 
     for i in reversed(range(0, k - 1)):
         q[i] = floor(
-            int(array_to_number(x_array_number)) /
+            int(array_to_number(r)) /
             int(array_to_number(radix**i * y)))
         r = subtract(r, mult([q[i] * radix**i], y, radix), radix)
 
