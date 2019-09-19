@@ -2,7 +2,7 @@ from math import ceil, floor
 from time import sleep
 
 from utils import (array_to_number, invert, is_equal, is_greater_than,
-                   number_to_array)
+                   is_negative, number_to_array)
 
 INPUTFILE = "example.txt"
 OUTPUTFILE = "output.txt"
@@ -131,6 +131,23 @@ def print_output(sol):
 
 
 def add(x, y, radix):
+    invert_outcome = False
+    # If both x and y are negative, then invert, calculate and invert
+    if is_negative(x) and is_negative(y):
+        x = invert(x)
+        y = invert(y)
+        invert_outcome = True
+
+    if is_negative(x) and not is_negative(y):
+        x = invert(x)
+        z = subtract(x, y, radix)
+        return invert(z)
+
+    if not is_negative(x) and is_negative(y):
+        y = invert(y)
+        z = subtract(y, x, radix)
+        return invert(z)
+
     # Sanitise input
     while len(x) > len(y):
         y.append(0)
@@ -146,7 +163,7 @@ def add(x, y, radix):
         z.append(
             x[i] + y[i] + c
         )  # Add to end of list (z[i]) TODO: deal with different length lists
-        if z[i] >= radix:
+        if z[i] >= radix or z[i] <= -radix:
             z[i] = z[i] - radix
             c = 1
         else:
@@ -154,6 +171,9 @@ def add(x, y, radix):
 
     if c == 1:  # Add final carry
         z.append(1)
+
+    if invert_outcome:
+        z = invert(z)
 
     return z
 
@@ -331,8 +351,7 @@ def reduce(x, y, radix):
 
     for i in reversed(range(0, k - 1)):
         q[i] = floor(
-            int(array_to_number(r)) /
-            int(array_to_number(radix**i * y)))
+            int(array_to_number(r)) / int(array_to_number(radix**i * y)))
         r = subtract(r, mult([q[i] * radix**i], y, radix), radix)
 
     return q and r
