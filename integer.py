@@ -4,22 +4,16 @@ from time import sleep
 from utils import (array_to_number, invert, is_equal, is_greater_than,
                    is_negative, number_to_array)
 
-INPUTFILE = "test.txt"
+INPUTFILE = "example.txt"
 OUTPUTFILE = "output.txt"
-
-x_neg = False
-y_neg = False
 
 
 def parse_input():
-    global x_neg
-    global y_neg
-
     try:
         input_file = open(INPUTFILE, "r")
     except:
         print(
-            "Input file {} not found in current dirctory. Make sure the file is in the same directory!"
+            "Input file {} not found in current directory. Make sure the file is in the same directory!"
             .format(INPUTFILE))
         return
 
@@ -27,8 +21,6 @@ def parse_input():
         obj = {}
         # we only accept blocks of info starting with [radix], this also ignores comments
         if line.startswith("[radix]"):
-            x_neg = False
-            y_neg = False
             # define local variables
             x_original = None
             y_original = None
@@ -58,15 +50,11 @@ def parse_input():
                 x = number_to_array(x_original.split()[1], obj['radix'])
                 obj['x_original'] = x_original
                 obj['x'] = x
-                if '-' in x_original:
-                    x_neg = True
 
             if y_original:
                 y = number_to_array(y_original.split()[1], obj['radix'])
                 obj['y_original'] = y_original
                 obj['y'] = y
-                if '-' in y_original:
-                    y_neg = True
 
             if m_original:
                 m = number_to_array(m_original.split()[1], obj['radix'])
@@ -135,7 +123,11 @@ def print_output(sol):
     print()
 
 
-def add(x, y, radix):
+def add(x_remote, y_remote, radix):
+    # Copy local lists so we don't modify input parameters
+    x = x_remote.copy()
+    y = y_remote.copy()
+
     invert_outcome = False
     # If both x and y are negative, then invert, calculate and invert
     if is_negative(x) and is_negative(y):
@@ -183,15 +175,24 @@ def add(x, y, radix):
     return z
 
 
-def subtract(x, y, radix):
+# Returns x - y
+def subtract(x_remote, y_remote, radix):
+    # Copy local lists so we don't modify input parameters
+    x = x_remote.copy()
+    y = y_remote.copy()
+
     # Sanitise input
     invert_solution = False
 
+    # If we try to subtract a positive number from a negative number, it is the same as
+    # adding the positive of those two numbers and returning the negative result.
     if is_negative(x) and not is_negative(y):
         x = invert(x)
         z = add(x, y, radix)
         return invert(z)
 
+    # If we try to subtract a negative number from a positive number, it is the same as
+    # adding the positive of those two numbers and returning the positive result.
     if not is_negative(x) and is_negative(y):
         y = invert(y)
         z = add(x, y, radix)
@@ -234,7 +235,11 @@ def subtract(x, y, radix):
         return z
 
 
-def mult(x, y, radix):
+def mult(x_remote, y_remote, radix):
+    # Copy local lists so we don't modify input parameters
+    x = x_remote.copy()
+    y = y_remote.copy()
+    # Convert input to be positive, to fit the algorithm
     invert_outcome = False
     if is_negative(x) and is_negative(y):
         x = invert(x)
@@ -273,7 +278,16 @@ def mult(x, y, radix):
 
 
 # recursively returns the product of x and y, where x and y are arrays of numbers, to represent a number of base radix
-def karatsuba(x, y, radix):
+def karatsuba(x_remote, y_remote, radix):
+    # Copy local lists so we don't modify input parameters
+    x = x_remote.copy()
+    y = y_remote.copy()
+
+    while x[-1] == 0 and len(x) > 1:  # Remove leading zeroes
+        x.pop()
+    while y[-1] == 0 and len(y) > 1:
+        y.pop()
+
     invert_outcome = False
     if is_negative(x) and is_negative(y):
         x = invert(x)
@@ -286,14 +300,13 @@ def karatsuba(x, y, radix):
         y = invert(y)
         invert_outcome = True
 
-    # base
-    if is_greater_than([radix], x) and is_greater_than([radix], y):
-        # TODO: modify multiplication for list of numbers
+    # Base case to break recursion
+    if len(x) == 1 and len(y) == 1:
         if invert_outcome:
             return invert(mult(x, y, radix))
         return mult(x, y, radix)
 
-    # Sanitise input
+    # Equalize number length
     while len(x) > len(y):
         y.append(0)
 
@@ -306,13 +319,12 @@ def karatsuba(x, y, radix):
 
     # SPLIT
     n = ceil(max(len(x), len(y)) / 2)
-    split = radix**n
 
     # splitting numbers is easy because we are dealing with lists of numbers
     x_hi = x[n:]
     x_lo = x[:n]
     y_hi = y[n:]
-    y_lo = x[:n]
+    y_lo = y[:n]
 
     a = karatsuba(x_hi, y_hi, radix)
     c = karatsuba(x_lo, y_lo, radix)
@@ -323,10 +335,13 @@ def karatsuba(x, y, radix):
         subtract(karatsuba(x_hi_lo_sum, y_hi_lo_sum, radix), c, radix), a,
         radix)
 
-    z = a + b + c
+    # We get the result by adding a, b, and c, shifted accordingly.
+    z = add(add(([0] * 2 * n) + a, ([0] * n) + b, radix), c, radix)
+
+    # Transform output
     while z[-1] == 0 and len(z) > 1:  # Remove leading zeroes
         z.pop()
-    # again, we are dealing with lists, so we don't need to multiply by any radix
+    # Invert if necessary
     if invert_outcome:
         return invert(z)
     else:
@@ -373,32 +388,55 @@ def mod_mult(x, y, radix, m):
     return z
 
 
+# def reduce(x, m, radix):
+#     # Modular reduction with negative m is the same as with positive m
+#     if is_negative(m):
+#         m = invert(m)
+#
+#
+#     if is_negative(x):
+#         r = [0]
+#         while is_greater_than(r, x):
+#             r = subtract(r, m, radix)
+#         r = subtract(x, r, radix)
+#     else:
+#         r = x
+#         while is_greater_than(r, m):
+#             r = subtract(r, m, radix)
+#
+#     if is_greater_than(r, [0]):
+#         while r[-1] == 0:  # Remove leading zeroes
+#             r.pop()
+#
+#     return r
+
+
 def reduce(x, m, radix):
+    # Modular reduction with negative m is the same as with positive m
     if is_negative(m):
         m = invert(m)
 
-    if is_negative(x):
-        r = [0]
-        while is_greater_than(r, x):
-            r = subtract(r, m, radix)
-        r = subtract(x, r, radix)
-    else:
-        r = x
-        while is_greater_than(r, m):
-            r = subtract(r, m, radix)
+    # We start off with r = x. We then add or subtract m until we have 0 <= r < m
+    r = x
+    # While r < 0, r = r + m
+    while is_negative(r):
+        r = add(r, m, radix)
 
-    if is_greater_than(r, [0]):
-        while r[-1] == 0:  # Remove leading zeroes
-            r.pop()
+    # While r => m, r = r - m
+    while not is_greater_than(m, r):
+        r = subtract(r, m, radix)
+
+    while r[-1] == 0 and len(r) > 1:  # Remove leading zeroes
+        r.pop()
 
     return r
 
 
 def divide(x, y, radix):
-    '''
+    """
     Custom division method that counts the amount of additions before the denominator exceeds the numerator.
     Returns floor(x/y)
-    '''
+    """
     counter = [0]
     ytemp = y
 

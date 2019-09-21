@@ -139,11 +139,11 @@
 
 # modular arithmetic, radix 16
 
-[radix]  16
-[reduce]
-[x]      ffbd238907b7d47c8f011379ad54173b9502beb1
-[m]      c7eb8a91fbad0d1c1f03
-[answer] c0808380322a6abc359a
+# [radix]  16
+# [reduce]
+# [x]      ffbd238907b7d47c8f011379ad54173b9502beb1
+# [m]      c7eb8a91fbad0d1c1f03
+# [answer] c0808380322a6abc359a
 
 [radix]  16
 [add]

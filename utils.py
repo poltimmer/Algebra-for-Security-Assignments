@@ -4,10 +4,10 @@ def is_greater_than(x, y):
     x_local = x.copy()
     y_local = y.copy()
 
-    # while len(x_local) > len(y_local):
-    #     y_local.append(0)
-    # while len(y_local) > len(x_local):
-    #     x_local.append(0)
+    while len(x_local) > len(y_local):
+        y_local.append(0)
+    while len(y_local) > len(x_local):
+        x_local.append(0)
 
     for a, b in zip(reversed(x_local), reversed(y_local)):
         if a > b:
@@ -36,7 +36,7 @@ def number_to_array(n, radix):
     invert_outcome = False
     result = []
     for digit in n:
-        if digit == '-':  # TODO: implement negative numbers
+        if digit == '-':
             invert_outcome = True
             continue
         result.append(int(digit, radix))
