@@ -474,30 +474,6 @@ def divide(x_remote, y_remote, radix):
     return z
 
 
-# def inverse(x, m, radix):
-#     inv_x = x
-#     inv_m = m
-#     c = [[0], [1], [0], [0]]
-#
-#     while is_greater_than(inv_m, [0]):
-#         q = divide(inv_x, inv_m, radix)
-#         r = subtract(inv_x, mult(q, inv_m, radix), radix)
-#
-#         inv_x = inv_m
-#         inv_m = r
-#
-#         t1 = mult(q, c[2], radix)
-#         c[3] = subtract(c[1], t1, radix)
-#         c[1] = c[2]
-#         c[2] = c[3]
-#
-#     if inv_x == 1:
-#         inverse_x = c[1]
-#         return inverse_x
-#     else:
-#         return "Inverse does not exist"
-
-
 # Modular inversion, follows algorithm 2.11
 def inverse(a_remote, m_remote, radix):
     # Copy local lists so we don't modify input parameters
