@@ -591,7 +591,7 @@ def inc_add(amount=1):
 
 
 def inc_mult(amount=1):
-    # Increment Global Multiplication Counter
+    # Increment Global Multiplication/Division Counter
     global COUNT_MULT
     COUNT_MULT += amount
 
