@@ -172,14 +172,6 @@
 [y]      -5
 [answer] -6
 
-[radix]  16
-[euclid]
-[x]      5896363941d32eccd5c
-[y]      c7eb8a91fbad0d1c1f03
-[answ-d] 1
-[answ-a] 96998fcd4268440ce6a5
-[answ-b] -42bb80ba0313b9aff19
-
 [radix]  10
 [divide]
 [x]      67890
@@ -269,3 +261,35 @@
 [x]      b99ab2815ee4b4a5f842
 [m]      c7eb8a91fbad0d1c1f03
 [answer] inverse does not exist
+
+[radix]  16
+[euclid]
+[x]      5896363941d32eccd5c
+[y]      c7eb8a91fbad0d1c1f03
+[answ-d] 1
+[answ-a] 96998fcd4268440ce6a5
+[answ-b] -42bb80ba0313b9aff19
+
+[radix]  16
+[euclid]
+[x]      5896363941d32eccd5c
+[y]      c7eb8a91fbad0d1c1f03
+[answ-d] 1
+[answ-a] 96998fcd4268440ce6a5
+[answ-b] -42bb80ba0313b9aff19
+
+[radix]  10
+[euclid]
+[x]      345688
+[y]      245994
+[answ-d] 14
+[answ-a] 4592
+[answ-b] -6453
+
+[radix]  10
+[euclid]
+[x]      328
+[y]      288
+[answ-d] 8
+[answ-a] -7
+[answ-b] 8

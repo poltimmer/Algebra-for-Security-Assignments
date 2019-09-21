@@ -499,44 +499,58 @@ def inverse(a_remote, m_remote, radix):
         return [0]
 
 
-def euclid_gcd(x, y, radix):
-    c = [[0], [1], [0], [0]]
-    d = [[0], [0], [1], [0]]
-    xp = x  # TODO: Must both be the absolute value!
-    yp = y
+def euclid_gcd(a, b, radix):
+    x = [[0], [1], [0], [0]]
+    y = [[0], [0], [1], [0]]
 
-    while is_greater_than(yp, [0]):
-        q = divide(xp, yp, radix)
-        r = subtract(xp, mult(q, yp, radix), radix)
+    # if is_greater_than(y, x):
+    #     temp = x
+    #     x = y
+    #     y = temp
 
-        xp = yp
-        yp = r
+    ap = a
+    bp = b
 
-        t1 = mult(q, c[2], radix)
-        t2 = mult(q, d[2], radix)
-        c[3] = subtract(c[1], t1, radix)
-        d[3] = subtract(d[1], t2, radix)
-        c[1] = c[2]
-        d[1] = d[2]
-        c[2] = c[3]
-        d[2] = d[3]
+    if is_negative(a):
+        ap = invert(a)
 
-    gcd = xp
+    if is_negative(b):
+        bp = invert(b)
 
-    while gcd[-1] == 0 and len(gcd) > 1:  # Remove leading zeroes
-        gcd.pop()
+    while is_greater_than(bp, [0]):
+        q = divide(ap, bp, radix)
+        r = subtract(ap, karatsuba(q, bp, radix), radix)
 
-    if 1 >= 0:  # TODO: Must be changed to x >= 0 once negatives work
-        c = c[1]
+        ap = bp
+        bp = r
+
+        t1 = karatsuba(q, x[2], radix)
+        t2 = karatsuba(q, y[2], radix)
+        x[3] = subtract(x[1], t1, radix)
+        y[3] = subtract(y[1], t2, radix)
+        x[1] = x[2]
+        y[1] = y[2]
+        x[2] = x[3]
+        y[2] = y[3]
+
+    d = ap
+
+    while d[-1] == 0 and len(d) > 1:  # Remove leading zeroes
+        d.pop()
+
+    if is_greater_than(
+            a, [0]):  # TODO: Must be changed to x >= 0 once negatives work
+        x = x[1]
     else:
-        c = -1 * c[1]
+        x = invert(x[1])
 
-    if 1 >= 0:  # TODO: Must be changed to y >= 0 once negatives work
-        d = d[1]
+    if is_greater_than(
+            b, [0]):  # TODO: Must be changed to y >= 0 once negatives work
+        y = y[1]
     else:
-        d = -1 * d[1]
+        y = invert(y[1])
 
-    return gcd, c, d
+    return d, x, y
 
 
 def increment_operation(amount=1):
