@@ -116,7 +116,7 @@ def attach_answer(obj):
         elif op == 'multiply':
             obj['answer'] = mult(x, y, radix)
         elif op == 'euclid':
-            obj['answ-d'], obj['answ-a'], obj['answ-b'] = euclid_gcd(
+            obj['answ-d'], obj['answ-a'], obj['answ-b'] = euclid(
                 x, y, radix)
         elif op == 'divide':
             obj['answer'] = divide(x, y, radix)
@@ -524,56 +524,44 @@ def inverse(a_remote, m_remote, radix):
         return [-1]
 
 
-def euclid_gcd(a, b, radix):
-    x = [[0], [1], [0], [0]]
-    y = [[0], [0], [1], [0]]
-
-    # if is_greater_than(y, x):
-    #     temp = x
-    #     x = y
-    #     y = temp
-
-    ap = a
-    bp = b
+# Extended Euclidean Algorithm, follows algorithm 2.2
+def euclid(a_remote, b_remote, radix):
+    # Copy local lists so we don't modify input parameters
+    a = a_remote.copy()
+    b = b_remote.copy()
 
     if is_negative(a):
-        ap = invert(a)
-
+        a = invert(a)
     if is_negative(b):
-        bp = invert(b)
+        b = invert(b)
 
-    while is_greater_than(bp, [0]):
-        q = divide(ap, bp, radix)
-        r = subtract(ap, karatsuba(q, bp, radix), radix)
+    x_1 = [1]
+    x_2 = [0]
+    y_1 = [0]
+    y_2 = [1]
 
-        ap = bp
-        bp = r
+    while is_greater_than(b, [0]):
+        q = divide(a, b, radix)
+        r = subtract(a, karatsuba(q, b, radix), radix)
+        a = b
+        b = r
+        x_3 = subtract(x_1, karatsuba(q, x_2, radix), radix)
+        y_3 = subtract(y_1, karatsuba(q, y_2, radix), radix)
+        x_1 = x_2
+        y_1 = y_2
+        x_2 = x_3
+        y_2 = y_3
+    d = a
 
-        t1 = karatsuba(q, x[2], radix)
-        t2 = karatsuba(q, y[2], radix)
-        x[3] = subtract(x[1], t1, radix)
-        y[3] = subtract(y[1], t2, radix)
-        x[1] = x[2]
-        y[1] = y[2]
-        x[2] = x[3]
-        y[2] = y[3]
-
-    d = ap
-
-    while d[-1] == 0 and len(d) > 1:  # Remove leading zeroes
-        d.pop()
-
-    if is_greater_than(
-            a, [0]):  # TODO: Must be changed to x >= 0 once negatives work
-        x = x[1]
+    if is_negative(a_remote):
+        x = invert(x_1)
     else:
-        x = invert(x[1])
+        x = x_1
 
-    if is_greater_than(
-            b, [0]):  # TODO: Must be changed to y >= 0 once negatives work
-        y = y[1]
+    if is_negative(b_remote):
+        y = invert(y_1)
     else:
-        y = invert(y[1])
+        y = y_1
 
     return d, x, y
 

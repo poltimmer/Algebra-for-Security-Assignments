@@ -178,85 +178,85 @@
 [m]      c7eb8a91fbad0d1c1f03
 [answer] 9c1b2bab5c0ca148e260
 
-[radix]  10
+#[radix]  10
 [subtract]
 [x]      -11
 [y]      -5
 [answer] -6
 
-[radix]  10
+#[radix]  10
 [divide]
 [x]      67890
 [y]      12345
 [answer] 5
 
-[radix]  10
+#[radix]  10
 [divide]
 [x]      67890
 [y]      -12345
 [answer] -5
 
-[radix]  10
+#[radix]  10
 [divide]
 [x]      -67890
 [y]      12345
 [answer] -5
 
-[radix]  10
+#[radix]  10
 [divide]
 [x]      -67890
 [y]      -12345
 [answer] 5
 
-[radix]  10
+#[radix]  10
 [divide]
 [x]      12345
 [y]      67890
 [answer] 0
 
-[radix]  10
+#[radix]  10
 [divide]
 [x]      12345
 [y]      -67890
 [answer] 0
 
-[radix]  10
+#[radix]  10
 [divide]
 [x]      -12345
 [y]      6789012345
 [answer] 0
 
-[radix]  10
+#[radix]  10
 [divide]
 [x]      -12345
 [y]      -67890
 [answer] 0
 
-[radix]  10
+#[radix]  10
 [divide]
 [x]      -234
 [y]      3
 [answer] -78
 
-[radix]  10
+#[radix]  10
 [divide]
 [x]      234
 [y]      3
 [answer] 78
 
-[radix]  10
+#[radix]  10
 [divide]
 [x]      0
 [y]      125
 [answer] 0
 
-[radix]  10
+#[radix]  10
 [divide]
 [x]      125
 [y]      5
 [answer] 25
 
-[radix]  10
+#[radix]  10
 [divide]
 [x]      137
 [y]      3
@@ -292,6 +292,14 @@
 
 [radix]  10
 [euclid]
+[x]      26146198083132013202780
+[y]      944095899986950667116291
+[answ-d] 1
+[answ-a] 711187686285057578559141
+[answ-b] -19695937796309127986969
+
+[radix]  10
+[euclid]
 [x]      345688
 [y]      245994
 [answ-d] 14
@@ -305,3 +313,19 @@
 [answ-d] 8
 [answ-a] -7
 [answ-b] 8
+
+[radix]  10
+[euclid]
+[x]      20398475098
+[y]      1502349572359873
+[answ-d] 1
+[answ-a] 531521195806474
+[answ-b] -7216843587
+
+[radix]  16
+[euclid]
+[x]      4BFD8075A
+[y]      556610496C6C1
+[answ-d] 1
+[answ-a] 1E36A6C110F0A
+[answ-b] -1AE284B43
