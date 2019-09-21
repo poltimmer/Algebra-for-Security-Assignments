@@ -422,7 +422,7 @@ def reduce(x_remote, m, radix):
             x = subtract(x, ([0] * i) + m, radix)
 
     if invert_outcome:
-        return invert(x)
+        return subtract(m, x, radix)
     else:
         return x
 
