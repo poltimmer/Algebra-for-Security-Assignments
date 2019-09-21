@@ -3,17 +3,24 @@ from math import ceil, floor
 from utils import (array_to_number, invert, is_equal, is_greater_than,
                    is_negative, number_to_array)
 
-INPUTFILE = "example.txt"
+# Define Constants
+INPUTFILE = "input.txt"
 OUTPUTFILE = "output.txt"
 
+# Define Globals
 COUNT_ADD = 0
 COUNT_MULT = 0
 
 
 def main():
+    # Initialize globals for editing
     global COUNT_ADD
     global COUNT_MULT
+
+    # Get Calculations from INPUTFILE
     objects = parse_input()
+
+    # Do the Calculation
     for obj in objects:
         COUNT_ADD = 0
         COUNT_MULT = 0
@@ -32,6 +39,7 @@ def parse_input():
         # Read input file
         input_file = open(INPUTFILE, "r")
 
+    # If no INPUTFILE is found in the same directory, show error
     except:
         print(
             "Input file {} not found in current directory. Make sure the file is in the same directory!"
@@ -106,6 +114,8 @@ def attach_answer(obj):
             obj['answer'] = reduce(x, m, radix)
         elif op == 'inverse':
             obj['answer'] = inverse(x, m, radix)
+        else:
+            obj['answer'] = [-1]
     else:
         # Regular arithmetic
         if op == 'karatsuba':
@@ -117,26 +127,27 @@ def attach_answer(obj):
         elif op == 'multiply':
             obj['answer'] = mult(x, y, radix)
         elif op == 'euclid':
-            obj['answ-d'], obj['answ-a'], obj['answ-b'] = euclid(
-                x, y, radix)
-        elif op == 'divide':
-            obj['answer'] = divide(x, y, radix)
+            obj['answ-d'], obj['answ-a'], obj['answ-b'] = euclid(x, y, radix)
         else:
-            obj['answer'] = [1]
+            obj['answer'] = [-1]
 
     return obj
 
 
+# Print the same to the console as to the output file
 def print_both(text, output):
     output.write(text + '\n')
     print(text)
 
 
 def print_output(obj):
+    # Open OUTPUTFILE in Append mode to add new objects every time
     output_file = open(OUTPUTFILE, 'a')
-    # export_to_file(obj)
+
+    # Print Results to both OUTPUTFILE as well as Terminal
     print_both('[radix]  {}'.format(obj['radix']), output_file)
     print_both('[{}]'.format(obj['operation']), output_file)
+
     if 'x_original' in obj:
         print_both(obj['x_original'], output_file)
     if 'y_original' in obj:
@@ -158,10 +169,11 @@ def print_output(obj):
         if 'answ-b' in obj:
             print_both('[answ-b] {}'.format(array_to_number(obj['answ-b'])),
                        output_file)
-    # print operations done
+
+    # Print operations done
     print_both('[count-add] {}'.format(COUNT_ADD), output_file)
     print_both('[count-mul] {}'.format(COUNT_MULT), output_file)
-    # break line
+    # Break line
     print_both('', output_file)
 
     output_file.close()
@@ -215,7 +227,7 @@ def add(x_remote, y_remote, radix):
         z.append(1)
 
     if invert_outcome:
-        z = invert(z)
+        return invert(z)
 
     return z
 
@@ -262,9 +274,7 @@ def subtract(x_remote, y_remote, radix):
     z = []  # The return list
 
     for i in range(0, len(x)):
-        z.append(
-            x[i] - y[i] - c
-        )  # Add to end of list (z[i])
+        z.append(x[i] - y[i] - c)  # Add to end of list (z[i])
         inc_add(2)
         if z[i] < 0:
             z[i] = z[i] + radix
@@ -278,8 +288,8 @@ def subtract(x_remote, y_remote, radix):
 
     if invert_solution:
         return invert(z)
-    else:
-        return z
+
+    return z
 
 
 def mult(x_remote, y_remote, radix):
@@ -323,7 +333,8 @@ def mult(x_remote, y_remote, radix):
 
     z = z[:k + 1]
     if invert_outcome:
-        z = invert(z)
+        return invert(z)
+
     return z
 
 
@@ -391,17 +402,19 @@ def karatsuba(x_remote, y_remote, radix):
     # Transform output
     while z[-1] == 0 and len(z) > 1:  # Remove leading zeroes
         z.pop()
+
     # Invert if necessary
     if invert_outcome:
         return invert(z)
-    else:
-        return z
+
+    return z
 
 
 def mod_add(x_remote, y_remote, radix, m):
     # Copy local lists so we don't modify input parameters
     x = x_remote.copy()
     y = y_remote.copy()
+
     # The algorithm assumes input in reduced form
     reduce(x, m, radix)
     reduce(y, m, radix)
@@ -418,6 +431,7 @@ def mod_sub(x_remote, y_remote, radix, m):
     # Copy local lists so we don't modify input parameters
     x = x_remote.copy()
     y = y_remote.copy()
+
     # The algorithm assumes input in reduced form
     reduce(x, m, radix)
     reduce(y, m, radix)
@@ -434,6 +448,7 @@ def mod_mult(x_remote, y_remote, radix, m):
     # Copy local lists so we don't modify input parameters
     x = x_remote.copy()
     y = y_remote.copy()
+
     # The algorithm assumes input in reduced form
     reduce(x, m, radix)
     reduce(y, m, radix)
@@ -464,8 +479,8 @@ def reduce(x_remote, m, radix):
 
     if invert_outcome:
         return subtract(m, x, radix)
-    else:
-        return x
+
+    return x
 
 
 # Division method that returns floor(x/y) using long division
@@ -523,8 +538,8 @@ def inverse(a_remote, m_remote, radix):
 
     if is_equal(a, [1]):
         return reduce(x_1, m_remote, radix)
-    else:
-        return [-1]
+
+    return [-1]
 
 
 # Extended Euclidean Algorithm, follows algorithm 2.2
@@ -570,11 +585,13 @@ def euclid(a_remote, b_remote, radix):
 
 
 def inc_add(amount=1):
+    # Increment Global Addition/Subtraction Counter
     global COUNT_ADD
     COUNT_ADD += amount
 
 
 def inc_mult(amount=1):
+    # Increment Global Multiplication Counter
     global COUNT_MULT
     COUNT_MULT += amount
 
