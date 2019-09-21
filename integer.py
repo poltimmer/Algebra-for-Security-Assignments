@@ -1,4 +1,5 @@
 from math import ceil, floor
+
 from utils import (array_to_number, invert, is_equal, is_greater_than,
                    is_negative, number_to_array)
 
@@ -21,7 +22,13 @@ def parse_input():
     result = []
 
     try:
+        # Remove any output content still located in the folder
+        output_file = open(OUTPUTFILE, 'w')
+        output_file.close()
+
+        # Read input file
         input_file = open(INPUTFILE, "r")
+
     except:
         print(
             "Input file {} not found in current directory. Make sure the file is in the same directory!"
@@ -119,32 +126,45 @@ def attach_answer(obj):
     return obj
 
 
+def print_both(text, output):
+    output.write(text + '\n')
+    print(text)
+
+
 def print_output(obj):
-    print('[radix]  {}'.format(obj['radix']))
-    print('[{}]'.format(obj['operation']))
+    output_file = open(OUTPUTFILE, 'a')
+    # export_to_file(obj)
+    print_both('[radix]  {}'.format(obj['radix']), output_file)
+    print_both('[{}]'.format(obj['operation']), output_file)
     if 'x_original' in obj:
-        print(obj['x_original'])
+        print_both(obj['x_original'], output_file)
     if 'y_original' in obj:
-        print(obj['y_original'])
+        print_both(obj['y_original'], output_file)
     if 'm_original' in obj:
-        print(obj['m_original'])
+        print_both(obj['m_original'], output_file)
 
     if obj['operation'] != 'euclid':
         if 'answer' in obj:
-            print('[answer] {}'.format(array_to_number(obj['answer'])))
+            print_both('[answer] {}'.format(array_to_number(obj['answer'])),
+                       output_file)
     else:
         if 'answ-d' in obj:
-            print('[answ-d] {}'.format(array_to_number(obj['answ-d'])))
+            print_both('[answ-d] {}'.format(array_to_number(obj['answ-d'])),
+                       output_file)
         if 'answ-a' in obj:
-            print('[answ-a] {}'.format(array_to_number(obj['answ-a'])))
+            print_both('[answ-a] {}'.format(array_to_number(obj['answ-a'])),
+                       output_file)
         if 'answ-b' in obj:
-            print('[answ-b] {}'.format(array_to_number(obj['answ-b'])))
+            print_both('[answ-b] {}'.format(array_to_number(obj['answ-b'])),
+                       output_file)
     if 'answer_original' in obj:  # TODO: remove
         print(obj['answer_original'] + ' original')
     # print operations done
-    print('[operations] {}'.format(OPERATION_COUNT))
+    print_both('[operations] {}'.format(OPERATION_COUNT), output_file)
     # break line
-    print()
+    print_both('', output_file)
+
+    output_file.close()
 
 
 def add(x_remote, y_remote, radix):
