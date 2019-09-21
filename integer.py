@@ -62,7 +62,6 @@ def parse_input():
                 obj['m'] = m
 
             obj = choose_operation(obj)
-            print('SOLUTION!!!!!!!!!!!!!!!!')
         # if the block doesn't start with [radix], we keep going until we find a line that does.
         else:
             continue
@@ -77,22 +76,32 @@ def choose_operation(obj):
     m = obj.get('m')
 
     radix = obj['radix']
-    if op == 'karatsuba':
-        obj['answer'] = karatsuba(x, y, radix)
-    elif op == 'add':
-        obj['answer'] = add(x, y, radix)
-    elif op == 'subtract':
-        obj['answer'] = subtract(x, y, radix)
-    elif op == 'multiply':
-        obj['answer'] = mult(x, y, radix)
-    elif op == 'reduce':
-        obj['answer'] = reduce(x, m, radix)
-    elif op == 'inverse':
-        obj['answer'] = inverse(x, m, radix)
-    elif op == 'euclid':
-        obj['answ-d'], obj['answ-a'], obj['answ-b'] = euclid_gcd(x, y, radix)
+    if 'm' in obj:
+        # Modular arithmetic
+        if op == 'add':
+            obj['answer'] = mod_add(x, y, radix, m)
+        elif op == 'subtract':
+            obj['answer'] = mod_sub(x, y, radix, m)
+        elif op == 'multiply':
+            obj['answer'] = mod_mult(x, y, radix, m)
+        elif op == 'reduce':
+            obj['answer'] = reduce(x, m, radix)
+        elif op == 'inverse':
+            obj['answer'] = inverse(x, m, radix)
     else:
-        obj['answer'] = [1]
+        # Regular arithmetic
+        if op == 'karatsuba':
+            obj['answer'] = karatsuba(x, y, radix)
+        elif op == 'add':
+            obj['answer'] = add(x, y, radix)
+        elif op == 'subtract':
+            obj['answer'] = subtract(x, y, radix)
+        elif op == 'multiply':
+            obj['answer'] = mult(x, y, radix)
+        elif op == 'euclid':
+            obj['answ-d'], obj['answ-a'], obj['answ-b'] = euclid_gcd(x, y, radix)
+        else:
+            obj['answer'] = [1]
 
     return obj
 
@@ -348,88 +357,74 @@ def karatsuba(x_remote, y_remote, radix):
         return z
 
 
-def mod_add(x, y, radix, m):
-    reduce(x, m, radix)  # reduce x to modulo m
-    reduce(y, m, radix)  # reduce y to modulo m
-
-    z = x + y
-
-    if z < m:
-        z = z
-    else:
-        z = z - m
-
-    return z
-
-
-def mod_sub(x, y, radix, m):
+def mod_add(x_remote, y_remote, radix, m):
+    # Copy local lists so we don't modify input parameters
+    x = x_remote.copy()
+    y = y_remote.copy()
+    # The algorithm assumes input in reduced form
     reduce(x, m, radix)
     reduce(y, m, radix)
 
-    z = x - y
+    z = add(x, y, radix)
 
-    if z >= 0:
-        z = z
-    else:
-        z = z + m
+    if not is_greater_than(m, z):
+        z = subtract(z, m, radix)
 
     return z
 
 
-def mod_mult(x, y, radix, m):
+def mod_sub(x_remote, y_remote, radix, m):
+    # Copy local lists so we don't modify input parameters
+    x = x_remote.copy()
+    y = y_remote.copy()
+    # The algorithm assumes input in reduced form
     reduce(x, m, radix)
     reduce(y, m, radix)
 
-    z = x * y
+    z = subtract(x, y, radix)
 
-    while z >= m:
-        z = z - m
+    if is_negative(z):
+        z = add(z, m, radix)
 
     return z
 
 
-# def reduce(x, m, radix):
-#     # Modular reduction with negative m is the same as with positive m
-#     if is_negative(m):
-#         m = invert(m)
-#
-#
-#     if is_negative(x):
-#         r = [0]
-#         while is_greater_than(r, x):
-#             r = subtract(r, m, radix)
-#         r = subtract(x, r, radix)
-#     else:
-#         r = x
-#         while is_greater_than(r, m):
-#             r = subtract(r, m, radix)
-#
-#     if is_greater_than(r, [0]):
-#         while r[-1] == 0:  # Remove leading zeroes
-#             r.pop()
-#
-#     return r
+def mod_mult(x_remote, y_remote, radix, m):
+    # Copy local lists so we don't modify input parameters
+    x = x_remote.copy()
+    y = y_remote.copy()
+    # The algorithm assumes input in reduced form
+    reduce(x, m, radix)
+    reduce(y, m, radix)
+
+    z = karatsuba(x, y, radix)
+
+    z = reduce(z, m, radix)
+
+    return z
 
 
-def reduce(x, m, radix):
-    # Modular reduction with negative m is the same as with positive m
-    if is_negative(m):
-        m = invert(m)
+# Efficient modular reduction with radix, follows algorithm 2.5
+def reduce(x_remote, m, radix):
+    # Copy local list so we don't modify input parameters
+    x = x_remote.copy()
 
-    # We start off with r = x. We then add or subtract m until we have 0 <= r < m
-    r = x
-    # While r < 0, r = r + m
-    while is_negative(r):
-        r = add(r, m, radix)
+    invert_outcome = False
+    # x' = |x|
+    if is_negative(x):
+        invert(x)
+        invert_outcome = True
 
-    # While r => m, r = r - m
-    while not is_greater_than(m, r):
-        r = subtract(r, m, radix)
+    k = len(x)
+    n = len(m)
+    for i in reversed(range(0, k-n)):
+        while not is_greater_than(([0] * i) + m, x):
+            x = subtract(x, ([0] * i) + m, radix)
 
-    while r[-1] == 0 and len(r) > 1:  # Remove leading zeroes
-        r.pop()
-
-    return r
+    if invert_outcome:
+        return invert(x)
+    else:
+        return x
 
 
 def divide(x, y, radix):
@@ -449,6 +444,7 @@ def divide(x, y, radix):
             return counter
 
     return counter
+
 
 def inverse(x, m, radix):
     inv_x = x
