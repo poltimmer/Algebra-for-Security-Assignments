@@ -7,14 +7,27 @@ from utils import (array_to_number, invert, is_equal, is_greater_than,
 INPUTFILE = "example.txt"
 OUTPUTFILE = "output.txt"
 
+OPERATION_COUNT = 0
+
+
+def main():
+    global OPERATION_COUNT
+    objects = parse_input()
+    for obj in objects:
+        OPERATION_COUNT = 0
+        attach_answer(obj)
+        print_output(obj)
+
 
 def parse_input():
+    result = []
+
     try:
         input_file = open(INPUTFILE, "r")
     except:
         print(
             "Input file {} not found in current directory. Make sure the file is in the same directory!"
-            .format(INPUTFILE))
+                .format(INPUTFILE))
         return
 
     for line in input_file:
@@ -61,15 +74,14 @@ def parse_input():
                 obj['m_original'] = m_original
                 obj['m'] = m
 
-            obj = choose_operation(obj)
-        # if the block doesn't start with [radix], we keep going until we find a line that does.
-        else:
+            result.append(obj)
+        else:  # if the block doesn't start with [radix], we keep going until we find a line that does.
             continue
 
-        print_output(obj)
+    return result
 
 
-def choose_operation(obj):
+def attach_answer(obj):
     op = obj.get('operation')
     x = obj.get('x')
     y = obj.get('y')
@@ -106,28 +118,30 @@ def choose_operation(obj):
     return obj
 
 
-def print_output(sol):
-    print('[radix]  {}'.format(sol['radix']))
-    print('[{}]'.format(sol['operation']))
-    if 'x_original' in sol:
-        print(sol['x_original'])
-    if 'y_original' in sol:
-        print(sol['y_original'])
-    if 'm_original' in sol:
-        print(sol['m_original'])
+def print_output(obj):
+    print('[radix]  {}'.format(obj['radix']))
+    print('[{}]'.format(obj['operation']))
+    if 'x_original' in obj:
+        print(obj['x_original'])
+    if 'y_original' in obj:
+        print(obj['y_original'])
+    if 'm_original' in obj:
+        print(obj['m_original'])
 
-    if sol['operation'] != 'euclid':
-        if 'answer' in sol:
-            print('[answer] {}'.format(array_to_number(sol['answer'])))
+    if obj['operation'] != 'euclid':
+        if 'answer' in obj:
+            print('[answer] {}'.format(array_to_number(obj['answer'])))
     else:
-        if 'answ-d' in sol:
-            print('[answ-d] {}'.format(array_to_number(sol['answ-d'])))
-        if 'answ-a' in sol:
-            print('[answ-a] {}'.format(array_to_number(sol['answ-a'])))
-        if 'answ-b' in sol:
-            print('[answ-b] {}'.format(array_to_number(sol['answ-b'])))
-    if 'answer_original' in sol:  # TODO: remove
-        print(sol['answer_original'] + ' original')
+        if 'answ-d' in obj:
+            print('[answ-d] {}'.format(array_to_number(obj['answ-d'])))
+        if 'answ-a' in obj:
+            print('[answ-a] {}'.format(array_to_number(obj['answ-a'])))
+        if 'answ-b' in obj:
+            print('[answ-b] {}'.format(array_to_number(obj['answ-b'])))
+    if 'answer_original' in obj:  # TODO: remove
+        print(obj['answer_original'] + ' original')
+    # print operations done
+    print('[operations] {}'.format(OPERATION_COUNT))
     # break line
     print()
 
@@ -146,13 +160,11 @@ def add(x_remote, y_remote, radix):
 
     if is_negative(x) and not is_negative(y):
         x = invert(x)
-        z = subtract(x, y, radix)
-        return invert(z)
+        return invert(subtract(x, y, radix))
 
     if not is_negative(x) and is_negative(y):
         y = invert(y)
-        z = subtract(y, x, radix)
-        return invert(z)
+        return invert(subtract(y, x, radix))
 
     # Sanitise input
     while len(x) > len(y):
@@ -168,15 +180,17 @@ def add(x_remote, y_remote, radix):
     for i in range(0, len(x)):
         z.append(
             x[i] + y[i] + c
-        )  # Add to end of list (z[i]) TODO: deal with different length lists
+        )  # Add to end of list (z[i])
         if z[i] >= radix:
             z[i] = z[i] - radix
             c = 1
         else:
             c = 0
+        increment_operation()
 
     if c == 1:  # Add final carry
         z.append(1)
+        increment_operation()
 
     if invert_outcome:
         z = invert(z)
@@ -234,6 +248,7 @@ def subtract(x_remote, y_remote, radix):
             c = 1
         else:
             c = 0
+        increment_operation()
 
     while z[-1] == 0 and len(z) > 1:  # Remove leading zeroes
         z.pop()
@@ -273,6 +288,7 @@ def mult(x_remote, y_remote, radix):
             t = z[i + j] + x[i] * y[j] + c
             c = floor(t / radix)
             z[i + j] = t - c * radix
+            increment_operation(5)
         z[i + n] = c
 
     if z[m + n - 1] == 0:
@@ -427,13 +443,23 @@ def reduce(x_remote, m, radix):
         return x
 
 
-def divide(x, y, radix):
+def divide(x_remote, y_remote, radix):
     """
     Custom division method that counts the amount of additions before the denominator exceeds the numerator.
     Returns floor(x/y)
     """
+    # Copy local lists so we don't modify input parameters
+    x = x_remote.copy()
+    y = y_remote.copy()
+
+    # Take positive x and y
+    if is_negative(x):
+        x = invert(x)
+    if is_negative(y):
+        y = invert(y)
+
     counter = [0]
-    ytemp = y
+    ytemp = y.copy()
 
     while is_greater_than(x, ytemp):
         counter = add(counter, [1], radix)
@@ -446,28 +472,77 @@ def divide(x, y, radix):
     return counter
 
 
-def inverse(x, m, radix):
-    inv_x = x
-    inv_m = m
-    c = [[0], [1], [0], [0]]
+def new_divide(x_remote, y_remote, radix):
+    # Copy local lists so we don't modify input parameters
+    x = x_remote.copy()
+    y = y_remote.copy()
 
-    while is_greater_than(inv_m, [0]):
-        q = divide(inv_x, inv_m, radix)
-        r = subtract(inv_x, mult(q, inv_m, radix), radix)
+    if is_negative(x):
+        x = invert(x)
+    if is_negative(y):
+        y = invert(y)
 
-        inv_x = inv_m
-        inv_m = r
+    k = len(x)
+    n = len(y)
+    if n > k:
+        return [0]
 
-        t1 = mult(q, c[2], radix)
-        c[3] = subtract(c[1], t1, radix)
-        c[1] = c[2]
-        c[2] = c[3]
+    z = [0] * (k - n + 1)
+    for i in reversed(range(0, k - n + 1)):
+        while not is_greater_than(([0] * i) + y, x):
+            x = subtract(x, ([0] * i) + y, radix)
+            z = add(z, ([0] * i) + [1], radix)
 
-    if inv_x == 1:
-        inverse_x = c[1]
-        return inverse_x
+    return z
+
+
+# def inverse(x, m, radix):
+#     inv_x = x
+#     inv_m = m
+#     c = [[0], [1], [0], [0]]
+#
+#     while is_greater_than(inv_m, [0]):
+#         q = divide(inv_x, inv_m, radix)
+#         r = subtract(inv_x, mult(q, inv_m, radix), radix)
+#
+#         inv_x = inv_m
+#         inv_m = r
+#
+#         t1 = mult(q, c[2], radix)
+#         c[3] = subtract(c[1], t1, radix)
+#         c[1] = c[2]
+#         c[2] = c[3]
+#
+#     if inv_x == 1:
+#         inverse_x = c[1]
+#         return inverse_x
+#     else:
+#         return "Inverse does not exist"
+
+
+# Modular inversion, follows algorithm 2.11
+def inverse(a_remote, m_remote, radix):
+    # Copy local lists so we don't modify input parameters
+    a = a_remote.copy()
+    m = m_remote.copy()
+
+    x_1 = [1]
+    x_2 = [0]
+
+    while is_greater_than(m, [0]):
+        q = new_divide(a, m, radix)
+        r = subtract(a, karatsuba(q, m, radix), radix)
+        a = m
+        m = r
+        x_3 = subtract(x_1, karatsuba(q, x_2, radix), radix)
+        x_1 = x_2
+        x_2 = x_3
+
+    if is_equal(a, [1]):
+        return x_1
     else:
-        return "Inverse does not exist"
+        print("inverso no existo")
+        return [0]
 
 
 def euclid_gcd(x, y, radix):
@@ -510,5 +585,15 @@ def euclid_gcd(x, y, radix):
     return gcd, c, d
 
 
+def increment_operation(amount=1):
+    global OPERATION_COUNT
+    OPERATION_COUNT += amount
+
+
+def test():
+    result = new_divide([-4, -5], [5], 10)
+    print(result)
+
+
 if __name__ == "__main__":
-    parse_input()
+    main()
