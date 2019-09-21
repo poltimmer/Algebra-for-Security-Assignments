@@ -22,21 +22,51 @@
 [y]      21
 [answer] 252
 
-[radix]  16
+# [radix]  16
 [reduce]
 [x]      30f1c1d0dabf19a8be7c
 [m]      c5dcce23d1493636985
 [answer] [3, 1, 14, 3, 15, 12, 3, 14, 1, 9, 7, 2, 1, 9, 0, 9, 9, 9]
 
 
-# [radix]  16
+[radix]  16
 [inverse]
-[x]      30f1c1d0dabf19a8be7c
-[m]      c5dcce23d1493636985
+[x]      5896363941d32eccd5c
+[m]      c7eb8a91fbad0d1c1f03
 [answer] 96998fcd4268440ce6a5
 
-# [radix]  16
+[radix]  16
 [inverse]
 [x]      b99ab2815ee4b4a5f842
 [m]      c7eb8a91fbad0d1c1f03
 [answer] inverse does not exist
+
+# [radix]  10
+[inverse]
+[x]      3
+[m]      26
+[answer] 9
+
+[radix]  10
+[inverse]
+[x]      8
+[m]      17
+[answer] 15
+
+[radix]  10
+[inverse]
+[x]      8
+[m]      27
+[answer] 17
+
+[radix]  10
+[inverse]
+[x]      18
+[m]      37
+[answer] 35
+
+# [radix]  10
+[inverse]
+[x]      18
+[m]      5
+[answer] 2

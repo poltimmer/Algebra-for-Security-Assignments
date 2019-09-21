@@ -443,36 +443,8 @@ def reduce(x_remote, m, radix):
         return x
 
 
+# Division method that returns floor(x/y) using long division
 def divide(x_remote, y_remote, radix):
-    """
-    Custom division method that counts the amount of additions before the denominator exceeds the numerator.
-    Returns floor(x/y)
-    """
-    # Copy local lists so we don't modify input parameters
-    x = x_remote.copy()
-    y = y_remote.copy()
-
-    # Take positive x and y
-    if is_negative(x):
-        x = invert(x)
-    if is_negative(y):
-        y = invert(y)
-
-    counter = [0]
-    ytemp = y.copy()
-
-    while is_greater_than(x, ytemp):
-        counter = add(counter, [1], radix)
-        ytemp = add(ytemp, y, radix)
-
-        if is_equal(x, ytemp):
-            counter = add(counter, [1], radix)
-            return counter
-
-    return counter
-
-
-def new_divide(x_remote, y_remote, radix):
     # Copy local lists so we don't modify input parameters
     x = x_remote.copy()
     y = y_remote.copy()
@@ -492,6 +464,9 @@ def new_divide(x_remote, y_remote, radix):
         while not is_greater_than(([0] * i) + y, x):
             x = subtract(x, ([0] * i) + y, radix)
             z = add(z, ([0] * i) + [1], radix)
+
+    while z[-1] == 0 and len(z) > 1:  # Remove leading zeroes
+        z.pop()
 
     return z
 
@@ -530,7 +505,7 @@ def inverse(a_remote, m_remote, radix):
     x_2 = [0]
 
     while is_greater_than(m, [0]):
-        q = new_divide(a, m, radix)
+        q = divide(a, m, radix)
         r = subtract(a, karatsuba(q, m, radix), radix)
         a = m
         m = r
@@ -539,7 +514,7 @@ def inverse(a_remote, m_remote, radix):
         x_2 = x_3
 
     if is_equal(a, [1]):
-        return x_1
+        return reduce(x_1, m_remote, radix)
     else:
         print("inverso no existo")
         return [0]
@@ -588,11 +563,6 @@ def euclid_gcd(x, y, radix):
 def increment_operation(amount=1):
     global OPERATION_COUNT
     OPERATION_COUNT += amount
-
-
-def test():
-    result = new_divide([-4, -5], [5], 10)
-    print(result)
 
 
 if __name__ == "__main__":
