@@ -27,7 +27,7 @@ def parse_input():
     except:
         print(
             "Input file {} not found in current directory. Make sure the file is in the same directory!"
-                .format(INPUTFILE))
+            .format(INPUTFILE))
         return
 
     for line in input_file:
@@ -111,7 +111,10 @@ def attach_answer(obj):
         elif op == 'multiply':
             obj['answer'] = mult(x, y, radix)
         elif op == 'euclid':
-            obj['answ-d'], obj['answ-a'], obj['answ-b'] = euclid_gcd(x, y, radix)
+            obj['answ-d'], obj['answ-a'], obj['answ-b'] = euclid_gcd(
+                x, y, radix)
+        elif op == 'divide':
+            obj['answer'] = divide(x, y, radix)
         else:
             obj['answer'] = [1]
 
@@ -178,9 +181,7 @@ def add(x_remote, y_remote, radix):
     z = []  # The return list
 
     for i in range(0, len(x)):
-        z.append(
-            x[i] + y[i] + c
-        )  # Add to end of list (z[i])
+        z.append(x[i] + y[i] + c)  # Add to end of list (z[i])
         if z[i] >= radix:
             z[i] = z[i] - radix
             c = 1
@@ -443,44 +444,50 @@ def reduce(x_remote, m, radix):
         return x
 
 
+# def old_divide(x_remote, y_remote, radix):
+#     """
+#     Custom division method that counts the amount of additions before the denominator exceeds the numerator.
+#     Returns floor(x/y)
+#     """
+#     # Copy local lists so we don't modify input parameters
+#     x = x_remote.copy()
+#     y = y_remote.copy()
+
+#     # Take positive x and y
+#     if is_negative(x):
+#         x = invert(x)
+#     if is_negative(y):
+#         y = invert(y)
+
+#     counter = [0]
+#     ytemp = y.copy()
+
+#     while is_greater_than(x, ytemp):
+#         counter = add(counter, [1], radix)
+#         ytemp = add(ytemp, y, radix)
+
+#         if is_equal(x, ytemp):
+#             counter = add(counter, [1], radix)
+
+#     return counter
+
+
 def divide(x_remote, y_remote, radix):
-    """
-    Custom division method that counts the amount of additions before the denominator exceeds the numerator.
-    Returns floor(x/y)
-    """
+    invert_outcome = False
     # Copy local lists so we don't modify input parameters
     x = x_remote.copy()
     y = y_remote.copy()
 
-    # Take positive x and y
-    if is_negative(x):
+    if is_negative(x) and is_negative(y):
         x = invert(x)
-    if is_negative(y):
         y = invert(y)
-
-    counter = [0]
-    ytemp = y.copy()
-
-    while is_greater_than(x, ytemp):
-        counter = add(counter, [1], radix)
-        ytemp = add(ytemp, y, radix)
-
-        if is_equal(x, ytemp):
-            counter = add(counter, [1], radix)
-            return counter
-
-    return counter
-
-
-def new_divide(x_remote, y_remote, radix):
-    # Copy local lists so we don't modify input parameters
-    x = x_remote.copy()
-    y = y_remote.copy()
 
     if is_negative(x):
         x = invert(x)
+        invert_outcome = True
     if is_negative(y):
         y = invert(y)
+        invert_outcome = True
 
     k = len(x)
     n = len(y)
@@ -492,6 +499,12 @@ def new_divide(x_remote, y_remote, radix):
         while not is_greater_than(([0] * i) + y, x):
             x = subtract(x, ([0] * i) + y, radix)
             z = add(z, ([0] * i) + [1], radix)
+
+    while z[-1] == 0 and len(z) > 1:  # Remove leading zeroes
+        z.pop()
+
+    if invert_outcome:
+        z = invert(z)
 
     return z
 
@@ -530,7 +543,7 @@ def inverse(a_remote, m_remote, radix):
     x_2 = [0]
 
     while is_greater_than(m, [0]):
-        q = new_divide(a, m, radix)
+        q = divide(a, m, radix)
         r = subtract(a, karatsuba(q, m, radix), radix)
         a = m
         m = r
@@ -591,7 +604,7 @@ def increment_operation(amount=1):
 
 
 def test():
-    result = new_divide([-4, -5], [5], 10)
+    result = divide([-4, -5], [5], 10)
     print(result)
 
 
