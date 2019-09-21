@@ -4,10 +4,11 @@ def is_greater_than(x_remote, y_remote):
     x = x_remote.copy()
     y = y_remote.copy()
 
-    while len(x) > len(y):
-        y.append(0)
-    while len(y) > len(x):
-        x.append(0)
+    diff = len(x) - len(y)
+    if diff > 0:
+        y = y + [0] * diff
+    elif diff < 0:
+        x = x + [0] * -diff
 
     for a, b in zip(reversed(x), reversed(y)):
         if a > b:
