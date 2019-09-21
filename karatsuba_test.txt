@@ -41,7 +41,7 @@
 [m]      c7eb8a91fbad0d1c1f03
 [answer] inverse does not exist
 
-# [radix]  10
+[radix]  10
 [inverse]
 [x]      3
 [m]      26
@@ -65,7 +65,7 @@
 [m]      37
 [answer] 35
 
-# [radix]  10
+[radix]  10
 [inverse]
 [x]      18
 [m]      5

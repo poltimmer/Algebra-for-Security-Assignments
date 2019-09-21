@@ -1,6 +1,4 @@
 from math import ceil, floor
-from time import sleep
-
 from utils import (array_to_number, invert, is_equal, is_greater_than,
                    is_negative, number_to_array)
 
@@ -45,7 +43,7 @@ def parse_input():
 
             # Parse rest
             for current_line in input_file:
-                if current_line == '\n':
+                if current_line == '\n':  # If we find an empty line, the block is finished
                     break
 
                 key = current_line.split()[0][1:-1]
@@ -155,19 +153,22 @@ def add(x_remote, y_remote, radix):
     y = y_remote.copy()
 
     invert_outcome = False
-    # If both x and y are negative, then invert, calculate and invert
+    # If we try to add two negative numbers, it is the same as adding their positive counterparts, and then
+    # returning the result's negative counterpart
     if is_negative(x) and is_negative(y):
         x = invert(x)
         y = invert(y)
         invert_outcome = True
 
+    # If we try to add a positive number to a negative number, it is the same as subtracting the positive
+    # counterpart of the negative number from the positive number.
     if is_negative(x) and not is_negative(y):
         x = invert(x)
-        return invert(subtract(x, y, radix))
+        return subtract(y, x, radix)
 
     if not is_negative(x) and is_negative(y):
         y = invert(y)
-        return invert(subtract(y, x, radix))
+        return subtract(x, y, radix)
 
     # Sanitise input
     while len(x) > len(y):
@@ -450,6 +451,8 @@ def divide(x_remote, y_remote, radix):
     x = x_remote.copy()
     y = y_remote.copy()
 
+    invert_outcome = False
+
     if is_negative(x):
         x = invert(x)
         invert_outcome = True
@@ -470,6 +473,9 @@ def divide(x_remote, y_remote, radix):
 
     while z[-1] == 0 and len(z) > 1:  # Remove leading zeroes
         z.pop()
+
+    if invert_outcome:
+        z = invert(z)
 
     return z
 
@@ -495,8 +501,7 @@ def inverse(a_remote, m_remote, radix):
     if is_equal(a, [1]):
         return reduce(x_1, m_remote, radix)
     else:
-        print("inverso no existo")
-        return [0]
+        return [-1]
 
 
 def euclid_gcd(a, b, radix):
