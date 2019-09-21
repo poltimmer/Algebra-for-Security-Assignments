@@ -6,14 +6,17 @@ from utils import (array_to_number, invert, is_equal, is_greater_than,
 INPUTFILE = "example.txt"
 OUTPUTFILE = "output.txt"
 
-OPERATION_COUNT = 0
+COUNT_ADD = 0
+COUNT_MULT = 0
 
 
 def main():
-    global OPERATION_COUNT
+    global COUNT_ADD
+    global COUNT_MULT
     objects = parse_input()
     for obj in objects:
-        OPERATION_COUNT = 0
+        COUNT_ADD = 0
+        COUNT_MULT = 0
         attach_answer(obj)
         print_output(obj)
 
@@ -61,8 +64,6 @@ def parse_input():
                     y_original = current_line[:-1]
                 elif key == 'm':
                     m_original = current_line[:-1]
-                elif key == 'answer':  # TODO: remove
-                    obj['answer_original'] = current_line[:-1]
 
             if x_original:
                 x = number_to_array(x_original.split()[1], obj['radix'])
@@ -157,10 +158,9 @@ def print_output(obj):
         if 'answ-b' in obj:
             print_both('[answ-b] {}'.format(array_to_number(obj['answ-b'])),
                        output_file)
-    if 'answer_original' in obj:  # TODO: remove
-        print(obj['answer_original'] + ' original')
     # print operations done
-    print_both('[operations] {}'.format(OPERATION_COUNT), output_file)
+    print_both('[count-add] {}'.format(COUNT_ADD), output_file)
+    print_both('[count-mul] {}'.format(COUNT_MULT), output_file)
     # break line
     print_both('', output_file)
 
@@ -203,16 +203,16 @@ def add(x_remote, y_remote, radix):
 
     for i in range(0, len(x)):
         z.append(x[i] + y[i] + c)  # Add to end of list (z[i])
+        inc_add(2)
         if z[i] >= radix:
             z[i] = z[i] - radix
             c = 1
+            inc_add()
         else:
             c = 0
-        increment_operation()
 
     if c == 1:  # Add final carry
         z.append(1)
-        increment_operation()
 
     if invert_outcome:
         z = invert(z)
@@ -264,13 +264,14 @@ def subtract(x_remote, y_remote, radix):
     for i in range(0, len(x)):
         z.append(
             x[i] - y[i] - c
-        )  # Add to end of list (z[i]) TODO: deal with different length lists
+        )  # Add to end of list (z[i])
+        inc_add(2)
         if z[i] < 0:
             z[i] = z[i] + radix
             c = 1
+            inc_add()
         else:
             c = 0
-        increment_operation()
 
     while z[-1] == 0 and len(z) > 1:  # Remove leading zeroes
         z.pop()
@@ -310,8 +311,10 @@ def mult(x_remote, y_remote, radix):
             t = z[i + j] + x[i] * y[j] + c
             c = floor(t / radix)
             z[i + j] = t - c * radix
-            increment_operation(5)
+            inc_add(5)
+            inc_mult(3)
         z[i + n] = c
+        inc_add()
 
     if z[m + n - 1] == 0:
         k = m + n - 2
@@ -566,9 +569,14 @@ def euclid(a_remote, b_remote, radix):
     return d, x, y
 
 
-def increment_operation(amount=1):
-    global OPERATION_COUNT
-    OPERATION_COUNT += amount
+def inc_add(amount=1):
+    global COUNT_ADD
+    COUNT_ADD += amount
+
+
+def inc_mult(amount=1):
+    global COUNT_MULT
+    COUNT_MULT += amount
 
 
 if __name__ == "__main__":
