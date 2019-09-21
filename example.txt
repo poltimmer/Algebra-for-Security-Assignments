@@ -180,6 +180,84 @@
 [answ-a] 96998fcd4268440ce6a5
 [answ-b] -42bb80ba0313b9aff19
 
+[radix]  10
+[divide]
+[x]      67890
+[y]      12345
+[answer] 5
+
+[radix]  10
+[divide]
+[x]      67890
+[y]      -12345
+[answer] -5
+
+[radix]  10
+[divide]
+[x]      -67890
+[y]      12345
+[answer] -5
+
+[radix]  10
+[divide]
+[x]      -67890
+[y]      -12345
+[answer] 5
+
+[radix]  10
+[divide]
+[x]      12345
+[y]      67890
+[answer] 0
+
+[radix]  10
+[divide]
+[x]      12345
+[y]      -67890
+[answer] 0
+
+[radix]  10
+[divide]
+[x]      -12345
+[y]      6789012345
+[answer] 0
+
+[radix]  10
+[divide]
+[x]      -12345
+[y]      -67890
+[answer] 0
+
+[radix]  10
+[divide]
+[x]      -234
+[y]      3
+[answer] -78
+
+[radix]  10
+[divide]
+[x]      234
+[y]      3
+[answer] 78
+
+[radix]  10
+[divide]
+[x]      0
+[y]      125
+[answer] 0
+
+[radix]  10
+[divide]
+[x]      125
+[y]      5
+[answer] 25
+
+[radix]  10
+[divide]
+[x]      137
+[y]      3
+[answer] 45
+
 [radix]  16
 [inverse]
 [x]      5896363941d32eccd5c

@@ -27,7 +27,7 @@ def parse_input():
     except:
         print(
             "Input file {} not found in current directory. Make sure the file is in the same directory!"
-                .format(INPUTFILE))
+            .format(INPUTFILE))
         return
 
     for line in input_file:
@@ -111,7 +111,10 @@ def attach_answer(obj):
         elif op == 'multiply':
             obj['answer'] = mult(x, y, radix)
         elif op == 'euclid':
-            obj['answ-d'], obj['answ-a'], obj['answ-b'] = euclid_gcd(x, y, radix)
+            obj['answ-d'], obj['answ-a'], obj['answ-b'] = euclid_gcd(
+                x, y, radix)
+        elif op == 'divide':
+            obj['answer'] = divide(x, y, radix)
         else:
             obj['answer'] = [1]
 
@@ -178,9 +181,7 @@ def add(x_remote, y_remote, radix):
     z = []  # The return list
 
     for i in range(0, len(x)):
-        z.append(
-            x[i] + y[i] + c
-        )  # Add to end of list (z[i])
+        z.append(x[i] + y[i] + c)  # Add to end of list (z[i])
         if z[i] >= radix:
             z[i] = z[i] - radix
             c = 1
@@ -451,8 +452,10 @@ def divide(x_remote, y_remote, radix):
 
     if is_negative(x):
         x = invert(x)
+        invert_outcome = True
     if is_negative(y):
         y = invert(y)
+        invert_outcome = True
 
     k = len(x)
     n = len(y)
