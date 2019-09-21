@@ -99,6 +99,8 @@ def choose_operation(obj):
         obj['answer'] = mult(x, y, radix)
     elif op == 'reduce':
         obj['answer'] = reduce(x, m, radix)
+    elif op == 'inverse':
+        obj['answer'] = inverse(x, m, radix)
     elif op == 'euclid':
         obj['answ-d'], obj['answ-a'], obj['answ-b'] = euclid_gcd(x, y, radix)
     else:
@@ -409,6 +411,29 @@ def divide(x, y, radix):
             return counter
 
     return counter
+
+def inverse(x, m, radix):
+    inv_x = x
+    inv_m = m
+    c = [[0], [1], [0], [0]]
+
+    while is_greater_than(inv_m, [0]):
+        q = divide(inv_x, inv_m, radix)
+        r = subtract(inv_x, mult(q, inv_m, radix), radix)
+
+        inv_x = inv_m
+        inv_m = r
+
+        t1 = mult(q, c[2], radix)
+        c[3] = subtract(c[1], t1, radix)
+        c[1] = c[2]
+        c[2] = c[3]
+
+    if inv_x == 1:
+        inverse_x = c[1]
+        return inverse_x
+    else:
+        return "Inverse does not exist"
 
 
 def euclid_gcd(x, y, radix):
