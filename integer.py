@@ -412,12 +412,12 @@ def reduce(x_remote, m, radix):
     invert_outcome = False
     # x' = |x|
     if is_negative(x):
-        invert(x)
+        x = invert(x)
         invert_outcome = True
 
     k = len(x)
     n = len(m)
-    for i in reversed(range(0, k-n)):
+    for i in reversed(range(0, k - n)):
         while not is_greater_than(([0] * i) + m, x):
             x = subtract(x, ([0] * i) + m, radix)
 
