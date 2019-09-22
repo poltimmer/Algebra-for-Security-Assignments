@@ -1,5 +1,7 @@
 import unittest
 
+import a2.polynomial as poly
+
 
 class test1(unittest.TestCase):
     def testfunc1(self):
