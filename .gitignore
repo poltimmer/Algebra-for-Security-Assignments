@@ -2,4 +2,4 @@ __pycache__/
 .idea
 .vscode
 venv
-output.txt
+a1/output.txt
