@@ -1,6 +1,6 @@
 import unittest
 
-from polynomial import display_poly
+from polynomial import add_poly, display_poly
 from utils import set_to_array
 
 
@@ -57,6 +57,39 @@ class testPoly(unittest.TestCase):
         obj['mod'] = 4
         obj['f'] = [5, 6, 7, 8]
         assert display_poly(obj)['answer'] == 'X^3+2X^2+3X'
+
+    def test_add_poly(self):
+        obj = {}
+        obj['mod'] = 12
+
+        obj['f'] = [1, 2, 1]
+        obj['g'] = [10, 11, 12, 13]
+        assert add_poly(obj)['answer'] == '10X^3+2X+2'
+
+        obj['f'] = [0, 0, 0, 0, 0, 0, 0]
+        obj['g'] = []
+        assert add_poly(obj)['answer'] == '0'
+
+        obj['f'] = [33]
+        obj['g'] = [11]
+        assert add_poly(obj)['answer'] == '8'
+
+        obj['f'] = [10, 2]
+        obj['g'] = [3, 5]
+        assert add_poly(obj)['answer'] == 'X+7'
+
+        obj['f'] = [-7, 5, 6]
+        obj['g'] = [4, 8]
+        assert add_poly(obj)['answer'] == '5X^2+9X+2'
+
+        obj['f'] = [-3, -5, -3]
+        obj['g'] = [-5, -3, -5]
+        assert add_poly(obj)['answer'] == '4X^2+4X+4'
+
+        obj['mod'] = 3
+        obj['f'] = [5, 3, 6, 9]
+        obj['g'] = [1, 4, 3]
+        assert add_poly(obj)['answer'] == '2X^3+X^2+X'
 
 
 if __name__ == "__main__":

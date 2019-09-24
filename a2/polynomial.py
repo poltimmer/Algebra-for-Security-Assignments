@@ -19,6 +19,7 @@ def main():
     objects = read_input()
     for obj in objects:
         obj = generate_answer(obj)
+        print(obj)
 
     print_output(objects)
 
@@ -123,7 +124,7 @@ def generate_answer(obj):
     if op == "display-poly":
         obj = display_poly(obj)
     elif op == "add-poly":
-        pass
+        obj = add_poly(obj)
     elif op == "subtract-poly":
         pass
     elif op == "multiply-poly":
@@ -199,6 +200,37 @@ def display_poly(obj):
 
     # Return Object
     obj['answer'] = result
+    return obj
+
+
+def add_poly(obj):
+    # Get the values we need from the object
+    f = obj.get('f')
+    g = obj.get('g')
+    m = obj.get('mod')
+
+    # Set local variable
+    result = []  # Result array we will convert to string later
+
+    # Make sure the lengths are equal by insterting at the front
+    while len(f) > len(g):
+        g.insert(0, 0)
+
+    while len(g) > len(f):
+        f.insert(0, 0)
+
+    # Add numbers with same index and modulo m them. Add to result
+    for a, b in zip(reversed(f), reversed(g)):
+        result.append((a + b) % m)
+
+    # Reverse result back to original order and add to obj
+    result.reverse()
+    obj['f'] = result
+
+    # Get the string copy of result by calling display_poly
+    obj = display_poly(obj)
+
+    # Return object which now includes an answer key-value pair
     return obj
 
 
