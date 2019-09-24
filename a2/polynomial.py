@@ -124,9 +124,9 @@ def generate_answer(obj):
     if op == "display-poly":
         obj = display_poly(obj)
     elif op == "add-poly":
-        obj = add_poly(obj)
+        obj = add_sub_poly(obj, 'add')
     elif op == "subtract-poly":
-        pass
+        obj = add_sub_poly(obj, 'sub')
     elif op == "multiply-poly":
         pass
     elif op == "long-div-poly":
@@ -203,7 +203,7 @@ def display_poly(obj):
     return obj
 
 
-def add_poly(obj):
+def add_sub_poly(obj, op='add'):
     # Get the values we need from the object
     f_orig = obj.get('f')
     f_new = f_orig.copy()
@@ -222,7 +222,13 @@ def add_poly(obj):
 
     # Add numbers with same index and modulo m them. Add to result
     for a, b in zip(reversed(f_new), reversed(g_new)):
-        result.append((a + b) % m)
+        # If operand is addition then add
+        if op == 'add':
+            result.append((a + b) % m)
+
+        # Now operand is subtraction then minus
+        if op == 'sub':
+            result.append((a - b) % m)
 
     # Reverse result back to original order and add to obj
     result.reverse()
