@@ -146,7 +146,32 @@ def generate_answer(obj):
 
 
 def print_output(objects):
-    pass
+    output_file = open(OUTPUTFILE, 'w')
+
+    for obj in objects:
+        output_file.write("[mod] {}\n".format(obj['mod']))
+        output_file.write("[{}]\n".format(obj['operation']))
+        if obj['operation'] == "mod-poly":
+            output_file.write("[{}]\n".format(obj['additional_data']))
+
+        if 'f_original' in obj:
+            output_file.write(obj['f_original'] + '\n')
+        if 'g_original' in obj:
+            output_file.write(obj['g_original'] + '\n')
+        if 'h_original' in obj:
+            output_file.write(obj['h_original'] + '\n')
+        if 'deg_original' in obj:
+            output_file.write(obj['deg_original'] + '\n')
+        if 'a_original' in obj:
+            output_file.write(obj['a_original'] + '\n')
+        if 'b_original' in obj:
+            output_file.write(obj['b_original'] + '\n')
+        if 'answer' in obj:
+            output_file.write('[answer] {}\n'.format(obj['answer']))
+
+        output_file.write('\n')
+
+    output_file.close()
 
 
 def display_poly(obj):

@@ -3,3 +3,4 @@ __pycache__/
 .vscode
 venv
 a1/output.txt
+a2/output.txt
