@@ -205,30 +205,35 @@ def display_poly(obj):
 
 def add_poly(obj):
     # Get the values we need from the object
-    f = obj.get('f')
-    g = obj.get('g')
+    f_orig = obj.get('f')
+    f_new = f_orig.copy()
+    g_new = obj.get('g')
     m = obj.get('mod')
 
     # Set local variable
     result = []  # Result array we will convert to string later
 
     # Make sure the lengths are equal by insterting at the front
-    while len(f) > len(g):
-        g.insert(0, 0)
+    while len(f_new) > len(g_new):
+        g_new.insert(0, 0)
 
-    while len(g) > len(f):
-        f.insert(0, 0)
+    while len(g_new) > len(f_new):
+        f_new.insert(0, 0)
 
     # Add numbers with same index and modulo m them. Add to result
-    for a, b in zip(reversed(f), reversed(g)):
+    for a, b in zip(reversed(f_new), reversed(g_new)):
         result.append((a + b) % m)
 
     # Reverse result back to original order and add to obj
     result.reverse()
     obj['f'] = result
+    obj['answer_original'] = result
 
     # Get the string copy of result by calling display_poly
     obj = display_poly(obj)
+
+    # Return object to initial state
+    obj['f'] = f_orig
 
     # Return object which now includes an answer key-value pair
     return obj
