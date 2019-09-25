@@ -128,19 +128,19 @@ def generate_answer(obj):
     elif op == "subtract-poly":
         obj = add_sub_poly(obj, 'sub')
     elif op == "multiply-poly":
-        pass
+        obj = mul_poly(obj)
     elif op == "long-div-poly":
-        pass
+        obj = div_poly(obj)
     elif op == "euclid-poly":
-        pass
+        obj = euclid_poly(obj)
     elif op == "equals-poly-mod":
-        pass
+        obj = equals_poly_mod(obj)
     elif op == "irreducible":
-        pass
+        obj = irreducible(obj)
     elif op == "find-irred":
-        pass
+        obj = find_irred(obj)
     elif op == "mod-poly":
-        pass
+        obj = mod_poly(obj)
 
     return obj
 
@@ -267,6 +267,53 @@ def add_sub_poly(obj, op='add'):
     obj['f'] = f_orig
 
     # Return object which now includes an answer key-value pair
+    return obj
+
+
+def mul_poly(obj):
+    f_orig = obj.get('f')
+    f_new = f_orig.copy()
+    g_new = obj.get('g')
+    m = obj.get('mod')
+
+    # Set local variable
+    result = []  # Result array we will convert to string later
+
+    result.reverse()
+    obj['f'] = result
+    obj['answer_original'] = result
+
+    # Get the string copy of result by calling display_poly
+    obj = display_poly(obj)
+
+    # Return object to initial state
+    obj['f'] = f_orig
+
+    # Return object which now includes an answer key-value pair
+    return obj
+
+
+def div_poly(obj):
+    return obj
+
+
+def euclid_poly(obj):
+    return obj
+
+
+def equals_poly_mod(obj):
+    return obj
+
+
+def irreducible(obj):
+    return obj
+
+
+def find_irred(obj):
+    return obj
+
+
+def mod_poly(obj):
     return obj
 
 
