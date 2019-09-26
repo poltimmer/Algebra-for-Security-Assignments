@@ -1,2 +1,2 @@
-import a1
-import a2
+from a1 import integer
+from a2 import polynomial

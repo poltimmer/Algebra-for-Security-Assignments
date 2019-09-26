@@ -1,5 +1,4 @@
-from a1.utils import number_to_array
-from utils import sanitize_arrays, set_to_array
+from utils import sanitize_arrays, set_to_array # pylint: disable=no-name-in-module
 
 INPUTFILE = "input.txt"
 OUTPUTFILE = "output.txt"

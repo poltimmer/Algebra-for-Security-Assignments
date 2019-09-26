@@ -1,7 +1,7 @@
 import unittest
 
 from polynomial import add_sub_poly, display_poly
-from utils import set_to_array
+from utils import set_to_array # pylint: disable=no-name-in-module
 
 
 class testUtils(unittest.TestCase):
