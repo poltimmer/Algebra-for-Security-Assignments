@@ -19,7 +19,7 @@ def main():
     objects = read_input()
     for obj in objects:
         obj = generate_answer(obj)
-        print(obj)
+        print(obj)  # TODO: Remove before production
 
     print_output(objects)
 
