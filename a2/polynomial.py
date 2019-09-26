@@ -128,17 +128,17 @@ def generate_answer(obj):
     elif op == "subtract-poly":
         obj = add_sub_poly(obj, 'sub')
     elif op == "multiply-poly":
-        obj = mul_poly(obj)
+        obj = mul_poly(obj)  # Janneke
     elif op == "long-div-poly":
-        obj = div_poly(obj)
+        obj = div_poly(obj)  # Pol
     elif op == "euclid-poly":
-        obj = euclid_poly(obj)
+        obj = euclid_poly(obj)  # Pol
     elif op == "equals-poly-mod":
-        obj = equals_poly_mod(obj)
+        obj = equals_poly_mod(obj)  # Janneke
     elif op == "irreducible":
-        obj = irreducible(obj)
+        obj = is_irreducible(obj)  # Edwin
     elif op == "find-irred":
-        obj = find_irred(obj)
+        obj = find_irred(obj)  # Edwin
     elif op == "mod-poly":
         obj = mod_poly(obj)
 
@@ -305,7 +305,7 @@ def equals_poly_mod(obj):
     return obj
 
 
-def irreducible(obj):
+def is_irreducible(obj):
     return obj
 
 

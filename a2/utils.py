@@ -1,7 +1,3 @@
-def test():
-    pass
-
-
 def set_to_array(original_set):
     result = []
     split_set = original_set.split(',')
