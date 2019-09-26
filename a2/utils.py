@@ -9,3 +9,11 @@ def set_to_array(original_set):
             result.append(int(group))
 
     return result
+
+
+def sanitize_arrays(f, g):
+    while len(f) > len(g):
+        g.insert(0, 0)
+
+    while len(g) > len(f):
+        f.insert(0, 0)

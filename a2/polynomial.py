@@ -1,5 +1,5 @@
 from a1.utils import number_to_array
-from utils import set_to_array
+from utils import sanitize_arrays, set_to_array
 
 INPUTFILE = "input.txt"
 OUTPUTFILE = "output.txt"
@@ -232,18 +232,15 @@ def add_sub_poly(obj, op='add'):
     # Get the values we need from the object
     f_orig = obj.get('f')
     f_new = f_orig.copy()
-    g_new = obj.get('g')
+    g_orig = obj.get('g')
+    g_new = g_orig.copy()
     m = obj.get('mod')
 
     # Set local variable
     result = []  # Result array we will convert to string later
 
     # Make sure the lengths are equal by insterting at the front
-    while len(f_new) > len(g_new):
-        g_new.insert(0, 0)
-
-    while len(g_new) > len(f_new):
-        f_new.insert(0, 0)
+    sanitize_arrays(f_new, g_new)
 
     # Add numbers with same index and modulo m them. Add to result
     for a, b in zip(reversed(f_new), reversed(g_new)):
@@ -265,6 +262,7 @@ def add_sub_poly(obj, op='add'):
 
     # Return object to initial state
     obj['f'] = f_orig
+    obj['g'] = g_orig
 
     # Return object which now includes an answer key-value pair
     return obj
