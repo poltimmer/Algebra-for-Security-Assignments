@@ -1,4 +1,4 @@
-from utils import sanitize_arrays, set_to_array # pylint: disable=no-name-in-module
+from .utils import sanitize_arrays, set_to_array # pylint: disable=no-name-in-module
 
 INPUTFILE = "input.txt"
 OUTPUTFILE = "output.txt"
@@ -184,7 +184,8 @@ def display_poly(obj):
 
     # For each number in reversed input
     for index, i in enumerate(reversed(f)):
-        # Calculate coefficient for each exponent. If 1 then ignore before X, but return when at the beginning of the answer.
+        # Calculate coefficient for each exponent. If 1 then ignore before X, but return when at the beginning of the
+        # answer.
         if i % m == 1 and index == 0:
             coef = '1'
         elif i % m == 1:
@@ -238,7 +239,7 @@ def add_sub_poly(obj, op='add'):
     # Set local variable
     result = []  # Result array we will convert to string later
 
-    # Make sure the lengths are equal by insterting at the front
+    # Make sure the lengths are equal by inserting at the front
     sanitize_arrays(f_new, g_new)
 
     # Add numbers with same index and modulo m them. Add to result
@@ -277,7 +278,7 @@ def mul_poly(obj):
     result = []  # Result array we will convert to string later
 
     result.reverse()
-    obj['f'] = result
+    obj['f'] = result  # TODO: having to key your answer to 'f' for display_poly to work is a bit ridiculous.
     obj['answer_original'] = result
 
     # Get the string copy of result by calling display_poly
@@ -291,11 +292,68 @@ def mul_poly(obj):
 
 
 def div_poly(obj):
+    a = obj.get('f')
+    b = obj.get('g')
+    m = obj.get('m')
+
+    answer_q, answer_r = long_div_poly(a, b, m)
+
+    obj['answ-q'] = answer_q
+    obj['answ-r'] = answer_r
+
+    # Get the string copy of result by calling display_poly
+    obj = display_poly(obj)  # TODO: doesn't work for these answers, due to no abstraction in display_poly
+
     return obj
+
+
+def long_div_poly(a_remote, b_remote, m):
+    a = a_remote.copy()
+    b = b_remote.copy()
+
+    # TODO: modular reduction
+
+    q = [0]
+    r = a
+    while len(r) >= len(b):
+        X = [r[0]/b[0]] + [0] * (len(r) - len(b))
+        q = add(q, X)  # TODO: this assumes properly abstracted methods
+        r = subtract(r, mult(X, b))
+    return q, r
 
 
 def euclid_poly(obj):
+    a = obj.get('f')
+    b = obj.get('g')
+    m = obj.get('m')
+
+    obj['answ-a'], obj['answ-b'] = euclid_extended_poly(a, b, m)
+
+    # Get the string copy of result by calling display_poly
+    obj = display_poly(obj)
+
     return obj
+
+
+def euclid_extended_poly(a_remote, b_remote, m):
+    a = a_remote.copy()
+    b = b_remote.copy()
+
+    x = 1,
+    v = 1,
+    y = 0,
+    u = 0,
+    while b != [0]:  # TODO: likely faulty comparison, as addresses get compared
+        q, r = long_div_poly(a, b, m)
+        a = b
+        b = r
+        x_ = x
+        y_ = y
+        x = u
+        y = v
+        u = subtract(x_, mult(q, u))  # TODO: assumes proper abstraction
+        v = subtract(y_, mult(q, v))
+    return inv(x(a[0])), inv(y(a[0]))  # TODO: need to figure out how to invert, and need helper function to calculate function
 
 
 def equals_poly_mod(obj):

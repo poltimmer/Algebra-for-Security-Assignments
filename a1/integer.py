@@ -1,6 +1,6 @@
 from math import ceil, floor
 
-from utils import (array_to_number, invert, is_equal, is_greater_than,
+from .utils import (array_to_number, invert, is_equal, is_greater_than,
                    is_negative, number_to_array)
 
 # Define Constants
