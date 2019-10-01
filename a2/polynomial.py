@@ -288,9 +288,7 @@ def mul_poly(obj):
     m = obj.get('mod')
 
     # Set local variable
-    result = []  # Result array we will convert to string later
-    for k in range(0, len(f_new) + len(g_new) - 1):
-        result.append(0)
+    result = [0] * (len(f_new) + len(g_new))  # Result array we will convert to string later
 
     for i in range(0, len(f_new)):
         for j in range(0, len(g_new)):
