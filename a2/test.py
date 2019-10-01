@@ -1,10 +1,10 @@
 import unittest
 
-from polynomial import add_sub_poly, display_poly
-from utils import set_to_array # pylint: disable=no-name-in-module
+from polynomial import add_sub_poly, display_poly, long_div_poly
+from utils import set_to_array  # pylint: disable=no-name-in-module
 
 
-class testUtils(unittest.TestCase):
+class TestUtils(unittest.TestCase):
     def test_set_to_array(self):
         assert set_to_array('{}') == []
         assert set_to_array('{1,2,3}') == [1, 2, 3]
@@ -13,7 +13,7 @@ class testUtils(unittest.TestCase):
         assert set_to_array('{0,0,0}') == [0, 0, 0]
 
 
-class testPoly(unittest.TestCase):
+class TestPoly(unittest.TestCase):
     def test_display_poly(self):
         obj = {}
         obj['mod'] = 12
@@ -123,6 +123,22 @@ class testPoly(unittest.TestCase):
         obj['f'] = [5, 3, 6, 9]
         obj['g'] = [1, 4, 3]
         assert add_sub_poly(obj, 'sub')['answer'] == '2X^3+2X^2+2X'
+
+    def test_long_div_poly(self):
+        a = [3, 5, 2]
+        b = [2, 1]
+        m = 7
+        assert long_div_poly(a, b, m) == [5, 0], [2]
+
+        a = [6, -5, 2]
+        b = [2, 1]
+        m = 7
+        assert long_div_poly(a, b, m) == [3, 3], [6]
+
+        a = [-5, 2]
+        b = [2, 1]
+        m = 7
+        assert long_div_poly(a, b, m) == [1], [1]
 
 
 if __name__ == "__main__":

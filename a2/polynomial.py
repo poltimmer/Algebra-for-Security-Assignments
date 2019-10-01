@@ -311,15 +311,28 @@ def long_div_poly(a_remote, b_remote, m):
     a = a_remote.copy()
     b = b_remote.copy()
 
-    # TODO: modular reduction
+    # TODO: modular reduction of a and b
 
     q = [0]
     r = a
     while len(r) >= len(b):
-        X = [r[0]/b[0]] + [0] * (len(r) - len(b))
-        q = add(q, X)  # TODO: this assumes properly abstracted methods
-        r = subtract(r, mult(X, b))
+        x = [mod_div(r[0], b[0], m)] + [0] * (len(r) - len(b))
+        q = add(q, x, m)  # TODO: this assumes properly abstracted methods
+        r = subtract(r, mult(x, b, m), m)
+
+    # TODO: modular reduction of q and r
     return q, r
+
+
+# Modular division of integers a and b mod m
+def mod_div(a, b, m):
+    a = a % m
+    b = b % m
+
+    while a % b != 0:
+        a += m
+
+    return (a / b) % m
 
 
 def euclid_poly(obj):
@@ -339,6 +352,8 @@ def euclid_extended_poly(a_remote, b_remote, m):
     a = a_remote.copy()
     b = b_remote.copy()
 
+    # TODO: reduce polynomials
+
     x = 1,
     v = 1,
     y = 0,
@@ -351,8 +366,8 @@ def euclid_extended_poly(a_remote, b_remote, m):
         y_ = y
         x = u
         y = v
-        u = subtract(x_, mult(q, u))  # TODO: assumes proper abstraction
-        v = subtract(y_, mult(q, v))
+        u = subtract(x_, mult(q, u, m), m)  # TODO: assumes proper abstraction
+        v = subtract(y_, mult(q, v, m), m)
     return inv(x(a[0])), inv(y(a[0]))  # TODO: need to figure out how to invert, and need helper function to calculate function
 
 
