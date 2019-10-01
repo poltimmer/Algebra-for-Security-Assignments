@@ -182,47 +182,6 @@ def display_poly(obj):
     result = ''  # Final string that will be returned as answer
     index_string = 0  # Index of place in result
 
-    # # For each number in reversed input
-    # for index, i in enumerate(reversed(f)):
-    #     # Calculate coefficient for each exponent. If 1 then ignore before X, but return when at the beginning of the
-    #     # answer.
-    #     if i % m == 1 and index == 0:
-    #         coef = '1'
-    #     elif i % m == 1:
-    #         coef = ''
-    #     else:
-    #         coef = str(i % m)
-    #
-    #     # Coefficient is 0, ignore whole piece
-    #     if i % m == 0:
-    #         continue
-    #
-    #     # If at the beginning make sure to ignore '+' because this will mess up the answer
-    #     if index_string == 0:
-    #         index_string += 1
-    #
-    #         if index == 0:
-    #             result = coef + result
-    #         elif index == 1:
-    #             result = coef + 'X' + result
-    #         else:
-    #             result = coef + 'X^' + str(index) + result
-    #
-    #     # Regular case
-    #     else:
-    #         index_string += 1
-    #
-    #         if index == 0:
-    #             result = coef + '+' + result
-    #         elif index == 1:
-    #             result = coef + 'X' + '+' + result
-    #         else:
-    #             result = coef + 'X^' + str(index) + '+' + result
-    #
-    # # If nothing gets added to result then we should just return 0
-    # if result == '':
-    #     result = '0'
-
     result = poly_string(f)
     # Return Object
     obj['answer'] = result
