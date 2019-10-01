@@ -42,9 +42,6 @@ def poly_string(x):
 
         result = term + '+' + result
 
-
-
-
     # If nothing gets added to result then we should just return 0
     if result == '':
         return '0'
