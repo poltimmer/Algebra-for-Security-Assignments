@@ -1,4 +1,4 @@
-from utils import sanitize_arrays, set_to_array, poly_string # pylint: disable=no-name-in-module
+from utils import sanitize_arrays, set_to_array, poly_string  # pylint: disable=no-name-in-module
 
 INPUTFILE = "input.txt"
 OUTPUTFILE = "output.txt"
@@ -33,7 +33,7 @@ def read_input():
     except FileNotFoundError:
         print(
             "Input file {} not found in current directory. Make sure the file is in the same directory!"
-            .format(INPUTFILE))
+                .format(INPUTFILE))
         exit(1)
 
     for line in input_file:
@@ -289,17 +289,17 @@ def mul_poly(obj):
 
     # Set local variable
     result = []  # Result array we will convert to string later
-    for k in range(0, len(f_new)+len(g_new)-1):
+    for k in range(0, len(f_new) + len(g_new) - 1):
         result.append(0)
 
     for i in range(0, len(f_new)):
         for j in range(0, len(g_new)):
-            result[i+j] = result[i+j] + (f_new[i]*g_new[j])
-            while result[i+j] < 0: #TODO als meer dan een keer modulo erbij moet
-                result[i+j] = result[i+j] + m
-            result[i+j] = result[i+j] % m
+            result[i + j] = result[i + j] + (f_new[i] * g_new[j])
+            while result[i + j] < 0:  # TODO als meer dan een keer modulo erbij moet
+                result[i + j] = result[i + j] + m
+            result[i + j] = result[i + j] % m
 
-    #result.reverse()
+    # result.reverse()
     obj['f'] = result  # TODO: having to key your answer to 'f' for display_poly to work is a bit ridiculous.
     obj['answer_original'] = result
 
@@ -390,7 +390,8 @@ def euclid_extended_poly(a_remote, b_remote, m):
         y = v
         u = subtract_poly(x_, mult(q, u, m), m)  # TODO: assumes proper abstraction
         v = subtract_poly(y_, mult(q, v, m), m)
-    return inv(x(a[0])), inv(y(a[0]))  # TODO: need to figure out how to invert, and need helper function to calculate function
+    return inv(x(a[0])), inv(
+        y(a[0]))  # TODO: need to figure out how to invert, and need helper function to calculate function
 
 
 def equals_poly_mod(obj):
