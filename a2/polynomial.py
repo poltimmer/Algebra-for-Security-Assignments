@@ -242,18 +242,15 @@ def add_sub_poly(obj, op='add'):
     # Make sure the lengths are equal by inserting at the front
     sanitize_arrays(f_new, g_new)
 
-    # Add numbers with same index and modulo m them. Add to result
-    for a, b in zip(reversed(f_new), reversed(g_new)):
-        # If operand is addition then add
-        if op == 'add':
-            result.append((a + b) % m)
+    # If operand is addition then add
+    if op == 'add':
+        result = add_poly(f_new, g_new, m)
 
-        # Now operand is subtraction then minus
-        if op == 'sub':
-            result.append((a - b) % m)
+    # Now operand is subtraction then subtract
+    if op == 'sub':
+        result = subtract_poly(f_new, g_new, m)
 
-    # Reverse result back to original order and add to obj
-    result.reverse()
+    # Add result to obj
     obj['f'] = result
     obj['answer_original'] = result
 
@@ -266,6 +263,24 @@ def add_sub_poly(obj, op='add'):
 
     # Return object which now includes an answer key-value pair
     return obj
+
+
+def add_poly(a, b, m):
+    result = []
+    # Add numbers with same index and modulo m them. Add to result
+    for x, y in zip(a, b):
+        result.append((x + y) % m)
+
+    return result
+
+
+def subtract_poly(a, b, m):
+    result = []
+    # Subtract numbers with same index and modulo m them. Add to result
+    for x, y in zip(a, b):
+        result.append((x - y) % m)
+
+    return result
 
 
 def mul_poly(obj):
@@ -317,8 +332,8 @@ def long_div_poly(a_remote, b_remote, m):
     r = a
     while len(r) >= len(b):
         x = [mod_div(r[0], b[0], m)] + [0] * (len(r) - len(b))
-        q = add(q, x, m)  # TODO: this assumes properly abstracted methods
-        r = subtract(r, mult(x, b, m), m)
+        q = add_poly(q, x, m)  # TODO: this assumes properly abstracted methods
+        r = subtract_poly(r, mult(x, b, m), m)
 
     # TODO: modular reduction of q and r
     return q, r
@@ -366,8 +381,8 @@ def euclid_extended_poly(a_remote, b_remote, m):
         y_ = y
         x = u
         y = v
-        u = subtract(x_, mult(q, u, m), m)  # TODO: assumes proper abstraction
-        v = subtract(y_, mult(q, v, m), m)
+        u = subtract_poly(x_, mult(q, u, m), m)  # TODO: assumes proper abstraction
+        v = subtract_poly(y_, mult(q, v, m), m)
     return inv(x(a[0])), inv(y(a[0]))  # TODO: need to figure out how to invert, and need helper function to calculate function
 
 
