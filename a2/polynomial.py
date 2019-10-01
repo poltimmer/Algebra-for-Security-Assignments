@@ -236,19 +236,16 @@ def add_sub_poly(obj, op='add'):
     g_new = g_orig.copy()
     m = obj.get('mod')
 
-    # Set local variable
-    result = []  # Result array we will convert to string later
-
     # Make sure the lengths are equal by inserting at the front
     sanitize_arrays(f_new, g_new)
 
     # If operand is addition then add
     if op == 'add':
         result = add_poly(f_new, g_new, m)
-
-    # Now operand is subtraction then subtract
-    if op == 'sub':
+    elif op == 'sub':
         result = subtract_poly(f_new, g_new, m)
+    else:
+        raise Exception('Invalid operator ', op)
 
     # Add result to obj
     obj['f'] = result
