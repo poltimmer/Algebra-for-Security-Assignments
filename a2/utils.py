@@ -17,3 +17,34 @@ def sanitize_arrays(f, g):
 
     while len(g) > len(f):
         f.insert(0, 0)
+
+
+# Converts a polynomial to a string representing that polynomial. Assumes positive coefficients.
+def poly_string(x):
+    result = ''
+
+    for power, coefficient in enumerate(reversed(x)):
+        if coefficient > 1:
+            result = str(coefficient) + result
+        elif coefficient == 1:
+            if power > 0:
+                pass
+            else:
+                result = str(coefficient) + result
+        else:
+            continue
+
+        if power > 1:
+            result = 'X^' + str(power) + '+' + result
+        elif power == 1:
+            result = 'X' + '+' + result
+        else:
+            result += '+'
+
+
+    # If nothing gets added to result then we should just return 0
+    if result == '':
+        return '0'
+    else:
+        return result[:-1]  # Removes '+' at the end
+
