@@ -288,8 +288,18 @@ def mul_poly(obj):
 
     # Set local variable
     result = []  # Result array we will convert to string later
+    for k in range(0, len(f_new)+len(g_new)-1):
+        result.append(0)
 
-    result.reverse()
+    for i in range(0, len(f_new)):
+        for j in range(0, len(g_new)):
+            result[i+j] = result[i+j] + (f_new[i]*g_new[j])
+            if result[i+j] < 0:
+                result[i+j] = result[i+j] + m
+            else:
+                result[i+j] = result[i+j] % m
+
+    #result.reverse()
     obj['f'] = result  # TODO: having to key your answer to 'f' for display_poly to work is a bit ridiculous.
     obj['answer_original'] = result
 

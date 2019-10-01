@@ -134,19 +134,19 @@ class TestPoly(unittest.TestCase):
 
         obj['f'] = [0, 0, 0, 0, 0, 0, 0]
         obj['g'] = []
-        assert mul_poly(obj, 'sub')['answer'] == '0'
+        assert mul_poly(obj)['answer'] == '0'
 
         obj['f'] = [33]
         obj['g'] = [27]
-        assert mul_poly(obj, 'sub')['answer'] == '2'
+        assert mul_poly(obj)['answer'] == '2'
 
         obj['f'] = [1,1,1]
         obj['g'] = [1,-1]
-        assert mul_poly(obj, 'sub')['answer'] == 'X^3+6'
+        assert mul_poly(obj)['answer'] == 'X^3+6'
 
         obj['f'] = [2,3]
         obj['g'] = [1,6,1]
-        assert mul_poly(obj, 'sub')['answer'] == '2X^3+X^2+6X+3'
+        assert mul_poly(obj)['answer'] == '2X^3+X^2+6X+3'
 
 
     def test_long_div_poly(self):
