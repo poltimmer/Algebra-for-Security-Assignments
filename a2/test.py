@@ -1,6 +1,6 @@
 import unittest
 
-from polynomial import add_sub_poly, display_poly, long_div_poly
+from polynomial import add_sub_poly, display_poly, long_div_poly, mul_poly
 from utils import set_to_array  # pylint: disable=no-name-in-module
 
 
@@ -123,6 +123,31 @@ class TestPoly(unittest.TestCase):
         obj['f'] = [5, 3, 6, 9]
         obj['g'] = [1, 4, 3]
         assert add_sub_poly(obj, 'sub')['answer'] == '2X^3+2X^2+2X'
+
+    def test_mul_poly(self):
+        obj = {}
+        obj['mod'] = 7
+
+        obj['f'] = [6]
+        obj['g'] = [5]
+        assert mul_poly(obj)['answer'] == '2'
+
+        obj['f'] = [0, 0, 0, 0, 0, 0, 0]
+        obj['g'] = []
+        assert mul_poly(obj, 'sub')['answer'] == '0'
+
+        obj['f'] = [33]
+        obj['g'] = [27]
+        assert mul_poly(obj, 'sub')['answer'] == '2'
+
+        obj['f'] = [1,1,1]
+        obj['g'] = [1,-1]
+        assert mul_poly(obj, 'sub')['answer'] == 'X^3+6'
+
+        obj['f'] = [2,3]
+        obj['g'] = [1,6,1]
+        assert mul_poly(obj, 'sub')['answer'] == '2X^3+X^2+6X+3'
+
 
     def test_long_div_poly(self):
         a = [3, 5, 2]
