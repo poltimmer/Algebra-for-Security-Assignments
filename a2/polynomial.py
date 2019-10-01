@@ -404,7 +404,7 @@ def euclid_extended_poly(a_remote, b_remote, m):
         y_ = y
         x = u
         y = v
-        u = subtract_poly(x_, mult(q, u, m), m)  # TODO: assumes proper abstraction
+        u = subtract_poly(x_, mult(q, u, m), m)
         v = subtract_poly(y_, mult(q, v, m), m)
     # TODO: need to figure out how to invert, and need helper function to calculate function
     return inv(x(a[0])), inv(y(a[0]))

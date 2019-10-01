@@ -1,6 +1,6 @@
 import unittest
 
-from polynomial import add_sub_poly, display_poly, long_div_poly, mul_poly
+from polynomial import add_sub_poly, display_poly, long_div_poly, mul_poly, euclid_extended_poly
 from utils import set_to_array  # pylint: disable=no-name-in-module
 
 
@@ -172,6 +172,32 @@ class TestLongDivPoly(unittest.TestCase):
         b = [2, 1]
         m = 7
         assert long_div_poly(a, b, m) == ([1], [1])
+
+
+class TestEuclidPoly(unittest.TestCase):
+    def test1(self):
+        a = [1, 2, 0, 1, 0, 1]
+        b = [1, 0, 0, 0, -1]
+        m = 7
+        assert euclid_extended_poly(a, b, m) == ([2, 2, 1], [5, 1, 2, 0])
+
+    def test2(self):
+        a = [1, 2, 0, 1, 0, 1]
+        b = [1, 0, 3, 0, -1]
+        m = 7
+        assert euclid_extended_poly(a, b, m) == ([2, 1, 0, 3], [5, 2, 4, 0, 2])
+
+    def test3(self):
+        a = [1, 0, 1]
+        b = [1, 0, 3, 0, -1]
+        m = 7
+        assert euclid_extended_poly(a, b, m) == ([5, 0, 3], [2])
+
+    def test4(self):
+        a = [6, 0, 0, -1, 0, 1]
+        b = [1, 0, 3, 0, -1]
+        m = 7
+        assert euclid_extended_poly(a, b, m) == ([3, 0, 3, 6], [3, 3, 5, 0, 5])
 
 
 if __name__ == "__main__":
