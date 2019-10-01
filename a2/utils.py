@@ -19,6 +19,15 @@ def sanitize_arrays(f, g):
         f.insert(0, 0)
 
 
+def clear_leading_zeroes(x_remote):
+    x = x_remote.copy()
+
+    while x[0] == 0 and len(x) > 1:
+        x = x[1:]
+
+    return x
+
+
 # Converts a polynomial to a string representing that polynomial. Assumes positive coefficients.
 def poly_string(x):
     result = ''

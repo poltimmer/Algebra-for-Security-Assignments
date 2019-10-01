@@ -1,4 +1,4 @@
-from utils import sanitize_arrays, set_to_array, poly_string  # pylint: disable=no-name-in-module
+from utils import sanitize_arrays, set_to_array, poly_string, clear_leading_zeroes  # pylint: disable=no-name-in-module
 
 INPUTFILE = "input.txt"
 OUTPUTFILE = "output.txt"
@@ -263,7 +263,12 @@ def add_sub_poly(obj, op='add'):
     return obj
 
 
-def add_poly(a, b, m):
+def add_poly(a_remote, b_remote, m):
+    a = a_remote.copy()
+    b = b_remote.copy()
+
+    sanitize_arrays(a, b)
+
     result = []
     # Add numbers with same index and modulo m them. Add to result
     for x, y in zip(a, b):
@@ -272,7 +277,12 @@ def add_poly(a, b, m):
     return result
 
 
-def subtract_poly(a, b, m):
+def subtract_poly(a_remote, b_remote, m):
+    a = a_remote.copy()
+    b = b_remote.copy()
+
+    sanitize_arrays(a, b)
+
     result = []
     # Subtract numbers with same index and modulo m them. Add to result
     for x, y in zip(a, b):
@@ -305,7 +315,7 @@ def mul_poly(obj):
 
 
 def mult(a, b, m):
-    result = [0] * (len(a) + len(b))
+    result = [0] * (len(a) + len(b)-1)
 
     for i in range(0, len(a)):
         for j in range(0, len(b)):
@@ -343,8 +353,10 @@ def long_div_poly(a_remote, b_remote, m):
     r = a
     while len(r) >= len(b):
         x = [mod_div(r[0], b[0], m)] + [0] * (len(r) - len(b))
-        q = add_poly(q, x, m)  # TODO: this assumes properly abstracted methods
-        r = subtract_poly(r, mult(x, b, m), m)
+        q = add_poly(q, x, m)
+        w = mult(x, b, m)
+        r = subtract_poly(r, w, m)
+        r = clear_leading_zeroes(r)
 
     # TODO: modular reduction of q and r
     return q, r
@@ -358,7 +370,7 @@ def mod_div(a, b, m):
     while a % b != 0:
         a += m
 
-    return (a / b) % m
+    return int((a / b) % m)
 
 
 def euclid_poly(obj):
