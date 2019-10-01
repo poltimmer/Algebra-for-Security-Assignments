@@ -24,22 +24,25 @@ def poly_string(x):
     result = ''
 
     for power, coefficient in enumerate(reversed(x)):
+        term = ''
         if coefficient > 1:
-            result = str(coefficient) + result
+            term += str(coefficient)
         elif coefficient == 1:
             if power > 0:
                 pass
             else:
-                result = str(coefficient) + result
+                term += str(coefficient)
         else:
             continue
 
         if power > 1:
-            result = 'X^' + str(power) + '+' + result
+            term += 'X^' + str(power)
         elif power == 1:
-            result = 'X' + '+' + result
-        else:
-            result += '+'
+            term += 'X'
+
+        result = term + '+' + result
+
+
 
 
     # If nothing gets added to result then we should just return 0
@@ -48,3 +51,4 @@ def poly_string(x):
     else:
         return result[:-1]  # Removes '+' at the end
 
+poly_string([1, 2, 1])

@@ -291,7 +291,7 @@ def mul_poly(obj):
     result = mult(f_new, g_new, m)
 
     # result.reverse()
-    obj['f'] = result  # TODO: having to key your answer to 'f' for display_poly to work is a bit ridiculous.
+    obj['f'] = result
     obj['answer_original'] = result
 
     # Get the string copy of result by calling display_poly
@@ -305,7 +305,7 @@ def mul_poly(obj):
 
 
 def mult(a, b, m):
-    result = [0] * (len(a) + len(b))  # Result array we will convert to string later
+    result = [0] * (len(a) + len(b))
 
     for i in range(0, len(a)):
         for j in range(0, len(b)):
@@ -394,8 +394,8 @@ def euclid_extended_poly(a_remote, b_remote, m):
         y = v
         u = subtract_poly(x_, mult(q, u, m), m)  # TODO: assumes proper abstraction
         v = subtract_poly(y_, mult(q, v, m), m)
-    return inv(x(a[0])), inv(
-        y(a[0]))  # TODO: need to figure out how to invert, and need helper function to calculate function
+    # TODO: need to figure out how to invert, and need helper function to calculate function
+    return inv(x(a[0])), inv(y(a[0]))
 
 
 def equals_poly_mod(obj):
