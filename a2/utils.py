@@ -50,5 +50,3 @@ def poly_string(x):
         return '0'
     else:
         return result[:-1]  # Removes '+' at the end
-
-poly_string([1, 2, 1])
