@@ -148,6 +148,10 @@ class TestPoly(unittest.TestCase):
         obj['g'] = [1,6,1]
         assert mul_poly(obj)['answer'] == '2X^3+X^2+6X+3'
 
+        obj['mod'] = 5
+        obj['f'] = [-2, 3]
+        obj['g'] = [4]
+        assert mul_poly(obj)['answer'] == '2X+2'
 
     def test_long_div_poly(self):
         a = [3, 5, 2]

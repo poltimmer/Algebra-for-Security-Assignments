@@ -294,10 +294,9 @@ def mul_poly(obj):
     for i in range(0, len(f_new)):
         for j in range(0, len(g_new)):
             result[i+j] = result[i+j] + (f_new[i]*g_new[j])
-            if result[i+j] < 0:
+            while result[i+j] < 0: #TODO als meer dan een keer modulo erbij moet
                 result[i+j] = result[i+j] + m
-            else:
-                result[i+j] = result[i+j] % m
+            result[i+j] = result[i+j] % m
 
     #result.reverse()
     obj['f'] = result  # TODO: having to key your answer to 'f' for display_poly to work is a bit ridiculous.
