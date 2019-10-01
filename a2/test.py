@@ -140,12 +140,12 @@ class TestPoly(unittest.TestCase):
         obj['g'] = [27]
         assert mul_poly(obj)['answer'] == '2'
 
-        obj['f'] = [1,1,1]
-        obj['g'] = [1,-1]
+        obj['f'] = [1, 1, 1]
+        obj['g'] = [1, -1]
         assert mul_poly(obj)['answer'] == 'X^3+6'
 
-        obj['f'] = [2,3]
-        obj['g'] = [1,6,1]
+        obj['f'] = [2, 3]
+        obj['g'] = [1, 6, 1]
         assert mul_poly(obj)['answer'] == '2X^3+X^2+6X+3'
 
         obj['mod'] = 5
