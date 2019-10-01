@@ -288,14 +288,7 @@ def mul_poly(obj):
     m = obj.get('mod')
 
     # Set local variable
-    result = [0] * (len(f_new) + len(g_new))  # Result array we will convert to string later
-
-    for i in range(0, len(f_new)):
-        for j in range(0, len(g_new)):
-            result[i + j] = result[i + j] + (f_new[i] * g_new[j])
-            while result[i + j] < 0:  # TODO als meer dan een keer modulo erbij moet
-                result[i + j] = result[i + j] + m
-            result[i + j] = result[i + j] % m
+    result = mult(f_new, g_new, m)
 
     # result.reverse()
     obj['f'] = result  # TODO: having to key your answer to 'f' for display_poly to work is a bit ridiculous.
@@ -309,6 +302,19 @@ def mul_poly(obj):
 
     # Return object which now includes an answer key-value pair
     return obj
+
+
+def mult(a, b, m):
+    result = [0] * (len(a) + len(b))  # Result array we will convert to string later
+
+    for i in range(0, len(a)):
+        for j in range(0, len(b)):
+            result[i + j] = result[i + j] + (a[i] * b[j])
+            while result[i + j] < 0:  # TODO als meer dan een keer modulo erbij moet
+                result[i + j] = result[i + j] + m
+            result[i + j] = result[i + j] % m
+
+    return result
 
 
 def div_poly(obj):
