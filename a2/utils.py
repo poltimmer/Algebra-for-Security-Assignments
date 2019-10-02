@@ -56,3 +56,12 @@ def poly_string(x):
         return '0'
     else:
         return result[:-1]  # Removes '+' at the end
+
+
+def reduce_poly(x_remote, m):
+    x = x_remote.copy()
+
+    for i in range(len(x)):
+        x[i] = x[i] % m
+
+    return x

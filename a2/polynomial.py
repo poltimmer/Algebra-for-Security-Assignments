@@ -1,4 +1,4 @@
-from utils import sanitize_arrays, set_to_array, poly_string, clear_leading_zeroes  # pylint: disable=no-name-in-module
+from utils import sanitize_arrays, set_to_array, poly_string, clear_leading_zeroes, reduce_poly  # pylint: disable=no-name-in-module
 
 INPUTFILE = "input.txt"
 OUTPUTFILE = "output.txt"
@@ -181,6 +181,8 @@ def display_poly(obj):
     # Set local variables
     result = ''  # Final string that will be returned as answer
     index_string = 0  # Index of place in result
+
+    f = reduce_poly(f, m)
 
     result = poly_string(f)
     # Return Object
