@@ -372,8 +372,18 @@ def euclid_extended_poly(a_remote, b_remote, m):
 
 
 def equals_poly_mod(obj):
-    return obj
+    a = obj.get('f')
+    b = obj.get('g')
+    c = obj.get('h')
+    m = obj.get('mod')
 
+    _, answer_a = long_div_poly(a, c, m)
+    _, answer_b = long_div_poly(b,c,m)
+
+    if answer_a == answer_b:
+        return 'TRUE'
+    else:
+        return 'FALSE'
 
 def is_irreducible(obj):
     return obj

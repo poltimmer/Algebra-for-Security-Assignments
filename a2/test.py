@@ -1,6 +1,6 @@
 import unittest
 
-from polynomial import add_sub_poly, display_poly, long_div_poly, mul_poly, euclid_extended_poly
+from polynomial import add_sub_poly, display_poly, long_div_poly, equals_poly_mod, mul_poly, euclid_extended_poly
 from utils import set_to_array  # pylint: disable=no-name-in-module
 
 
@@ -199,6 +199,25 @@ class TestEuclidPoly(unittest.TestCase):
         m = 7
         assert euclid_extended_poly(a, b, m) == ([3, 0, 3, 6], [3, 3, 5, 0, 5])
 
+    def test_equals_poly_mod(self):
+        obj = {}
+        obj['mod'] = 7
+
+        obj['f'] = [1,1,1]
+        obj['g'] = [10]
+        obj['h'] = [1,-1]
+        assert equals_poly_mod(obj)['answer'] == 'TRUE'
+
+        obj['f'] = [1,1,1]
+        obj['g'] = [3]
+        obj['h'] = []
+        assert equals_poly_mod(obj)['answer'] == 'FALSE'
+
+        obj['mod'] = 5
+        obj['f'] = [1, 1, 1]
+        obj['g'] = [10]
+        obj['h'] = [1, -1]
+        assert equals_poly_mod(obj)['answer'] == 'FALSE'
 
 if __name__ == "__main__":
     unittest.main()
