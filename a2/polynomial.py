@@ -281,7 +281,7 @@ def mult(a, b, m):
     for i in range(0, len(a)):
         for j in range(0, len(b)):
             result[i + j] = result[i + j] + (a[i] * b[j])
-            while result[i + j] < 0:  # TODO als meer dan een keer modulo erbij moet
+            while result[i + j] < 0:
                 result[i + j] = result[i + j] + m
             result[i + j] = result[i + j] % m
 
@@ -377,8 +377,11 @@ def equals_poly_mod(obj):
     c = obj.get('h')
     m = obj.get('mod')
 
-    _, answer_a = long_div_poly(a, c, m)
+    _, answer_a = long_div_poly(a,c,m)
     _, answer_b = long_div_poly(b,c,m)
+
+    answer_a = answer_a[0] % m
+    answer_b = answer_b[0] % m
 
     if answer_a == answer_b:
         return 'TRUE'
