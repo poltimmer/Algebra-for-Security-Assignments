@@ -143,9 +143,9 @@ def generate_answer(obj):
     elif op == "long-div-poly":
         answer_q, answer_r = long_div_poly(f, g, m)  # Pol
     elif op == "euclid-poly":
-        answer = euclid_poly(obj)  # Pol
+        answer_a, answer_b = euclid_extended_poly(f, g, m)  # Pol
     elif op == "equals-poly-mod":
-        answer = equals_poly_mod(obj)  # Janneke
+        answer = equals_poly_mod(f, g, h, m)  # Janneke
     elif op == "irreducible":
         answer = is_irreducible(obj)  # Edwin
     elif op == "find-irred":
@@ -211,6 +211,9 @@ def print_output(objects):
 
 
 def display_poly(f_remote, m):
+    if isinstance(f_remote, str):
+        return f_remote
+        
     # Get the values we need from the object
     f = f_remote.copy()
 
@@ -292,19 +295,6 @@ def mod_div(a, b, m):
     return int((a / b) % m)
 
 
-def euclid_poly(obj):
-    a = obj.get('f')
-    b = obj.get('g')
-    m = obj.get('m')
-
-    obj['answ-a'], obj['answ-b'] = euclid_extended_poly(a, b, m)
-
-    # Get the string copy of result by calling display_poly
-    obj = display_poly(obj)
-
-    return obj
-
-
 def euclid_extended_poly(a_remote, b_remote, m):
     a = a_remote.copy()
     b = b_remote.copy()
@@ -329,11 +319,10 @@ def euclid_extended_poly(a_remote, b_remote, m):
     return inv(x(a[0])), inv(y(a[0]))
 
 
-def equals_poly_mod(obj):
-    a = obj.get('f')
-    b = obj.get('g')
-    c = obj.get('h')
-    m = obj.get('mod')
+def equals_poly_mod(f_remote, g_remote, h_remote, m):
+    a = f_remote.copy()
+    b = g_remote.copy()
+    c = h_remote.copy()
 
     _, answer_a = long_div_poly(a,c,m)
     _, answer_b = long_div_poly(b,c,m)
