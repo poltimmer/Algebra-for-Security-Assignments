@@ -118,28 +118,46 @@ def read_input():
 
 
 def generate_answer(obj):
+    answer = None
+    answer_q = None
+    answer_r = None
+
     op = obj.get('operation')
+    m = obj.get('mod')
+    f = obj.get('f')
+    g = obj.get('g')
+    h = obj.get('h')
+    deg = obj.get('deg')
 
     if op == "display-poly":
-        obj = display_poly(obj)
+        answer = f
     elif op == "add-poly":
-        obj = add_sub_poly(obj, 'add')
+        answer = add_poly(f, g, m)
     elif op == "subtract-poly":
-        obj = add_sub_poly(obj, 'sub')
+        answer = subtract_poly(f, g, m)
     elif op == "multiply-poly":
-        obj = mul_poly(obj)  # Janneke
+        answer = mult(f, g, m)  # Janneke
     elif op == "long-div-poly":
-        obj = div_poly(obj)  # Pol
+        answer_q, answer_r = long_div_poly(f, g, m)  # Pol
     elif op == "euclid-poly":
-        obj = euclid_poly(obj)  # Pol
+        answer = euclid_poly(obj)  # Pol
     elif op == "equals-poly-mod":
-        obj = equals_poly_mod(obj)  # Janneke
+        answer = equals_poly_mod(obj)  # Janneke
     elif op == "irreducible":
-        obj = is_irreducible(obj)  # Edwin
+        answer = is_irreducible(obj)  # Edwin
     elif op == "find-irred":
-        obj = find_irred(obj)  # Edwin
+        answer = find_irred(obj)  # Edwin
     elif op == "mod-poly":
-        obj = mod_poly(obj)
+        answer = mod_poly(obj)
+    else:
+        answer = [-1]
+
+    if answer:
+        obj['answer'] = display_poly(answer, m)
+    if answer_q:
+        obj['answer-q'] = display_poly(answer_q, m)
+    if answer_r:
+        obj['answer-r'] = display_poly(answer_r, m)
 
     return obj
 
@@ -167,62 +185,28 @@ def print_output(objects):
             output_file.write(obj['b_original'] + '\n')
         if 'answer' in obj:
             output_file.write('[answer] {}\n'.format(obj['answer']))
+        if 'answer-q' in obj:
+            output_file.write('[answer-q] {}\n'.format(obj['answer-q']))
+        if 'answer-r' in obj:
+            output_file.write('[answer-r] {}\n'.format(obj['answer-r']))
 
         output_file.write('\n')
 
     output_file.close()
 
 
-def display_poly(obj):
+def display_poly(f_remote, m):
     # Get the values we need from the object
-    f = obj.get('f')
-    m = obj.get('mod')
+    f = f_remote.copy()
 
     # Set local variables
     result = ''  # Final string that will be returned as answer
-    index_string = 0  # Index of place in result
 
     f = reduce_poly(f, m)
 
     result = poly_string(f)
     # Return Object
-    obj['answer'] = result
-    return obj
-
-
-def add_sub_poly(obj, op='add'):
-    # Get the values we need from the object
-    f_orig = obj.get('f')
-    f_new = f_orig.copy()
-    g_orig = obj.get('g')
-    g_new = g_orig.copy()
-    m = obj.get('mod')
-
-    # Make sure the lengths are equal by inserting at the front
-    sanitize_arrays(f_new, g_new)
-
-    # If operand is addition then add
-    if op == 'add':
-        result = add_poly(f_new, g_new, m)
-    elif op == 'sub':
-        result = subtract_poly(f_new, g_new, m)
-    else:
-        raise Exception('Invalid operator ', op)
-
-    # Add result to obj
-    obj['f'] = result
-    obj['answer_original'] = result
-
-    # Get the string copy of result by calling display_poly
-    obj = display_poly(obj)
-
-    # Return object to initial state
-    obj['f'] = f_orig
-    obj['g'] = g_orig
-
-    # Return object which now includes an answer key-value pair
-    return obj
-
+    return result
 
 def add_poly(a_remote, b_remote, m):
     a = a_remote.copy()
@@ -235,7 +219,7 @@ def add_poly(a_remote, b_remote, m):
     for x, y in zip(a, b):
         result.append((x + y) % m)
 
-    return result
+    return clear_leading_zeroes(result)
 
 
 def subtract_poly(a_remote, b_remote, m):
@@ -249,31 +233,7 @@ def subtract_poly(a_remote, b_remote, m):
     for x, y in zip(a, b):
         result.append((x - y) % m)
 
-    return result
-
-
-def mul_poly(obj):
-    f_orig = obj.get('f')
-    f_new = f_orig.copy()
-    g_new = obj.get('g')
-    m = obj.get('mod')
-
-    # Set local variable
-    result = mult(f_new, g_new, m)
-
-    # result.reverse()
-    obj['f'] = result
-    obj['answer_original'] = result
-
-    # Get the string copy of result by calling display_poly
-    obj = display_poly(obj)
-
-    # Return object to initial state
-    obj['f'] = f_orig
-
-    # Return object which now includes an answer key-value pair
-    return obj
-
+    return clear_leading_zeroes(result)
 
 def mult(a, b, m):
     result = [0] * (len(a) + len(b)-1)
@@ -285,24 +245,7 @@ def mult(a, b, m):
                 result[i + j] = result[i + j] + m
             result[i + j] = result[i + j] % m
 
-    return result
-
-
-def div_poly(obj):
-    a = obj.get('f')
-    b = obj.get('g')
-    m = obj.get('m')
-
-    answer_q, answer_r = long_div_poly(a, b, m)
-
-    obj['answ-q'] = answer_q
-    obj['answ-r'] = answer_r
-
-    # Get the string copy of result by calling display_poly
-    obj = display_poly(obj)  # TODO: doesn't work for these answers, due to no abstraction in display_poly
-
-    return obj
-
+    return clear_leading_zeroes(result)
 
 def long_div_poly(a_remote, b_remote, m):
     a = a_remote.copy()

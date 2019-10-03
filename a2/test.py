@@ -1,6 +1,6 @@
 import unittest
 
-from polynomial import add_sub_poly, display_poly, long_div_poly, equals_poly_mod, mul_poly, euclid_extended_poly
+from polynomial import display_poly, add_poly, subtract_poly, long_div_poly, equals_poly_mod, mult, euclid_extended_poly
 from utils import set_to_array  # pylint: disable=no-name-in-module
 
 
@@ -15,144 +15,139 @@ class TestUtils(unittest.TestCase):
 
 class TestPoly(unittest.TestCase):
     def test_display_poly(self):
-        obj = {}
-        obj['mod'] = 12
+        m = 12
 
-        obj['f'] = [1, 2, 1]
-        assert display_poly(obj)['answer'] == 'X^2+2X+1'
+        f = [1, 2, 1]
+        assert display_poly(f,m) == 'X^2+2X+1'
 
-        obj['f'] = [0]
-        assert display_poly(obj)['answer'] == '0'
+        f = [0]
+        assert display_poly(f, m) == '0'
 
-        obj['f'] = []
-        assert display_poly(obj)['answer'] == '0'
+        f = []
+        assert display_poly(f, m) == '0'
 
-        obj['f'] = [14, 12, 11]
-        assert display_poly(obj)['answer'] == '2X^2+11'
+        f = [14, 12, 11]
+        assert display_poly(f, m) == '2X^2+11'
 
-        obj['f'] = [12, 12, 12]
-        assert display_poly(obj)['answer'] == '0'
+        f = [12, 12, 12]
+        assert display_poly(f, m) == '0'
 
-        obj['f'] = [1, 2, 1, 1]
-        assert display_poly(obj)['answer'] == 'X^3+2X^2+X+1'
+        f = [1, 2, 1, 1]
+        assert display_poly(f, m) == 'X^3+2X^2+X+1'
 
-        obj['f'] = [1, 2, 0, 0]
-        assert display_poly(obj)['answer'] == 'X^3+2X^2'
+        f = [1, 2, 0, 0]
+        assert display_poly(f, m) == 'X^3+2X^2'
 
-        obj['f'] = [1, 2, 0, 1]
-        assert display_poly(obj)['answer'] == 'X^3+2X^2+1'
+        f = [1, 2, 0, 1]
+        assert display_poly(f, m) == 'X^3+2X^2+1'
 
-        obj['f'] = [1, 2, 1, 0]
-        assert display_poly(obj)['answer'] == 'X^3+2X^2+X'
+        f = [1, 2, 1, 0]
+        assert display_poly(f, m) == 'X^3+2X^2+X'
 
-        obj['f'] = [-2]
-        assert display_poly(obj)['answer'] == '10'
+        f = [-2]
+        assert display_poly(f, m) == '10'
 
-        obj['f'] = [-11, 11]
-        assert display_poly(obj)['answer'] == 'X+11'
+        f = [-11, 11]
+        assert display_poly(f, m) == 'X+11'
 
-        obj['f'] = [123, 13]
-        assert display_poly(obj)['answer'] == '3X+1'
+        f = [123, 13]
+        assert display_poly(f, m) == '3X+1'
 
-        obj['mod'] = 4
-        obj['f'] = [5, 6, 7, 8]
-        assert display_poly(obj)['answer'] == 'X^3+2X^2+3X'
+        m = 4
+        f = [5, 6, 7, 8]
+        assert display_poly(f, m) == 'X^3+2X^2+3X'
 
     def test_add_sub_poly_add(self):
-        obj = {}
-        obj['mod'] = 12
+        m = 12
 
-        obj['f'] = [1, 2, 1]
-        obj['g'] = [10, 11, 12, 13]
-        assert add_sub_poly(obj, 'add')['answer'] == '10X^3+2X+2'
+        f = [1, 2, 1]
+        g = [10, 11, 12, 13]
+        assert add_poly(f, g, m) == [10, 0, 2, 2]
 
-        obj['f'] = [0, 0, 0, 0, 0, 0, 0]
-        obj['g'] = []
-        assert add_sub_poly(obj, 'add')['answer'] == '0'
+        f = [0, 0, 0, 0, 0, 0, 0]
+        g = []
+        assert add_poly(f, g, m) == [0]
 
-        obj['f'] = [33]
-        obj['g'] = [11]
-        assert add_sub_poly(obj, 'add')['answer'] == '8'
+        f = [33]
+        g = [11]
+        assert add_poly(f, g, m) == [8]
 
-        obj['f'] = [10, 2]
-        obj['g'] = [3, 5]
-        assert add_sub_poly(obj, 'add')['answer'] == 'X+7'
+        f = [10, 2]
+        g = [3, 5]
+        assert add_poly(f, g, m) == [1, 7]
 
-        obj['f'] = [-7, 5, 6]
-        obj['g'] = [4, 8]
-        assert add_sub_poly(obj, 'add')['answer'] == '5X^2+9X+2'
+        f = [-7, 5, 6]
+        g = [4, 8]
+        assert add_poly(f, g, m) == [5, 9, 2]
 
-        obj['f'] = [-3, -5, -3]
-        obj['g'] = [-5, -3, -5]
-        assert add_sub_poly(obj, 'add')['answer'] == '4X^2+4X+4'
+        f = [-3, -5, -3]
+        g = [-5, -3, -5]
+        assert add_poly(f, g, m) == [4, 4, 4]
 
-        obj['mod'] = 3
-        obj['f'] = [5, 3, 6, 9]
-        obj['g'] = [1, 4, 3]
-        assert add_sub_poly(obj, 'add')['answer'] == '2X^3+X^2+X'
+        m = 3
+        f = [5, 3, 6, 9]
+        g = [1, 4, 3]
+        assert add_poly(f, g, m) == [2, 1, 1, 0]
 
     def test_add_sub_poly_sub(self):
-        obj = {}
-        obj['mod'] = 12
+        m = 12
 
-        obj['f'] = [1, 2, 1]
-        obj['g'] = [10, 11, 12, 13]
-        assert add_sub_poly(obj, 'sub')['answer'] == '2X^3+2X^2+2X'
+        f = [1, 2, 1]
+        g = [10, 11, 12, 13]
+        assert subtract_poly(f, g, m) == [2, 2, 2, 0]
 
-        obj['f'] = [0, 0, 0, 0, 0, 0, 0]
-        obj['g'] = []
-        assert add_sub_poly(obj, 'sub')['answer'] == '0'
+        f = [0, 0, 0, 0, 0, 0, 0]
+        g = []
+        assert subtract_poly(f, g, m) == [0]
 
-        obj['f'] = [33]
-        obj['g'] = [11]
-        assert add_sub_poly(obj, 'sub')['answer'] == '10'
+        f = [33]
+        g = [11]
+        assert subtract_poly(f, g, m) == [10]
 
-        obj['f'] = [10, 2]
-        obj['g'] = [3, 5]
-        assert add_sub_poly(obj, 'sub')['answer'] == '7X+9'
+        f = [10, 2]
+        g = [3, 5]
+        assert subtract_poly(f, g, m) == [7, 9]
 
-        obj['f'] = [-7, 5, 6]
-        obj['g'] = [4, 8]
-        assert add_sub_poly(obj, 'sub')['answer'] == '5X^2+X+10'
+        f = [-7, 5, 6]
+        g = [4, 8]
+        assert subtract_poly(f, g, m) == [5, 1, 10]
 
-        obj['f'] = [-3, -5, -3]
-        obj['g'] = [-5, -3, -5]
-        assert add_sub_poly(obj, 'sub')['answer'] == '2X^2+10X+2'
+        f = [-3, -5, -3]
+        g = [-5, -3, -5]
+        assert subtract_poly(f, g, m) == [2, 10, 2]
 
-        obj['mod'] = 3
-        obj['f'] = [5, 3, 6, 9]
-        obj['g'] = [1, 4, 3]
-        assert add_sub_poly(obj, 'sub')['answer'] == '2X^3+2X^2+2X'
+        m = 3
+        f = [5, 3, 6, 9]
+        g = [1, 4, 3]
+        assert subtract_poly(f, g, m) == [2, 2, 2, 0]
 
     def test_mul_poly(self):
-        obj = {}
-        obj['mod'] = 7
+        m = 7
 
-        obj['f'] = [6]
-        obj['g'] = [5]
-        assert mul_poly(obj)['answer'] == '2'
+        f = [6]
+        g = [5]
+        assert mult(f, g, m) == [2]
 
-        obj['f'] = [0, 0, 0, 0, 0, 0, 0]
-        obj['g'] = []
-        assert mul_poly(obj)['answer'] == '0'
+        f = [0, 0, 0, 0, 0, 0, 0]
+        g = []
+        assert mult(f, g, m) == [0]
 
-        obj['f'] = [33]
-        obj['g'] = [27]
-        assert mul_poly(obj)['answer'] == '2'
+        f = [33]
+        g = [27]
+        assert mult(f, g, m) == [2]
 
-        obj['f'] = [1, 1, 1]
-        obj['g'] = [1, -1]
-        assert mul_poly(obj)['answer'] == 'X^3+6'
+        f = [1, 1, 1]
+        g = [1, -1]
+        assert mult(f, g, m) == [1, 0, 0, 6]
 
-        obj['f'] = [2, 3]
-        obj['g'] = [1, 6, 1]
-        assert mul_poly(obj)['answer'] == '2X^3+X^2+6X+3'
+        f = [2, 3]
+        g = [1, 6, 1]
+        assert mult(f, g, m) == [2, 1, 6, 3]
 
-        obj['mod'] = 5
-        obj['f'] = [-2, 3]
-        obj['g'] = [4]
-        assert mul_poly(obj)['answer'] == '2X+2'
-
+        m = 5
+        f = [-2, 3]
+        g = [4]
+        assert mult(f, g, m) == [2, 2]
 
 class TestLongDivPoly(unittest.TestCase):
     def test1(self):
@@ -201,21 +196,21 @@ class TestEuclidPoly(unittest.TestCase):
 
     def test_equals_poly_mod(self):
         obj = {}
-        obj['mod'] = 7
+        m = 7
 
-        obj['f'] = [1,1,1]
-        obj['g'] = [10]
+        f = [1,1,1]
+        g = [10]
         obj['h'] = [1,-1]
         assert equals_poly_mod(obj)['answer'] == 'TRUE'
 
-        obj['f'] = [1,1,1]
-        obj['g'] = [3]
+        f = [1,1,1]
+        g = [3]
         obj['h'] = []
         assert equals_poly_mod(obj)['answer'] == 'FALSE'
 
-        obj['mod'] = 5
-        obj['f'] = [1, 1, 1]
-        obj['g'] = [10]
+        m = 5
+        f = [1, 1, 1]
+        g = [10]
         obj['h'] = [1, -1]
         assert equals_poly_mod(obj)['answer'] == 'FALSE'
 
