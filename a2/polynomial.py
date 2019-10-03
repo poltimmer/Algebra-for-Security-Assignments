@@ -121,6 +121,9 @@ def generate_answer(obj):
     answer = None
     answer_q = None
     answer_r = None
+    answer_a = None
+    answer_b = None
+    answer_d = None
 
     op = obj.get('operation')
     m = obj.get('mod')
@@ -158,6 +161,12 @@ def generate_answer(obj):
         obj['answer-q'] = display_poly(answer_q, m)
     if answer_r:
         obj['answer-r'] = display_poly(answer_r, m)
+    if answer_a:
+        obj['answer-a'] = display_poly(answer_a, m)
+    if answer_b:
+        obj['answer-b'] = display_poly(answer_b, m)
+    if answer_d:
+        obj['answer-d'] = display_poly(answer_d, m)
 
     return obj
 
@@ -189,6 +198,12 @@ def print_output(objects):
             output_file.write('[answer-q] {}\n'.format(obj['answer-q']))
         if 'answer-r' in obj:
             output_file.write('[answer-r] {}\n'.format(obj['answer-r']))
+        if 'answer-a' in obj:
+            output_file.write('[answer-a] {}\n'.format(obj['answer-a']))
+        if 'answer-b' in obj:
+            output_file.write('[answer-b] {}\n'.format(obj['answer-b']))
+        if 'answer-d' in obj:
+            output_file.write('[answer-d] {}\n'.format(obj['answer-d']))
 
         output_file.write('\n')
 
