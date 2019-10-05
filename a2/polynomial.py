@@ -277,7 +277,7 @@ def long_div_poly(a_remote, b_remote, m):
 
     q = [0]
     r = a
-    while len(r) >= len(b):
+    while len(r) >= len(b) and r != [0]:
         x = [mod_div(r[0], b[0], m)] + [0] * (len(r) - len(b))
         q = add_poly(q, x, m)
         w = mult(x, b, m)
@@ -300,16 +300,14 @@ def mod_div(a, b, m):
 
 
 def euclid_extended_poly(a_remote, b_remote, m):
-    a = a_remote.copy()
-    b = b_remote.copy()
+    a = reduce_poly(a_remote, m)
+    b = reduce_poly(b_remote, m)
 
-    # TODO: reduce polynomials
-
-    x = 1,
-    v = 1,
-    y = 0,
-    u = 0,
-    while b != [0]:  # TODO: likely faulty comparison, as addresses get compared
+    x = [1]
+    v = [1]
+    y = [0]
+    u = [0]
+    while b != [0]:
         q, r = long_div_poly(a, b, m)
         a = b
         b = r
@@ -319,8 +317,10 @@ def euclid_extended_poly(a_remote, b_remote, m):
         y = v
         u = subtract_poly(x_, mult(q, u, m), m)
         v = subtract_poly(y_, mult(q, v, m), m)
-    # TODO: need to figure out how to invert, and need helper function to calculate function
-    return inv(x(a[0])), inv(y(a[0]))
+    x_out, discard = long_div_poly(x, [a[0]], m)
+    y_out, discard = long_div_poly(y, [a[0]], m)
+    gcd = add_poly(mult(a_remote, x_out, m), mult(b_remote, y_out, m), m)
+    return x_out, y_out, gcd
 
 
 def equals_poly_mod(f_remote, g_remote, h_remote, m):

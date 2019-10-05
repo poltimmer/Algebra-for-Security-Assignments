@@ -176,28 +176,40 @@ class TestLongDivPoly(unittest.TestCase):
 
 class TestEuclidPoly(unittest.TestCase):
     def test1(self):
-        a = [1, 2, 0, 1, 0, 1]
-        b = [1, 0, 0, 0, -1]
+        a = [1, 0, 1]
+        b = [1, 0, 0, 1]
         m = 7
-        assert euclid_extended_poly(a, b, m) == ([2, 2, 1], [5, 1, 2, 0])
+        assert euclid_extended_poly(a, b, m) == ([3, 3, 4], [4, 4], [1])
+        # [answ-a] 3X^2+3X+4
+        # [answ-b] 4X+4
+        # [answ-d] 1
 
     def test2(self):
-        a = [1, 2, 0, 1, 0, 1]
-        b = [1, 0, 3, 0, -1]
-        m = 7
-        assert euclid_extended_poly(a, b, m) == ([2, 1, 0, 3], [5, 2, 4, 0, 2])
+        a = [1, 0, 1]
+        b = [1, 0, 0, 1]
+        m = 2
+        assert euclid_extended_poly(a, b, m) == ([1, 0], [1], [1, 1])
+        # [answ-a] X
+        # [answ-b] 1
+        # [answ-d] X+1
 
     def test3(self):
-        a = [1, 0, 1]
-        b = [1, 0, 3, 0, -1]
+        a = [1, 1, 1]
+        b = [0]
         m = 7
-        assert euclid_extended_poly(a, b, m) == ([5, 0, 3], [2])
+        assert euclid_extended_poly(a, b, m) == ([1], [0], [1, 1, 1])
+        # [answ-a] 1
+        # [answ-b] 0
+        # [answ-d] X^2+X+1
 
     def test4(self):
-        a = [6, 0, 0, -1, 0, 1]
-        b = [1, 0, 3, 0, -1]
+        a = [2, 2, 2]
+        b = [0]
         m = 7
-        assert euclid_extended_poly(a, b, m) == ([3, 0, 3, 6], [3, 3, 5, 0, 5])
+        assert euclid_extended_poly(a, b, m) == ([4], [0], [1, 1, 1])
+        # [answ-a] 4
+        # [answ-b] 0
+        # [answ-d] X^2+X+1
 
 
 class TestEqualsPoly(unittest.TestCase):
