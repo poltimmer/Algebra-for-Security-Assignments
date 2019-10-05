@@ -18,7 +18,7 @@ class TestDisplayPoly(unittest.TestCase):
         m = 12
 
         f = [1, 2, 1]
-        assert display_poly(f,m) == 'X^2+2X+1'
+        assert display_poly(f, m) == 'X^2+2X+1'
 
         f = [0]
         assert display_poly(f, m) == '0'
@@ -56,6 +56,7 @@ class TestDisplayPoly(unittest.TestCase):
         m = 4
         f = [5, 6, 7, 8]
         assert display_poly(f, m) == 'X^3+2X^2+3X'
+
 
 class TestAddSubPoly(unittest.TestCase):
     def test_add_poly(self):
@@ -122,6 +123,7 @@ class TestAddSubPoly(unittest.TestCase):
         g = [1, 4, 3]
         assert subtract_poly(f, g, m) == [2, 2, 2, 0]
 
+
 class TestMultiplyPoly(unittest.TestCase):
     def test_mul_poly(self):
         m = 7
@@ -150,6 +152,7 @@ class TestMultiplyPoly(unittest.TestCase):
         f = [-2, 3]
         g = [4]
         assert mult(f, g, m) == [2, 2]
+
 
 class TestLongDivPoly(unittest.TestCase):
     def test1(self):
@@ -196,16 +199,17 @@ class TestEuclidPoly(unittest.TestCase):
         m = 7
         assert euclid_extended_poly(a, b, m) == ([3, 0, 3, 6], [3, 3, 5, 0, 5])
 
+
 class TestEqualsPoly(unittest.TestCase):
     def test_equals_poly_mod(self):
         m = 7
 
-        f = [1,1,1]
+        f = [1, 1, 1]
         g = [10]
-        h = [1,-1]
+        h = [1, -1]
         assert equals_poly_mod(f, g, h, m) == 'TRUE'
 
-        f = [1,1,1]
+        f = [1, 1, 1]
         g = [3]
         h = []
         assert equals_poly_mod(f, g, h, m) == 'FALSE'
@@ -215,6 +219,7 @@ class TestEqualsPoly(unittest.TestCase):
         g = [10]
         h = [1, -1]
         assert equals_poly_mod(f, g, h, m) == 'FALSE'
+
 
 if __name__ == "__main__":
     unittest.main()

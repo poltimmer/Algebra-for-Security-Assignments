@@ -1,4 +1,5 @@
-from utils import sanitize_arrays, set_to_array, poly_string, clear_leading_zeroes, reduce_poly  # pylint: disable=no-name-in-module
+from utils import sanitize_arrays, set_to_array, poly_string, clear_leading_zeroes, \
+    reduce_poly  # pylint: disable=no-name-in-module
 
 INPUTFILE = "input.txt"
 OUTPUTFILE = "output.txt"
@@ -213,7 +214,7 @@ def print_output(objects):
 def display_poly(f_remote, m):
     if isinstance(f_remote, str):
         return f_remote
-        
+
     # Get the values we need from the object
     f = f_remote.copy()
 
@@ -225,6 +226,7 @@ def display_poly(f_remote, m):
     result = poly_string(f)
     # Return Object
     return result
+
 
 def add_poly(a_remote, b_remote, m):
     a = a_remote.copy()
@@ -253,8 +255,9 @@ def subtract_poly(a_remote, b_remote, m):
 
     return clear_leading_zeroes(result)
 
+
 def mult(a, b, m):
-    result = [0] * (len(a) + len(b)-1)
+    result = [0] * (len(a) + len(b) - 1)
 
     for i in range(0, len(a)):
         for j in range(0, len(b)):
@@ -264,6 +267,7 @@ def mult(a, b, m):
             result[i + j] = result[i + j] % m
 
     return clear_leading_zeroes(result)
+
 
 def long_div_poly(a_remote, b_remote, m):
     a = a_remote.copy()
@@ -324,8 +328,8 @@ def equals_poly_mod(f_remote, g_remote, h_remote, m):
     b = g_remote.copy()
     c = h_remote.copy()
 
-    _, answer_a = long_div_poly(a,c,m)
-    _, answer_b = long_div_poly(b,c,m)
+    _, answer_a = long_div_poly(a, c, m)
+    _, answer_b = long_div_poly(b, c, m)
 
     answer_a = answer_a[0] % m
     answer_b = answer_b[0] % m
@@ -334,6 +338,7 @@ def equals_poly_mod(f_remote, g_remote, h_remote, m):
         return 'TRUE'
     else:
         return 'FALSE'
+
 
 def is_irreducible(obj):
     return obj
