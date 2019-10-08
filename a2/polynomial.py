@@ -345,9 +345,25 @@ def equals_poly_mod(f_remote, g_remote, h_remote, m):
         return 'FALSE'
 
 
-def is_irreducible(obj):
-    return obj
+def is_irreducible(a_remote, m):
 
+    a = a_remote.copy()
+    t = 1
+    n = len(a) - 1
+    b = [0] * (m**t + 1)
+    b[0] = 1
+    b[-2] = -1
+    x = euclid_extended_poly(a, b, m)[2]
+
+    while x == 1:
+        t = t + 1
+
+    if t == n and n > 1:
+        return 'TRUE'
+    elif t != n and n > 1:
+        return 'FALSE'
+    else:
+        return 'DEGREE OF F IS TOO SMALL'
 
 def find_irred(obj):
     return obj
