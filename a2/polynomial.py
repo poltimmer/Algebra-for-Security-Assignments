@@ -148,7 +148,7 @@ def generate_answer(obj):
     elif op == "equals-poly-mod":
         answer = equals_poly_mod(f, g, h, m)  # Janneke
     elif op == "irreducible":
-        answer = is_irreducible(obj)  # Edwin
+        answer = is_irreducible(f, m)  # Edwin
     elif op == "find-irred":
         answer = find_irred(obj)  # Edwin
     elif op == "mod-poly":
