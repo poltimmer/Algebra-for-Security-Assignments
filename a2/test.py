@@ -231,6 +231,21 @@ class TestEqualsPoly(unittest.TestCase):
         g = [10]
         h = [1, -1]
         assert equals_poly_mod(f, g, h, m) == 'FALSE'
+        
+class TestIsIrreducible(unittest.TestCase):
+    def test_is_irreducible(self):
+
+        m = 3
+        f = [2, 2, 1]
+        assert is_irreducible(f, m) == 'FALSE'
+
+        m = 2
+        f = [1, 1, 1]
+        assert is_irreducible(f, m) == 'FALSE'
+
+        f = [1]
+        assert is_irreducible(f, m) == 'DEGREE OF F IS TOO SMALL'
+
 
 
 if __name__ == "__main__":
