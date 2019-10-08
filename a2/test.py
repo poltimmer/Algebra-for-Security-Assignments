@@ -241,7 +241,7 @@ class TestIsIrreducible(unittest.TestCase):
 
         m = 2
         f = [1, 1, 1]
-        assert is_irreducible(f, m) == 'FALSE'
+        assert is_irreducible(f, m) == 'TRUE'
 
         f = [1]
         assert is_irreducible(f, m) == 'DEGREE OF F IS TOO SMALL'
