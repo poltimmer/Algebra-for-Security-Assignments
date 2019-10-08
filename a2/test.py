@@ -223,7 +223,7 @@ class TestEqualsPoly(unittest.TestCase):
 
         f = [1, 1, 1]
         g = [3]
-        h = []
+        h = [0]
         assert equals_poly_mod(f, g, h, m) == 'FALSE'
 
         m = 5
