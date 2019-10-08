@@ -144,7 +144,7 @@ def generate_answer(obj):
     elif op == "long-div-poly":
         answer_q, answer_r = long_div_poly(f, g, m)  # Pol
     elif op == "euclid-poly":
-        answer_a, answer_b = euclid_extended_poly(f, g, m)  # Pol
+        answer_a, answer_b, answer_d = euclid_extended_poly(f, g, m)  # Pol
     elif op == "equals-poly-mod":
         answer = equals_poly_mod(f, g, h, m)  # Janneke
     elif op == "irreducible":
@@ -274,6 +274,8 @@ def long_div_poly(a_remote, b_remote, m):
     b = b_remote.copy()
 
     # TODO: modular reduction of a and b
+    if b_remote == [0]:
+        return 'ERROR', 'ERROR'
 
     q = [0]
     r = a
@@ -317,8 +319,8 @@ def euclid_extended_poly(a_remote, b_remote, m):
         y = v
         u = subtract_poly(x_, mult(q, u, m), m)
         v = subtract_poly(y_, mult(q, v, m), m)
-    x_out, discard = long_div_poly(x, [a[0]], m)
-    y_out, discard = long_div_poly(y, [a[0]], m)
+    x_out, _ = long_div_poly(x, [a[0]], m)
+    y_out, _ = long_div_poly(y, [a[0]], m)
     gcd = add_poly(mult(a_remote, x_out, m), mult(b_remote, y_out, m), m)
     return x_out, y_out, gcd
 
@@ -330,6 +332,9 @@ def equals_poly_mod(f_remote, g_remote, h_remote, m):
 
     _, answer_a = long_div_poly(a, c, m)
     _, answer_b = long_div_poly(b, c, m)
+
+    if answer_a == 'ERROR' or answer_b == 'ERROR':
+        return 'FALSE'
 
     answer_a = answer_a[0] % m
     answer_b = answer_b[0] % m
