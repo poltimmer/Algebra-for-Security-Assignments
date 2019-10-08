@@ -1,6 +1,6 @@
 import unittest
 
-from polynomial import display_poly, add_poly, subtract_poly, long_div_poly, equals_poly_mod, mult, euclid_extended_poly
+from polynomial import display_poly, add_poly, subtract_poly, long_div_poly, equals_poly_mod, mult, euclid_extended_poly, is_irreducible
 from utils import set_to_array  # pylint: disable=no-name-in-module
 
 
@@ -236,7 +236,10 @@ class TestIsIrreducible(unittest.TestCase):
     def test_is_irreducible(self):
 
         m = 3
-        f = [2, 2, 1]
+        # f = [2, 2, 1]
+        # assert is_irreducible(f, m) == 'FALSE'
+
+        f = [1, 1, 1]
         assert is_irreducible(f, m) == 'FALSE'
 
         m = 2
