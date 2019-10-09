@@ -402,7 +402,7 @@ def find_irred(d, m):
         result.append(random.randrange(0, m))
     result[0] = random.randrange(1, m)
 
-    while is_irreducible(result, m) == ['FALSE']:
+    while is_irreducible(result, m) == 'FALSE':
         result = []
         for j in range(l):
             result.append(random.randrange(0, m))
