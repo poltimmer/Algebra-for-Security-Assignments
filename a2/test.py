@@ -255,8 +255,11 @@ class TestFindIrreducible(unittest.TestCase):
 
         m = 2
         deg = 1
-        assert find_irred(deg, m) == [1, 1]
+        assert find_irred(deg, m) in [[1, 1], [1, 0]]
 
+        m = 2
+        deg = 3
+        assert find_irred(deg, m) in [[1, 1, 0, 1], [1, 0, 1, 1]]
 
 
 if __name__ == "__main__":
