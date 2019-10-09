@@ -1,6 +1,8 @@
 from utils import sanitize_arrays, set_to_array, poly_string, clear_leading_zeroes, \
     reduce_poly  # pylint: disable=no-name-in-module
 
+import random
+
 INPUTFILE = "input.txt"
 OUTPUTFILE = "output.txt"
 
@@ -150,7 +152,7 @@ def generate_answer(obj):
     elif op == "irreducible":
         answer = is_irreducible(f, m)  # Edwin
     elif op == "find-irred":
-        answer = find_irred(obj)  # Edwin
+        answer = find_irred(deg, m)  # Edwin
     elif op == "mod-poly":
         answer = mod_poly(obj)
     else:
@@ -367,8 +369,21 @@ def is_irreducible(a_remote, m):
     else:
         return 'FALSE'
 
-def find_irred(obj):
-    return obj
+def find_irred(d, m):
+
+    l = d + 1
+    result = []
+    for j in range(l):
+        result.append(random.randrange(0, m))
+    result[0] = random.randrange(1, m)
+
+    while is_irreducible(result, m) == ['FALSE']:
+        result = []
+        for j in range(l):
+            result.append(random.randrange(0, m))
+        result[0] = random.randrange(1, m)
+
+    return clear_leading_zeroes(result)
 
 
 def mod_poly(obj):
