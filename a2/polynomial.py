@@ -78,7 +78,7 @@ def read_input():
                     h_original = current_line[:-1]
                 elif key == 'deg':
                     deg_original = current_line[:-1]
-                elif '[' not in key and key != '':
+                elif '[' not in key and key != '' and key != 'answer':
                     additional_data = key
 
             if a_original:
@@ -134,6 +134,8 @@ def generate_answer(obj):
     g = obj.get('g')
     h = obj.get('h')
     deg = obj.get('deg')
+    additional_data = obj.get('additional_data')
+    op_val = obj.get('operation_values')
 
     if op == "display-poly":
         answer = f
@@ -154,9 +156,32 @@ def generate_answer(obj):
     elif op == "find-irred":
         answer = find_irred(deg, m)  # Edwin
     elif op == "mod-poly":
-        answer = mod_poly(obj)
+        if additional_data == 'add-table':
+            answer = [1]
+        elif additional_data == 'mult-table':
+            answer = [1]
+        elif additional_data == 'display-field':
+            answer = [1]
+        elif additional_data == 'add-field':
+            answer = [1]
+        elif additional_data == 'subtract-field':
+            answer = [1]
+        elif additional_data == 'multiply-field':
+            answer = [1]
+        elif additional_data == 'inverse-field':
+            answer = [1]
+        elif additional_data == 'division-field':
+            answer = [1]
+        elif additional_data == 'equals-field':
+            answer = [1]
+        elif additional_data == 'primitive':
+            answer = [1]
+        elif additional_data == 'find-prim':
+            answer = [1]
+        else:
+            answer = 'Operation not Supported.'
     else:
-        answer = [-1]
+        answer = 'Operation not Supported.'
 
     if answer:
         obj['answer'] = display_poly(answer, m)
