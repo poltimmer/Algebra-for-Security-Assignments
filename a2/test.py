@@ -248,6 +248,14 @@ class TestIsIrreducible(unittest.TestCase):
 
         f = [1]
         assert is_irreducible(f, m) == 'DEGREE OF F IS TOO SMALL'
+        
+
+class TestFindIrreducible(unittest.TestCase):
+    def test_find_irred(self):
+
+        m = 2
+        deg = 1
+        assert find_irred(deg, m) == [1, 1]
 
 
 
