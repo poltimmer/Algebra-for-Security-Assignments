@@ -400,13 +400,13 @@ def find_irred(d, m):
 
     l = d + 1
     result = []
-    for j in range(l):
+    for _ in range(l):
         result.append(random.randrange(0, m))
     result[0] = random.randrange(1, m)
 
     while is_irreducible(result, m) == 'FALSE':
         result = []
-        for j in range(l):
+        for _ in range(l):
             result.append(random.randrange(0, m))
         result[0] = random.randrange(1, m)
 
