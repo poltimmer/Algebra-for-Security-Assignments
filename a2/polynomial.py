@@ -133,9 +133,11 @@ def generate_answer(obj):
     f = obj.get('f')
     g = obj.get('g')
     h = obj.get('h')
+    a = obj.get('a')
+    b = obj.get('b')
     deg = obj.get('deg')
     additional_data = obj.get('additional_data')
-    op_val = obj.get('operation_values')
+    poly_mod = obj.get('operation_values')
 
     if op == "display-poly":
         answer = f
@@ -156,27 +158,27 @@ def generate_answer(obj):
     elif op == "find-irred":
         answer = find_irred(deg, m)  # Edwin
     elif op == "mod-poly":
-        if additional_data == 'add-table':
+        if additional_data == 'add-table': # Edwin
             answer = [1]
-        elif additional_data == 'mult-table':
+        elif additional_data == 'mult-table': # Edwin
             answer = [1]
-        elif additional_data == 'display-field':
+        elif additional_data == 'display-field': # Luke
             answer = [1]
-        elif additional_data == 'add-field':
+        elif additional_data == 'add-field': # Janneke
             answer = [1]
-        elif additional_data == 'subtract-field':
+        elif additional_data == 'subtract-field': # Janneke
             answer = [1]
-        elif additional_data == 'multiply-field':
+        elif additional_data == 'multiply-field': # Janneke
             answer = [1]
-        elif additional_data == 'inverse-field':
+        elif additional_data == 'inverse-field': # Luke
             answer = [1]
-        elif additional_data == 'division-field':
+        elif additional_data == 'division-field': # Pol
             answer = [1]
-        elif additional_data == 'equals-field':
+        elif additional_data == 'equals-field': # Luke
             answer = [1]
-        elif additional_data == 'primitive':
+        elif additional_data == 'primitive': # Pol
             answer = [1]
-        elif additional_data == 'find-prim':
+        elif additional_data == 'find-prim': # Pol
             answer = [1]
         else:
             answer = 'Operation not Supported.'
@@ -409,11 +411,6 @@ def find_irred(d, m):
         result[0] = random.randrange(1, m)
 
     return clear_leading_zeroes(result)
-
-
-def mod_poly(obj):
-    return obj
-
 
 if __name__ == "__main__":
     main()
