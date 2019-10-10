@@ -1,6 +1,6 @@
 import unittest
 
-from polynomial import display_poly, add_poly, subtract_poly, long_div_poly, equals_poly_mod, mult, euclid_extended_poly, is_irreducible, find_irred, display_field, add_field
+from polynomial import display_poly, add_poly, subtract_poly, long_div_poly, equals_poly_mod, mult, euclid_extended_poly, is_irreducible, find_irred, display_field, add_field, subtract_field
 from utils import set_to_array  # pylint: disable=no-name-in-module
 
 
@@ -312,6 +312,14 @@ class TestAddField(unittest.TestCase):
         a = [1,1,2]
         b = [2,0,1]
         assert add_field(mod_poly,m,a,b) == [1,0]
+
+class TestAddField(unittest.TestCase):
+    def test_add_field(self):
+        m = 3
+        mod_poly = [1, 0, 2, 1]
+        a = [1, 1, 2]
+        b = [2, 0, 1]
+        assert subtract_field(mod_poly, m, a, b) == [2,1,1]
 
 
 if __name__ == "__main__":
