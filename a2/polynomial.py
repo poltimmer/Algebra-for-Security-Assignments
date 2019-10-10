@@ -169,7 +169,7 @@ def generate_answer(obj):
         elif additional_data == 'subtract-field': # Janneke
             answer = subtract_field(poly_mod,m,a,b)
         elif additional_data == 'multiply-field': # Janneke
-            answer = [1]
+            answer = multiply_field(poly_mod,m,a,b)
         elif additional_data == 'inverse-field': # Luke
             answer = inverse_field(a, m, poly_mod)
         elif additional_data == 'division-field': # Pol
@@ -422,17 +422,24 @@ def inverse_field(a_remote, m, poly_mod):
 def equals_field(a_remote, b_remote, m, poly_mod):
     return 'hoi'
 
-def add_field(mod_poly,m,a,b):
+def add_field(poly_mod,m,a,b):
     a_and_b = add_poly(a,b,m)
-    _, answer = long_div_poly(a_and_b, mod_poly, m)
+    _, answer = long_div_poly(a_and_b, poly_mod, m)
 
     return answer
 
-def subtract_field(mod_poly,m,a,b):
+def subtract_field(poly_mod,m,a,b):
     a_and_b = subtract_poly(a,b,m)
-    _, answer = long_div_poly(a_and_b, mod_poly, m)
+    _, answer = long_div_poly(a_and_b, poly_mod, m)
 
     return answer
+
+def multiply_field(poly_mod,m,a,b):
+    a_and_b = mult(a, b, m)
+    _, answer = long_div_poly(a_and_b, poly_mod, m)
+
+    return answer
+
 
 if __name__ == "__main__":
     main()
