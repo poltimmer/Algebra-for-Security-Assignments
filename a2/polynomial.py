@@ -412,5 +412,14 @@ def find_irred(d, m):
 
     return clear_leading_zeroes(result)
 
+
+def add_field(mod_poly,m,a,b):
+
+    a_and_b = add_poly(a,b,m)
+    _, answer = long_div_poly(a_and_b, mod_poly, m)
+
+    return answer
+
+
 if __name__ == "__main__":
     main()
