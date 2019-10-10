@@ -422,5 +422,13 @@ def inverse_field(a_remote, m, poly_mod):
 def equals_field(a_remote, b_remote, m, poly_mod):
     return 'hoi'
 
+def add_field(mod_poly,m,a,b):
+
+    a_and_b = add_poly(a,b,m)
+    _, answer = long_div_poly(a_and_b, mod_poly, m)
+
+    return answer
+
+
 if __name__ == "__main__":
     main()
