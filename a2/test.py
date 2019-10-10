@@ -276,5 +276,24 @@ class TestAddField(unittest.TestCase):
         b = [2]
         assert add_field(mod_poly,m,a,b) == [5]
 
+        m = 2
+        mod_poly = [1,1,1]
+        a = [1]
+        b = [1,1]
+        assert add_field(mod_poly,m,a,b) == [1,0]
+
+        m = 7
+        mod_poly = [1,0]
+        a = [3]
+        b = [2]
+        assert add_field(mod_poly,m,a,b) == [5]
+
+        m = 3
+        mod_poly = [1,0,2,1]
+        a = [1,1,2]
+        b = [2,0,1]
+        assert add_field(mod_poly,m,a,b) == [1,0]
+
+
 if __name__ == "__main__":
     unittest.main()
