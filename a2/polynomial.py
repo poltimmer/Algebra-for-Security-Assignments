@@ -165,9 +165,9 @@ def generate_answer(obj):
         elif additional_data == 'display-field': # Luke
             answer = [1]
         elif additional_data == 'add-field': # Janneke
-            answer = add_field(poly_mod,m,a,b)
+            answer = [1]
         elif additional_data == 'subtract-field': # Janneke
-            answer = subtract_field(poly_mod,m,a,b)
+            answer = [1]
         elif additional_data == 'multiply-field': # Janneke
             answer = [1]
         elif additional_data == 'inverse-field': # Luke
@@ -420,12 +420,6 @@ def add_field(mod_poly,m,a,b):
 
     return answer
 
-def subtract_field(mod_poly,m,a,b):
-
-    a_and_b = subtract_poly(a,b,m)
-    _, answer = long_div_poly(a_and_b, mod_poly, m)
-
-    return answer
 
 if __name__ == "__main__":
     main()
