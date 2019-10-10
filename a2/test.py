@@ -1,6 +1,6 @@
 import unittest
 
-from polynomial import display_poly, add_poly, subtract_poly, long_div_poly, equals_poly_mod, mult, euclid_extended_poly, is_irreducible, find_irred, add_field
+from polynomial import display_poly, add_poly, subtract_poly, long_div_poly, equals_poly_mod, mult, euclid_extended_poly, is_irreducible, find_irred, display_field, add_field
 from utils import set_to_array  # pylint: disable=no-name-in-module
 
 
@@ -261,6 +261,25 @@ class TestFindIrreducible(unittest.TestCase):
         deg = 3
         assert find_irred(deg, m) in [[1, 1, 0, 1], [1, 0, 1, 1]]
 
+class TestDisplayField(unittest.TestCase):
+    def test_display_field(self):
+        m = 5
+        poly_mod = [1, 0, 2]
+        a = [1, 0, 0]
+        assert display_field(a, m, poly_mod) == [3]
+
+    def test_display_field2(self):
+        m = 7
+        poly_mod = [2, -2]
+        a = [1, 1, 1]
+        assert display_field(a, m, poly_mod) == [3]
+
+    def test_display_field3(self):
+        m = 5
+        poly_mod = [1, 0, 2]
+        a = [1, 1]
+        assert display_field(a, m, poly_mod) == [1, 1]
+        
 class TestAddField(unittest.TestCase):
     def test_add_field(self):
 
