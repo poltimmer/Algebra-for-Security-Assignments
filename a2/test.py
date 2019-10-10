@@ -1,6 +1,6 @@
 import unittest
 
-from polynomial import display_poly, add_poly, subtract_poly, long_div_poly, equals_poly_mod, mult, euclid_extended_poly, is_irreducible
+from polynomial import display_poly, add_poly, subtract_poly, long_div_poly, equals_poly_mod, mult, euclid_extended_poly, is_irreducible, find_irred
 from utils import set_to_array  # pylint: disable=no-name-in-module
 
 
