@@ -1,6 +1,6 @@
 import unittest
 
-from polynomial import display_poly, add_poly, subtract_poly, long_div_poly, equals_poly_mod, mult, euclid_extended_poly, is_irreducible, find_irred, display_field, add_field, subtract_field, multiply_field
+from polynomial import display_poly, add_poly, subtract_poly, long_div_poly, equals_poly_mod, mult, euclid_extended_poly, is_irreducible, find_irred, display_field, add_field, subtract_field, multiply_field, equals_field, inverse_field
 from utils import set_to_array  # pylint: disable=no-name-in-module
 
 
@@ -334,6 +334,30 @@ class TestMultiplyField(unittest.TestCase):
         a = [1, 0,0]
         b = [1,0]
         assert multiply_field(mod_poly, m, a, b) == [1,2]
+
+class TestInverseField(unittest.TestCase):
+    def test_inverse_field(self):
+        m = 2
+        mod_poly = [1, 1, 1]
+        a = [1, 0]
+        assert inverse_field(a, m, mod_poly) == [1, 1]
+
+        mod_poly = [1, 1, 0]
+        a = [1, 0]
+        assert inverse_field(a, m, mod_poly) == 'ERROR'
+
+class TestEqualsField(unittest.TestCase):
+    def test_equals_field(self):
+        m = 5
+        mod_poly = [1, 0, 2]
+        a = [1, 0, 0]
+        b = [3]
+        assert equals_field(a, b, m, mod_poly) == 'TRUE'
+
+        mod_poly = [0]
+        a = [1, 0, 0]
+        b = [3]
+        assert equals_field(a, b, m, mod_poly) == 'FALSE'
 
 if __name__ == "__main__":
     unittest.main()

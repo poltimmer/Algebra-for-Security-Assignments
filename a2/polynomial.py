@@ -414,13 +414,16 @@ def find_irred(d, m):
 
 def display_field(a_remote, m, poly_mod):
     _, r = long_div_poly(a_remote, poly_mod, m)
-    return reduce_poly(r, m)
+    return r
 
 def inverse_field(a_remote, m, poly_mod):
-    return 'hoi'
+    x, _, gcd = euclid_extended_poly(a_remote, poly_mod, m)
+    if (gcd == [1]):
+        return x
+    return 'ERROR'
 
 def equals_field(a_remote, b_remote, m, poly_mod):
-    return 'hoi'
+    return equals_poly_mod(a_remote, b_remote, poly_mod, m)
 
 def add_field(poly_mod,m,a,b):
     a_and_b = add_poly(a,b,m)
