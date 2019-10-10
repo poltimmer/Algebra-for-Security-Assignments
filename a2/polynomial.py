@@ -163,7 +163,7 @@ def generate_answer(obj):
         elif additional_data == 'mult-table': # Edwin
             answer = [1]
         elif additional_data == 'display-field': # Luke
-            answer = [1]
+            answer = display_field(a, m, poly_mod)
         elif additional_data == 'add-field': # Janneke
             answer = [1]
         elif additional_data == 'subtract-field': # Janneke
@@ -171,11 +171,11 @@ def generate_answer(obj):
         elif additional_data == 'multiply-field': # Janneke
             answer = [1]
         elif additional_data == 'inverse-field': # Luke
-            answer = [1]
+            answer = inverse_field(a, m, poly_mod)
         elif additional_data == 'division-field': # Pol
             answer = [1]
         elif additional_data == 'equals-field': # Luke
-            answer = [1]
+            answer = equals_field(a, b, m, poly_mod)
         elif additional_data == 'primitive': # Pol
             answer = [1]
         elif additional_data == 'find-prim': # Pol
@@ -411,6 +411,16 @@ def find_irred(d, m):
         result[0] = random.randrange(1, m)
 
     return clear_leading_zeroes(result)
+
+def display_field(a_remote, m, poly_mod):
+    _, r = long_div_poly(a_remote, poly_mod, m)
+    return reduce_poly(r, m)
+
+def inverse_field(a_remote, m, poly_mod):
+    return 'hoi'
+
+def equals_field(a_remote, b_remote, m, poly_mod):
+    return 'hoi'
 
 if __name__ == "__main__":
     main()
