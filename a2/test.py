@@ -321,6 +321,30 @@ class TestSubtractField(unittest.TestCase):
         b = [2, 0, 1]
         assert subtract_field(mod_poly, m, a, b) == [2,1,1]
 
+        m = 2
+        mod_poly = [1, 1, 1]
+        a = [1, 1]
+        b = [1, 0]
+        assert subtract_field(mod_poly, m, a, b) == [1]
+
+        m = 7
+        mod_poly = [2, -2]
+        a = [1, 1, 1]
+        b = [2]
+        assert subtract_field(mod_poly, m, a, b) == [1]
+
+        m = 2
+        mod_poly = [1, 1, 1]
+        a = [1]
+        b = [1, 1]
+        assert subtract_field(mod_poly, m, a, b) == [1, 0]
+
+        m = 7
+        mod_poly = [1, 0]
+        a = [3]
+        b = [4]
+        assert subtract_field(mod_poly, m, a, b) == [6]
+
 class TestMultiplyField(unittest.TestCase):
     def test_multiply_field(self):
         m = 3
@@ -334,6 +358,12 @@ class TestMultiplyField(unittest.TestCase):
         a = [1, 0,0]
         b = [1,0]
         assert multiply_field(mod_poly, m, a, b) == [1,2]
+
+        m = 2
+        mod_poly = [1,1,1]
+        a = [1,0]
+        b = [1,0]
+        assert multiply_field(mod_poly,m,a,b) == [1,1]
 
 class TestInverseField(unittest.TestCase):
     def test_inverse_field(self):
