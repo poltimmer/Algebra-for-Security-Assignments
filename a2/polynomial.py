@@ -458,8 +458,9 @@ def multiply_field(poly_mod, m, a, b):
 
 
 def is_primitive(a, m, mod_poly):
+    mod_poly_clean = clear_leading_zeroes(mod_poly)
     x = a.copy()
-    q = m ** (len(mod_poly) - 1)
+    q = m ** (len(mod_poly_clean) - 1)
     factors = find_prime_factors(q - 1)
     i = 1
     for factor in reversed(factors):
