@@ -1,3 +1,6 @@
+from primes import primes
+
+
 def set_to_array(original_set):
     result = []
     split_set = original_set.split(',')
@@ -65,3 +68,19 @@ def reduce_poly(x_remote, m):
         x[i] = x[i] % m
 
     return x
+
+
+def find_prime_factors(x):
+    result = []
+    for prime in primes:
+        if prime > x:
+            return result
+        while x % prime == 0:
+            x = x / prime
+            if len(result) == 0 or result[-1] != prime:
+                result.append(prime)
+
+    return result
+
+
+find_prime_factors(30)

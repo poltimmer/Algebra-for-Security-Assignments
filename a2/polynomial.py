@@ -1,5 +1,5 @@
 from utils import sanitize_arrays, set_to_array, poly_string, clear_leading_zeroes, \
-    reduce_poly  # pylint: disable=no-name-in-module
+    reduce_poly, find_prime_factors  # pylint: disable=no-name-in-module
 
 import random
 
@@ -158,27 +158,27 @@ def generate_answer(obj):
     elif op == "find-irred":
         answer = find_irred(deg, m)  # Edwin
     elif op == "mod-poly":
-        if additional_data == 'add-table': # Edwin
+        if additional_data == 'add-table':  # Edwin
             answer = [1]
-        elif additional_data == 'mult-table': # Edwin
+        elif additional_data == 'mult-table':  # Edwin
             answer = [1]
-        elif additional_data == 'display-field': # Luke
+        elif additional_data == 'display-field':  # Luke
             answer = display_field(a, m, poly_mod)
-        elif additional_data == 'add-field': # Janneke
-            answer = add_field(poly_mod,m,a,b)
-        elif additional_data == 'subtract-field': # Janneke
-            answer = subtract_field(poly_mod,m,a,b)
-        elif additional_data == 'multiply-field': # Janneke
-            answer = multiply_field(poly_mod,m,a,b)
-        elif additional_data == 'inverse-field': # Luke
+        elif additional_data == 'add-field':  # Janneke
+            answer = add_field(poly_mod, m, a, b)
+        elif additional_data == 'subtract-field':  # Janneke
+            answer = subtract_field(poly_mod, m, a, b)
+        elif additional_data == 'multiply-field':  # Janneke
+            answer = multiply_field(poly_mod, m, a, b)
+        elif additional_data == 'inverse-field':  # Luke
             answer = inverse_field(a, m, poly_mod)
-        elif additional_data == 'division-field': # Pol
+        elif additional_data == 'division-field':  # Pol
             answer = [1]
-        elif additional_data == 'equals-field': # Luke
+        elif additional_data == 'equals-field':  # Luke
             answer = equals_field(a, b, m, poly_mod)
-        elif additional_data == 'primitive': # Pol
+        elif additional_data == 'primitive':  # Pol
             answer = [1]
-        elif additional_data == 'find-prim': # Pol
+        elif additional_data == 'find-prim':  # Pol
             answer = [1]
         else:
             answer = 'Operation not Supported.'
@@ -381,13 +381,13 @@ def is_irreducible(a_remote, m):
     if n <= 1:
         return 'DEGREE OF F IS TOO SMALL'
 
-    b = [0] * ((m**t) + 1)
+    b = [0] * ((m ** t) + 1)
     b[0] = 1
     b[-2] = -1
 
     while euclid_extended_poly(a_remote, b, m)[2] == [1]:
         t = t + 1
-        b = [0] * ((m**t) + 1)
+        b = [0] * ((m ** t) + 1)
         b[0] = 1
         b[-2] = -1
 
@@ -396,8 +396,8 @@ def is_irreducible(a_remote, m):
     else:
         return 'FALSE'
 
-def find_irred(d, m):
 
+def find_irred(d, m):
     l = d + 1
     result = []
     for _ in range(l):
@@ -412,21 +412,25 @@ def find_irred(d, m):
 
     return clear_leading_zeroes(result)
 
+
 def display_field(a_remote, m, poly_mod):
     _, r = long_div_poly(a_remote, poly_mod, m)
     return r
 
+
 def inverse_field(a_remote, m, poly_mod):
     x, _, gcd = euclid_extended_poly(a_remote, poly_mod, m)
-    if (gcd == [1]):
+    if gcd == [1]:
         return x
     return 'ERROR'
+
 
 def equals_field(a_remote, b_remote, m, poly_mod):
     return equals_poly_mod(a_remote, b_remote, poly_mod, m)
 
-def add_field(poly_mod,m,a,b):
-    a_and_b = add_poly(a,b,m)
+
+def add_field(poly_mod, m, a, b):
+    a_and_b = add_poly(a, b, m)
 
     if poly_mod == [0]:
         return a_and_b
@@ -434,21 +438,41 @@ def add_field(poly_mod,m,a,b):
         _, answer = long_div_poly(a_and_b, poly_mod, m)
         return answer
 
-def subtract_field(poly_mod,m,a,b):
-    a_and_b = subtract_poly(a,b,m)
+
+def subtract_field(poly_mod, m, a, b):
+    a_and_b = subtract_poly(a, b, m)
     if poly_mod == [0]:
         return a_and_b
     else:
         _, answer = long_div_poly(a_and_b, poly_mod, m)
         return answer
 
-def multiply_field(poly_mod,m,a,b):
+
+def multiply_field(poly_mod, m, a, b):
     a_and_b = mult(a, b, m)
     if poly_mod == [0]:
         return a_and_b
     else:
         _, answer = long_div_poly(a_and_b, poly_mod, m)
         return answer
+
+
+def is_primitive(a, m, mod_poly):
+    x = a.copy()
+    q = m ** (len(mod_poly) - 1)
+    factors = find_prime_factors(q - 1)
+    i = 1
+    for factor in reversed(factors):
+        while i * 2 <= (q - 1) / factor:
+            x = multiply_field(mod_poly, m, x, x)
+            i = i * 2
+        while i < (q - 1) / factor:
+            x = multiply_field(mod_poly, m, x, a)
+            i += 1
+        if x == [1]:
+            return False
+
+    return True
 
 
 if __name__ == "__main__":

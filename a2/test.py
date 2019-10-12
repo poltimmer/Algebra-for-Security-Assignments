@@ -1,6 +1,8 @@
 import unittest
 
-from polynomial import display_poly, add_poly, subtract_poly, long_div_poly, equals_poly_mod, mult, euclid_extended_poly, is_irreducible, find_irred, display_field, add_field, subtract_field, multiply_field, equals_field, inverse_field
+from polynomial import display_poly, add_poly, subtract_poly, long_div_poly, equals_poly_mod, mult, \
+    euclid_extended_poly, is_irreducible, find_irred, display_field, add_field, subtract_field, multiply_field, \
+    equals_field, inverse_field, is_primitive
 from utils import set_to_array  # pylint: disable=no-name-in-module
 
 
@@ -231,10 +233,10 @@ class TestEqualsPoly(unittest.TestCase):
         g = [10]
         h = [1, -1]
         assert equals_poly_mod(f, g, h, m) == 'FALSE'
-        
+
+
 class TestIsIrreducible(unittest.TestCase):
     def test_is_irreducible(self):
-
         m = 3
         # f = [2, 2, 1]
         # assert is_irreducible(f, m) == 'FALSE'
@@ -248,11 +250,10 @@ class TestIsIrreducible(unittest.TestCase):
 
         f = [1]
         assert is_irreducible(f, m) == 'DEGREE OF F IS TOO SMALL'
-        
+
 
 class TestFindIrreducible(unittest.TestCase):
     def test_find_irred(self):
-
         m = 2
         deg = 1
         assert find_irred(deg, m) in [[1, 1], [1, 0]]
@@ -260,6 +261,7 @@ class TestFindIrreducible(unittest.TestCase):
         m = 2
         deg = 3
         assert find_irred(deg, m) in [[1, 1, 0, 1], [1, 0, 1, 1]]
+
 
 class TestDisplayField(unittest.TestCase):
     def test_display_field(self):
@@ -279,39 +281,40 @@ class TestDisplayField(unittest.TestCase):
         poly_mod = [1, 0, 2]
         a = [1, 1]
         assert display_field(a, m, poly_mod) == [1, 1]
-        
+
+
 class TestAddField(unittest.TestCase):
     def test_add_field(self):
-
         m = 2
-        mod_poly = [1,1,1]
-        a = [1,1]
-        b = [1,0]
-        assert add_field(mod_poly,m,a,b) == [1]
+        mod_poly = [1, 1, 1]
+        a = [1, 1]
+        b = [1, 0]
+        assert add_field(mod_poly, m, a, b) == [1]
 
         m = 7
-        mod_poly = [2,-2]
-        a = [1,1,1]
+        mod_poly = [2, -2]
+        a = [1, 1, 1]
         b = [2]
-        assert add_field(mod_poly,m,a,b) == [5]
+        assert add_field(mod_poly, m, a, b) == [5]
 
         m = 2
-        mod_poly = [1,1,1]
+        mod_poly = [1, 1, 1]
         a = [1]
-        b = [1,1]
-        assert add_field(mod_poly,m,a,b) == [1,0]
+        b = [1, 1]
+        assert add_field(mod_poly, m, a, b) == [1, 0]
 
         m = 7
-        mod_poly = [1,0]
+        mod_poly = [1, 0]
         a = [3]
         b = [2]
-        assert add_field(mod_poly,m,a,b) == [5]
+        assert add_field(mod_poly, m, a, b) == [5]
 
         m = 3
-        mod_poly = [1,0,2,1]
-        a = [1,1,2]
-        b = [2,0,1]
-        assert add_field(mod_poly,m,a,b) == [1,0]
+        mod_poly = [1, 0, 2, 1]
+        a = [1, 1, 2]
+        b = [2, 0, 1]
+        assert add_field(mod_poly, m, a, b) == [1, 0]
+
 
 class TestSubtractField(unittest.TestCase):
     def test_subtract_field(self):
@@ -319,7 +322,7 @@ class TestSubtractField(unittest.TestCase):
         mod_poly = [1, 0, 2, 1]
         a = [1, 1, 2]
         b = [2, 0, 1]
-        assert subtract_field(mod_poly, m, a, b) == [2,1,1]
+        assert subtract_field(mod_poly, m, a, b) == [2, 1, 1]
 
         m = 2
         mod_poly = [1, 1, 1]
@@ -345,25 +348,27 @@ class TestSubtractField(unittest.TestCase):
         b = [4]
         assert subtract_field(mod_poly, m, a, b) == [6]
 
+
 class TestMultiplyField(unittest.TestCase):
     def test_multiply_field(self):
         m = 3
         mod_poly = [1, 0, 2, 1]
         a = [1, 1]
-        b = [1,2]
-        assert multiply_field(mod_poly, m, a, b) == [1,0,2]
+        b = [1, 2]
+        assert multiply_field(mod_poly, m, a, b) == [1, 0, 2]
 
         m = 3
         mod_poly = [1, 0, 2, 1]
-        a = [1, 0,0]
-        b = [1,0]
-        assert multiply_field(mod_poly, m, a, b) == [1,2]
+        a = [1, 0, 0]
+        b = [1, 0]
+        assert multiply_field(mod_poly, m, a, b) == [1, 2]
 
         m = 2
-        mod_poly = [1,1,1]
-        a = [1,0]
-        b = [1,0]
-        assert multiply_field(mod_poly,m,a,b) == [1,1]
+        mod_poly = [1, 1, 1]
+        a = [1, 0]
+        b = [1, 0]
+        assert multiply_field(mod_poly, m, a, b) == [1, 1]
+
 
 class TestInverseField(unittest.TestCase):
     def test_inverse_field(self):
@@ -375,6 +380,7 @@ class TestInverseField(unittest.TestCase):
         mod_poly = [1, 1, 0]
         a = [1, 0]
         assert inverse_field(a, m, mod_poly) == 'ERROR'
+
 
 class TestEqualsField(unittest.TestCase):
     def test_equals_field(self):
@@ -388,6 +394,52 @@ class TestEqualsField(unittest.TestCase):
         a = [1, 0, 0]
         b = [3]
         assert equals_field(a, b, m, mod_poly) == 'FALSE'
+
+
+class TestIsPrimitive(unittest.TestCase):
+    def test1(self):
+        m = 7
+        mod_poly = [1, 0, 0, 2]
+        a = [1, 0]
+        assert is_primitive(a, m, mod_poly) == False
+
+    def test2(self):
+        m = 7
+        mod_poly = [1, 0, 0, 2]
+        a = [1, 0, 1]
+        assert is_primitive(a, m, mod_poly)
+
+    def test3(self):
+        m = 2
+        mod_poly = [1, 0, 1, 1]
+        a = [1, 0, 0]
+        assert is_primitive(a, m, mod_poly)
+
+    def test4(self):
+        m = 2
+        mod_poly = [1, 0, 1, 1]
+        a = [1, 1]
+        assert is_primitive(a, m, mod_poly)
+
+    def test5(self):
+        m = 2
+        mod_poly = [1, 0, 1, 1]
+        a = [1]
+        assert not is_primitive(a, m, mod_poly)
+
+    def test6(self):
+        m = 2
+        mod_poly = [1, 1, 1]
+        a = [1, 0]
+        assert is_primitive(a, m, mod_poly)
+
+    def test7(self):
+        m = 3
+        mod_poly = [1, 0, 1]
+        a = [1, 0]
+        assert not is_primitive(a, m, mod_poly)
+
+
 
 if __name__ == "__main__":
     unittest.main()
