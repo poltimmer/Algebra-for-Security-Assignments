@@ -237,6 +237,7 @@ def print_output(objects):
 
         output_file.write('\n')
 
+    print('Output has been saved to ' + OUTPUTFILE + '.')
     output_file.close()
 
 

@@ -81,6 +81,3 @@ def find_prime_factors(x):
                 result.append(prime)
 
     return result
-
-
-find_prime_factors(30)
