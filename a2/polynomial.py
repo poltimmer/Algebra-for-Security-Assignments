@@ -432,29 +432,28 @@ def equals_field(a_remote, b_remote, m, poly_mod):
 
 def add_field(poly_mod, m, a, b):
     a_and_b = add_poly(a, b, m)
-
-    if poly_mod == [0]:
+    _, answer = long_div_poly(a_and_b, poly_mod, m)
+    if answer == 'ERROR':
         return a_and_b
     else:
-        _, answer = long_div_poly(a_and_b, poly_mod, m)
         return answer
 
 
 def subtract_field(poly_mod, m, a, b):
     a_and_b = subtract_poly(a, b, m)
-    if poly_mod == [0]:
+    _, answer = long_div_poly(a_and_b, poly_mod, m)
+    if answer == 'ERROR':
         return a_and_b
     else:
-        _, answer = long_div_poly(a_and_b, poly_mod, m)
         return answer
 
 
 def multiply_field(poly_mod, m, a, b):
     a_and_b = mult(a, b, m)
-    if poly_mod == [0]:
+    _, answer = long_div_poly(a_and_b, poly_mod, m)
+    if answer == 'ERROR':
         return a_and_b
     else:
-        _, answer = long_div_poly(a_and_b, poly_mod, m)
         return answer
 
 
