@@ -1,4 +1,5 @@
 from primes import primes
+import itertools as it
 
 
 def set_to_array(original_set):
@@ -79,5 +80,17 @@ def find_prime_factors(x):
             x = x / prime
             if len(result) == 0 or result[-1] != prime:
                 result.append(prime)
-
+                
     return result
+
+
+def find_all_elements_field(m, poly_mod):
+    d = len(poly_mod) - 1
+
+    a = list(range(m))
+    f = list((map(list, it.product(a, repeat=d))))
+
+    return f
+
+
+   
