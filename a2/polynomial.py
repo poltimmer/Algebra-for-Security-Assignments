@@ -303,20 +303,29 @@ def long_div_poly(a_remote, b_remote, m):
     a = a_remote.copy()
     b = b_remote.copy()
 
-    # TODO: modular reduction of a and b
+    a = reduce_poly(a, m)
+    b = reduce_poly(b, m)
+
     if b_remote == [0]:
         return 'ERROR', 'ERROR'
 
     q = [0]
     r = a
     while len(r) >= len(b) and r != [0]:
-        x = [mod_div(r[0], b[0], m)] + [0] * (len(r) - len(b))
+        try:
+            div = mod_div(r[0], b[0], m)
+        except:
+            return 'ERROR', 'ERROR'
+        x = [div] + [0] * (len(r) - len(b))
         q = add_poly(q, x, m)
         w = mult(x, b, m)
         r = subtract_poly(r, w, m)
         r = clear_leading_zeroes(r)
 
-    # TODO: modular reduction of q and r
+    # Reducing result as sanity-check
+    q = reduce_poly(q, m)
+    r = reduce_poly(r, m)
+
     return q, r
 
 
@@ -324,9 +333,13 @@ def long_div_poly(a_remote, b_remote, m):
 def mod_div(a, b, m):
     a = a % m
     b = b % m
+    i = 0
 
     while a % b != 0:
         a += m
+        i += 1
+        if i > b:
+            raise Exception
 
     return int((a / b) % m)
 

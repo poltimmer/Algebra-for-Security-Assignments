@@ -1,6 +1,6 @@
 import unittest
 
-from polynomial import display_poly, add_poly, subtract_poly, long_div_poly, equals_poly_mod, mult, \
+from a2.polynomial import display_poly, add_poly, subtract_poly, long_div_poly, equals_poly_mod, mult, \
     euclid_extended_poly, is_irreducible, find_irred, display_field, add_field, subtract_field, multiply_field, \
     equals_field, inverse_field, is_primitive
 from utils import set_to_array  # pylint: disable=no-name-in-module
@@ -174,6 +174,12 @@ class TestLongDivPoly(unittest.TestCase):
         b = [2, 1]
         m = 7
         assert long_div_poly(a, b, m) == ([1], [1])
+
+    def test4(self):
+        a = [1, 4, 5]
+        b = [2, 4]
+        m = 6
+        assert long_div_poly(a, b, m) == ('ERROR', 'ERROR')
 
 
 class TestEuclidPoly(unittest.TestCase):
@@ -438,7 +444,6 @@ class TestIsPrimitive(unittest.TestCase):
         mod_poly = [1, 0, 1]
         a = [1, 0]
         assert not is_primitive(a, m, mod_poly)
-
 
 
 if __name__ == "__main__":
