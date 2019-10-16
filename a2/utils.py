@@ -88,7 +88,7 @@ def find_all_elements_field(m, poly_mod):
     d = len(poly_mod) - 1
 
     a = list(range(m))
-    f = sum([list(map(list, it.product(a, repeat=d)))], [])
+    f = list((map(list, it.product(a, repeat=d))))
 
     return f
 
