@@ -439,6 +439,24 @@ def inverse_field(a_remote, m, poly_mod):
     return 'ERROR'
 
 
+def add_table_field(m, poly_mod):
+    x = find_all_elements_field(m, poly_mod)
+    f = []
+    for i in range(len(x)):
+        for j in range(len(x)):
+            f.append(add_field(poly_mod, m, x[i], x[j]))
+    return f
+
+
+def multiply_table_field(m, poly_mod):
+    x = find_all_elements_field(m, poly_mod)
+    f = []
+    for i in range(len(x)):
+        for j in range(len(x)):
+            f.append(multiply_field(poly_mod, m, x[i], x[j]))
+    return f
+
+
 def equals_field(a_remote, b_remote, m, poly_mod):
     return equals_poly_mod(a_remote, b_remote, poly_mod, m)
 
