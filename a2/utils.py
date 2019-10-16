@@ -81,7 +81,7 @@ def find_prime_factors(x):
             if len(result) == 0 or result[-1] != prime:
                 result.append(prime)
                 
-   return result
+    return result
 
 
 def find_all_elements_field(m, poly_mod):
