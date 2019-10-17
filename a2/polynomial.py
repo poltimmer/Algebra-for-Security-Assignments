@@ -450,19 +450,19 @@ def inverse_field(a_remote, m, poly_mod):
 
 def add_table_field(m, poly_mod):
     x = find_all_elements_field(m, poly_mod)
-    f = []
+    f = [[[] * len(x)] * len(x)] * len(x)
     for i in range(len(x)):
         for j in range(len(x)):
-            f.append(add_field(poly_mod, m, x[i], x[j]))
+            f[i][j] = add_field(poly_mod, m, x[i], x[j])
     return f
 
 
 def multiply_table_field(m, poly_mod):
     x = find_all_elements_field(m, poly_mod)
-    f = []
+    f = [[[] * len(x)] * len(x)] * len(x)
     for i in range(len(x)):
         for j in range(len(x)):
-            f.append(multiply_field(poly_mod, m, x[i], x[j]))
+            f[i][j] = multiply_field(poly_mod, m, x[i], x[j])
     return f
 
 
