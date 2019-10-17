@@ -62,6 +62,7 @@ def read_input():
             if '{' in obj['operation']:
                 operation = obj['operation'].split()
                 obj['operation'] = operation[0].strip(']')
+                obj['operation_values_original'] = operation[1] + '}'
                 obj['operation_values'] = set_to_array(operation[1])
 
             # Parse rest
@@ -182,7 +183,7 @@ def generate_answer(obj):
             answer = [1]
         elif additional_data == 'equals-field':  # Luke
             answer = equals_field(a, b, m, poly_mod)
-        elif additional_data == 'primitive':  # Pol
+        elif additional_data == 'primitive':  # Pol# Different Answer
             answer = is_primitive(a, m, poly_mod)
         elif additional_data == 'find-prim':  # Pol
             answer = find_primitive(m, poly_mod)
@@ -214,10 +215,12 @@ def print_output(objects):
 
     for obj in objects:
         output_file.write("[mod] {}\n".format(obj['mod']))
-        output_file.write("[{}]\n".format(obj['operation']))
-        if obj['operation'] == "mod-poly":
+        
+        if obj['operation'] == "mod-poly":            
+            output_file.write("[{}]\t{}\n".format(obj['operation'], obj['operation_values_original']))
             output_file.write("[{}]\n".format(obj['additional_data']))
-
+        else:
+            output_file.write("[{}]\n".format(obj['operation']))
         if 'f_original' in obj:
             output_file.write(obj['f_original'] + '\n')
         if 'g_original' in obj:
