@@ -557,7 +557,10 @@ def is_primitive(a, m, mod_poly_remote):
     return 'TRUE'
 
 
+# Finds the first (or lowest) primitive element and returns it.
 def find_primitive(m, mod_poly):
+    if is_irreducible(mod_poly, m) != 'TRUE':
+        return 'ERROR'
     elements = find_all_elements_field(m, mod_poly)
 
     for element in elements:
@@ -565,6 +568,21 @@ def find_primitive(m, mod_poly):
             return element
 
     return 'ERROR'
+
+
+def division_field(a_remote, b_remote, m, mod_poly):
+    a = clear_leading_zeroes(reduce_poly(a_remote.copy(), m))
+    b = clear_leading_zeroes(reduce_poly(b_remote.copy(), m))
+
+    while len(a) < len(b):
+        a = add_poly(a, mod_poly, m)
+
+    x, y = long_div_poly(a, b, m)
+    if x == 'ERROR':
+        return x
+    _, x = long_div_poly(x, mod_poly, m)
+
+    return x
 
 
 if __name__ == "__main__":

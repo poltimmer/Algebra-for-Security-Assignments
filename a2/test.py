@@ -2,7 +2,7 @@ import unittest
 
 from polynomial import display_poly, add_poly, subtract_poly, long_div_poly, equals_poly_mod, mult, \
     euclid_extended_poly, is_irreducible, find_irred, display_field, add_field, subtract_field, multiply_field, \
-    equals_field, inverse_field, is_primitive, find_primitive, add_table_field
+    equals_field, inverse_field, is_primitive, find_primitive, add_table_field, division_field
 from utils import set_to_array  # pylint: disable=no-name-in-module
 
 
@@ -474,17 +474,40 @@ class TestAddTableField(unittest.TestCase):
                                                 [0], [1], [1, 1], [1, 0], [1], [0]]
 
 
-class TestMultiplyTableField(unittest.TestCase):
-    def test_multiply_table_field(self):
-        m = 7
-        mod_poly = [1, 0]
-        assert multiply_table_field(m, mod_poly) == [[0], [0], [0], [0], [0], [0], [0], [0], [1], [2], [3], [4], [5],
-                                                     [6],
-                                                     [0], [2], [4], [6], [1], [3], [5], [0], [3], [6], [2], [5], [1],
-                                                     [4],
-                                                     [0], [4], [1], [5], [2], [6], [3], [0], [5], [3], [1], [6], [4],
-                                                     [2],
-                                                     [0], [6], [5], [4], [3], [2], [1]]
+# class TestMultiplyTableField(unittest.TestCase):
+#     def test_multiply_table_field(self):
+#         m = 7
+#         mod_poly = [1, 0]
+#         assert multiply_table_field(m, mod_poly) == [[0], [0], [0], [0], [0], [0], [0], [0], [1], [2], [3], [4], [5],
+#                                                      [6],
+#                                                      [0], [2], [4], [6], [1], [3], [5], [0], [3], [6], [2], [5], [1],
+#                                                      [4],
+#                                                      [0], [4], [1], [5], [2], [6], [3], [0], [5], [3], [1], [6], [4],
+#                                                      [2],
+#                                                      [0], [6], [5], [4], [3], [2], [1]]
+
+
+class TestDivisionField(unittest.TestCase):
+    def test1(self):
+        m = 2
+        mod_poly = [1, 1, 1]
+        a = [1, 0]
+        b = [1, 0]
+        assert division_field(a, b, m, mod_poly) == [1]
+
+    def test2(self):
+        m = 2
+        mod_poly = [1, 1, 1]
+        a = [1]
+        b = [1, 0]
+        assert division_field(a, b, m, mod_poly) == [1, 1]
+
+    def test3(self):
+        m = 2
+        mod_poly = [1, 1, 1]
+        a = [1]
+        b = [0]
+        assert division_field(a, b, m, mod_poly) == 'ERROR'
 
 
 if __name__ == "__main__":
