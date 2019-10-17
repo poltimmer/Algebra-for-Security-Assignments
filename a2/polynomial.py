@@ -20,7 +20,12 @@ def main():
     # Print output to file
     objects = read_input()
     for obj in objects:
-        obj = generate_answer(obj)
+        try:
+            obj = generate_answer(obj)
+        except Exception:
+            print('ERROR: An unrecoverable error occured during the processing of ' + obj.get('operation') + '. Continuing...')
+            obj['answer'] = 'ERROR'
+
         print(obj)  # TODO: Remove before production
 
     print_output(objects)
@@ -369,6 +374,10 @@ def euclid_extended_poly(a_remote, b_remote, m):
         v = subtract_poly(y_, mult(q, v, m), m)
     x_out, _ = long_div_poly(x, [a[0]], m)
     y_out, _ = long_div_poly(y, [a[0]], m)
+
+    if x_out == 'ERROR' or y_out == 'ERROR':
+        return 'ERROR', 'ERROR', 'ERROR'
+
     gcd = add_poly(mult(a_remote, x_out, m), mult(b_remote, y_out, m), m)
     return x_out, y_out, gcd
 
@@ -519,6 +528,8 @@ def multiply_field(poly_mod, m, a, b):
 def is_primitive(a, m, mod_poly):
     mod_poly_clean = clear_leading_zeroes(mod_poly)
     _, x = long_div_poly(a, mod_poly, m)
+    if x == 'ERROR':
+        return 'ERROR'
     x = clear_leading_zeroes(x)
     if x == [0]:
         return 'FALSE'
