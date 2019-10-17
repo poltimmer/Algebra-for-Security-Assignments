@@ -463,9 +463,6 @@ class TestFindPrimitive(unittest.TestCase):
         assert find_primitive(7, [1, 0, 6]) == 'ERROR'
 
     def test2(self):
-        assert find_primitive(7, [1, 0, 1]) == [2, 6]
-
-    def test3(self):
         assert find_primitive(7, [1, 0, 1]) == [1, 2]
 
 
