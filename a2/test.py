@@ -444,8 +444,29 @@ class TestIsPrimitive(unittest.TestCase):
         mod_poly = [1, 0, 1]
         a = [1, 0]
         assert not is_primitive(a, m, mod_poly)
-        
-    
+
+    def test8(self):
+        m = 7
+        mod_poly = [1, 0, 6]
+        a = [0, 0]
+        assert not is_primitive(a, m, mod_poly)
+
+    def test9(self):
+        m = 7
+        mod_poly = [1, 0, 1]
+        a = [2, 6]
+        assert is_primitive(a, m, mod_poly)
+
+class TestFindPrimitive(unittest.TestCase):
+    def test1(self):
+        assert find_primitive(7, [1, 0, 6]) == 'ERROR'
+
+    def test2(self):
+        assert find_primitive(7, [1, 0, 1]) == [2, 6]
+
+    def test3(self):
+        assert find_primitive(7, [1, 0, 1]) == [1, 2]
+
 class TestAddTableField(unittest.TestCase):
     def test_add_table_field(self):
         m = 2

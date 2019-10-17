@@ -518,7 +518,11 @@ def multiply_field(poly_mod, m, a, b):
 
 def is_primitive(a, m, mod_poly):
     mod_poly_clean = clear_leading_zeroes(mod_poly)
-    x = a.copy()
+    _, x = long_div_poly(a, mod_poly, m)
+    x = clear_leading_zeroes(x)
+    if x == [0]:
+        return False
+
     q = m ** (len(mod_poly_clean) - 1)
     factors = find_prime_factors(q - 1)
     i = 1
@@ -533,6 +537,16 @@ def is_primitive(a, m, mod_poly):
             return False
 
     return True
+
+
+def find_primitive(m, mod_poly):
+    elements = find_all_elements_field(m, mod_poly)
+
+    for element in elements:
+        if is_primitive(element, m, mod_poly):
+            return element
+
+    return 'ERROR'
 
 
 if __name__ == "__main__":
