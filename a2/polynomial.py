@@ -20,7 +20,12 @@ def main():
     # Print output to file
     objects = read_input()
     for obj in objects:
-        obj = generate_answer(obj)
+        try:
+            obj = generate_answer(obj)
+        except Exception:
+            print('ERROR: An unrecoverable error occured during the processing of ' + obj.get('operation') + '. Continuing...')
+            obj['answer'] = 'ERROR'
+
         print(obj)  # TODO: Remove before production
 
     print_output(objects)
@@ -57,6 +62,7 @@ def read_input():
             if '{' in obj['operation']:
                 operation = obj['operation'].split()
                 obj['operation'] = operation[0].strip(']')
+                obj['operation_values_original'] = operation[1] + '}'
                 obj['operation_values'] = set_to_array(operation[1])
 
             # Parse rest
@@ -177,7 +183,7 @@ def generate_answer(obj):
             answer = [1]
         elif additional_data == 'equals-field':  # Luke
             answer = equals_field(a, b, m, poly_mod)
-        elif additional_data == 'primitive':  # Pol
+        elif additional_data == 'primitive':  # Pol# Different Answer
             answer = is_primitive(a, m, poly_mod)
         elif additional_data == 'find-prim':  # Pol
             answer = find_primitive(m, poly_mod)
@@ -209,10 +215,12 @@ def print_output(objects):
 
     for obj in objects:
         output_file.write("[mod] {}\n".format(obj['mod']))
-        output_file.write("[{}]\n".format(obj['operation']))
-        if obj['operation'] == "mod-poly":
+        
+        if obj['operation'] == "mod-poly":            
+            output_file.write("[{}]\t{}\n".format(obj['operation'], obj['operation_values_original']))
             output_file.write("[{}]\n".format(obj['additional_data']))
-
+        else:
+            output_file.write("[{}]\n".format(obj['operation']))
         if 'f_original' in obj:
             output_file.write(obj['f_original'] + '\n')
         if 'g_original' in obj:
@@ -369,6 +377,10 @@ def euclid_extended_poly(a_remote, b_remote, m):
         v = subtract_poly(y_, mult(q, v, m), m)
     x_out, _ = long_div_poly(x, [a[0]], m)
     y_out, _ = long_div_poly(y, [a[0]], m)
+
+    if x_out == 'ERROR' or y_out == 'ERROR':
+        return 'ERROR', 'ERROR', 'ERROR'
+
     gcd = add_poly(mult(a_remote, x_out, m), mult(b_remote, y_out, m), m)
     return x_out, y_out, gcd
 
@@ -522,6 +534,8 @@ def is_primitive(a, m, mod_poly_remote):
         return 'FALSE'
 
     _, x = long_div_poly(a, mod_poly, m)
+    if x == 'ERROR':
+        return 'ERROR'
     x = clear_leading_zeroes(x)
 
     if x == [0]:
