@@ -122,6 +122,7 @@ def read_input():
 
 def generate_answer(obj):
     answer = None
+    answer_table = None
     answer_q = None
     answer_r = None
     answer_a = None
@@ -159,9 +160,9 @@ def generate_answer(obj):
         answer = find_irred(deg, m)  # Edwin
     elif op == "mod-poly":
         if additional_data == 'add-table':  # Edwin
-            answer = [1]
+            answer_table = add_table_field(m, poly_mod)
         elif additional_data == 'mult-table':  # Edwin
-            answer = [1]
+            answer_table = multiply_table_field(m, poly_mod)
         elif additional_data == 'display-field':  # Luke
             answer = display_field(a, m, poly_mod)
         elif additional_data == 'add-field':  # Janneke
@@ -187,6 +188,8 @@ def generate_answer(obj):
 
     if answer:
         obj['answer'] = display_poly(answer, m)
+    if answer_table:
+        obj['answer'] = display_table(answer_table, m)
     if answer_q:
         obj['answer-q'] = display_poly(answer_q, m)
     if answer_r:
@@ -440,6 +443,22 @@ def display_field(a_remote, m, poly_mod):
     _, r = long_div_poly(a_remote, poly_mod, m)
     return r
 
+def display_table(a, m):
+    result = ''
+    result += '{'
+
+    for i in a:
+        for j in i[:-1]:
+            result += display_poly(j, m)
+            result += ', '
+
+        result += display_poly(i[-1], m)
+        result += '; '
+
+    result = result[:-2]
+    result += '}'
+
+    return result
 
 def inverse_field(a_remote, m, poly_mod):
     x, _, gcd = euclid_extended_poly(a_remote, poly_mod, m)
