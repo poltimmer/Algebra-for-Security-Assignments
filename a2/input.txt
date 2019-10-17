@@ -297,7 +297,6 @@
 [f]		{1,1,1}
 [answer]	FALSE
 
-# Different Answer
 [mod]		2
 [find-irred]
 [deg]		3
