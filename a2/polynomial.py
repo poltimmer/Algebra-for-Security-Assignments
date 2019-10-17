@@ -178,9 +178,9 @@ def generate_answer(obj):
         elif additional_data == 'equals-field':  # Luke
             answer = equals_field(a, b, m, poly_mod)
         elif additional_data == 'primitive':  # Pol
-            answer = [1]
+            answer = is_primitive(a, m, poly_mod)
         elif additional_data == 'find-prim':  # Pol
-            answer = [1]
+            answer = find_primitive(m, poly_mod)
         else:
             answer = 'Operation not Supported.'
     else:
@@ -521,7 +521,7 @@ def is_primitive(a, m, mod_poly):
     _, x = long_div_poly(a, mod_poly, m)
     x = clear_leading_zeroes(x)
     if x == [0]:
-        return False
+        return 'FALSE'
 
     q = m ** (len(mod_poly_clean) - 1)
     factors = find_prime_factors(q - 1)
@@ -534,16 +534,16 @@ def is_primitive(a, m, mod_poly):
             x = multiply_field(mod_poly, m, x, a)
             i += 1
         if x == [1]:
-            return False
+            return 'FALSE'
 
-    return True
+    return 'TRUE'
 
 
 def find_primitive(m, mod_poly):
     elements = find_all_elements_field(m, mod_poly)
 
     for element in elements:
-        if is_primitive(element, m, mod_poly):
+        if is_primitive(element, m, mod_poly) == 'TRUE':
             return element
 
     return 'ERROR'
