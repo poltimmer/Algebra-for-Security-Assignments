@@ -9,29 +9,28 @@ OUTPUTFILE = "output.txt"
 
 def main():
     """
-    Main routine controlling the main tasks of the program
+    Main routine controlling the main flow of the program.
     """
-    # Read Input
-    # For each block of calculations do
-    # # Generate result
-    # # Add result to object
-    # # Return object
-    # Parse output in right format
-    # Print output to file
+    # Read input from file, returns all objects
     objects = read_input()
     for obj in objects:
         try:
+            # Generate the objects answer, yields new object
             obj = generate_answer(obj)
         except Exception:
+            # If an error might occur that is not covered, catch it here! Continue where left off
             print('ERROR: An unrecoverable error occured during the processing of ' + obj.get('operation') + '. Continuing...')
             obj['answer'] = 'ERROR'
 
         print(obj)  # TODO: Remove before production
-
+    # Generate an output file
     print_output(objects)
 
 
 def read_input():
+    """
+    Converts an input file (in a predefined layout) to objects usable by the program.
+    """
     # Define return object
     objects = []
 
@@ -44,6 +43,7 @@ def read_input():
                 .format(INPUTFILE))
         exit(1)
 
+    # Start generating the object with values from the input file
     for line in input_file:
         obj = {}
 
@@ -86,7 +86,8 @@ def read_input():
                     deg_original = current_line[:-1]
                 elif '[' not in key and key != '' and key != 'answer':
                     additional_data = key
-
+            
+            # Convert given values to arrays, keeping the old values
             if a_original:
                 a = set_to_array(a_original.split()[1])
                 obj['a_original'] = a_original
@@ -127,6 +128,10 @@ def read_input():
 
 
 def generate_answer(obj):
+    """
+    Call the correct function according to the operation required and complete the computation.
+    """
+    # Initialize variables
     answer = None
     answer_table = None
     answer_q = None
@@ -135,6 +140,7 @@ def generate_answer(obj):
     answer_b = None
     answer_d = None
 
+    # Get object values
     op = obj.get('operation')
     m = obj.get('mod')
     f = obj.get('f')
@@ -146,12 +152,13 @@ def generate_answer(obj):
     additional_data = obj.get('additional_data')
     poly_mod = obj.get('operation_values')
 
+    # Operation switch
     if op == "display-poly":
-        answer = f
+        answer = f # Luke
     elif op == "add-poly":
-        answer = add_poly(f, g, m)
+        answer = add_poly(f, g, m) # Luke
     elif op == "subtract-poly":
-        answer = subtract_poly(f, g, m)
+        answer = subtract_poly(f, g, m) # Luke
     elif op == "multiply-poly":
         answer = mult(f, g, m)  # Janneke
     elif op == "long-div-poly":
@@ -192,6 +199,7 @@ def generate_answer(obj):
     else:
         answer = 'Operation not Supported.'
 
+    # Parse result to a valid polynomial
     if answer:
         obj['answer'] = display_poly(answer, m)
     if answer_table:
@@ -211,16 +219,22 @@ def generate_answer(obj):
 
 
 def print_output(objects):
+    """
+    Print the initial values + answer to an output file.
+    """
     output_file = open(OUTPUTFILE, 'w')
 
     for obj in objects:
         output_file.write("[mod] {}\n".format(obj['mod']))
         
+        # If mod_poly then also output the polynomial behind it
         if obj['operation'] == "mod-poly":            
             output_file.write("[{}]\t{}\n".format(obj['operation'], obj['operation_values_original']))
             output_file.write("[{}]\n".format(obj['additional_data']))
         else:
             output_file.write("[{}]\n".format(obj['operation']))
+
+        # Print all values that are present    
         if 'f_original' in obj:
             output_file.write(obj['f_original'] + '\n')
         if 'g_original' in obj:
@@ -248,31 +262,37 @@ def print_output(objects):
 
         output_file.write('\n')
 
+    # Let the user know it has been generated
     print('Output has been saved to ' + OUTPUTFILE + '.')
     output_file.close()
 
 
 def display_poly(f_remote, m):
+    """
+    Convert an Array f_remote to a Polynomial string.
+    """
+    # If it is a string return the given value
     if isinstance(f_remote, str):
         return f_remote
 
     # Get the values we need from the object
     f = f_remote.copy()
 
-    # Set local variables
-    result = ''  # Final string that will be returned as answer
-
+    # Reduce the polynomial
     f = reduce_poly(f, m)
 
-    result = poly_string(f)
-    # Return Object
-    return result
+    return poly_string(f)
 
 
 def add_poly(a_remote, b_remote, m):
+    """
+    Add two polynomials together.
+    """
+    # Copy the two arrays
     a = a_remote.copy()
     b = b_remote.copy()
 
+    # Make the length the same
     sanitize_arrays(a, b)
 
     result = []
@@ -284,9 +304,14 @@ def add_poly(a_remote, b_remote, m):
 
 
 def subtract_poly(a_remote, b_remote, m):
+    """
+    Subtract two polynomials together.
+    """
+    # Copy the two arrays
     a = a_remote.copy()
     b = b_remote.copy()
 
+    # Make the length the same
     sanitize_arrays(a, b)
 
     result = []
@@ -450,29 +475,42 @@ def find_irred(d, m):
 
     return clear_leading_zeroes(result)
 
-
+### FIELD SECTION
 def display_field(a_remote, m, poly_mod):
+    """
+    Display the field a_remote given two modulos
+    """
     _, r = long_div_poly(a_remote, poly_mod, m)
     return r
 
 def display_table(a, m):
+    """
+    Get a 3D array of polynomials, convert them to a string
+    """
+    # Initialize string
     result = ''
     result += '{'
 
+    # Add all polynomials to the string, given they are already a string
     for i in a:
         for j in i[:-1]:
             result += display_poly(j, m)
             result += ', '
 
+        # Add the last one here to prevent unneeded comma
         result += display_poly(i[-1], m)
         result += '; '
 
+    # Remove final semicolon and close the brace
     result = result[:-2]
     result += '}'
 
     return result
 
 def inverse_field(a_remote, m, poly_mod):
+    """
+    Calculates the inverse of a field, ERROR if it does not exist
+    """
     x, _, gcd = euclid_extended_poly(a_remote, poly_mod, m)
     if gcd == [1]:
         return x
@@ -498,6 +536,9 @@ def multiply_table_field(m, poly_mod):
 
 
 def equals_field(a_remote, b_remote, m, poly_mod):
+    """
+    Check if two fields are equal given polynomial modulo
+    """
     return equals_poly_mod(a_remote, b_remote, poly_mod, m)
 
 
