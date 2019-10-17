@@ -444,6 +444,26 @@ class TestIsPrimitive(unittest.TestCase):
         mod_poly = [1, 0, 1]
         a = [1, 0]
         assert not is_primitive(a, m, mod_poly)
+        
+    
+class TestAddTableField(unittest.TestCase):
+    def test_add_table_field(self):
+        m = 2
+        mod_poly = [1, 1, 1]
+        assert add_table_field(m, mod_poly) == [[0], [1], [1, 0], [1, 1], [1], [0], [1, 1], [1, 0], [1, 0], [1, 1],
+                                                [0], [1], [1, 1], [1, 0], [1], [0]]
+
+
+class TestMultiplyTableField(unittest.TestCase):
+    def test_multiply_table_field(self):
+        m = 7
+        mod_poly = [1, 0]
+        assert multiply_table_field(m, mod_poly) == [[0], [0], [0], [0], [0], [0], [0], [0], [1], [2], [3], [4], [5], [6],
+                                                     [0], [2], [4], [6], [1], [3], [5], [0], [3], [6], [2], [5], [1], [4],
+                                                     [0], [4], [1], [5], [2], [6], [3], [0], [5], [3], [1], [6], [4], [2],
+                                                     [0], [6], [5], [4], [3], [2], [1]]
+
+
 
 
 if __name__ == "__main__":
