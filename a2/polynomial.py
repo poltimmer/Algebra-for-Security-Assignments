@@ -1,5 +1,5 @@
 from utils import sanitize_arrays, set_to_array, poly_string, clear_leading_zeroes, \
-    reduce_poly, find_prime_factors  # pylint: disable=no-name-in-module
+    reduce_poly, find_prime_factors, find_all_elements_field  # pylint: disable=no-name-in-module
 
 import random
 
@@ -354,6 +354,8 @@ def euclid_extended_poly(a_remote, b_remote, m):
     u = [0]
     while b != [0]:
         q, r = long_div_poly(a, b, m)
+        if q and r == 'ERROR':
+            return 'ERROR', 'ERROR', 'ERROR'
         a = b
         b = r
         x_ = x
@@ -398,12 +400,19 @@ def is_irreducible(a_remote, m):
     b = [0] * ((m ** t) + 1)
     b[0] = 1
     b[-2] = -1
+    _, _, euclid = euclid_extended_poly(a_remote, b, m)
 
-    while euclid_extended_poly(a_remote, b, m)[2] == [1]:
+    if euclid == 'ERROR':
+        return 'ERROR'
+
+    while euclid == [1]:
         t = t + 1
         b = [0] * ((m ** t) + 1)
         b[0] = 1
         b[-2] = -1
+        _, _, euclid = euclid_extended_poly(a_remote, b, m)
+        if euclid == 'ERROR':
+            return 'ERROR'
 
     if t == n:
         return 'TRUE'
