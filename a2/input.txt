@@ -297,6 +297,7 @@
 [f]		{1,1,1}
 [answer]	FALSE
 
+# Different Answer
 [mod]		2
 [find-irred]
 [deg]		3
@@ -406,6 +407,7 @@
 [b]		{1,0}
 [answer]	1
 
+# Different Answer
 [mod]		2
 [mod-poly]	{1,1,1}
 [division-field]
@@ -413,6 +415,7 @@
 [b]		{1,0}
 [answer]	X+1
 
+# Different Answer
 [mod]		2
 [mod-poly]	{1,1,1}
 [division-field]
@@ -439,11 +442,13 @@
 [a]		{1,0,1}
 [answer] 	TRUE
 
+# Different Answer
 [mod]		7
 [mod-poly]	{1,0,6}
 [find-prim]
 [answer] 	ERROR
 
+# Different Answer
 [mod]		7
 [mod-poly]	{1,0,1}
 [find-prim]
