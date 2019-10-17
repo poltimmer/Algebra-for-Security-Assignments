@@ -569,16 +569,20 @@ def multiply_field(poly_mod, m, a, b):
         return answer
 
 
-def is_primitive(a, m, mod_poly):
-    mod_poly_clean = clear_leading_zeroes(mod_poly)
+def is_primitive(a, m, mod_poly_remote):
+    mod_poly = clear_leading_zeroes(mod_poly_remote)
+    if is_irreducible(mod_poly, m) != 'TRUE':
+        return 'FALSE'
+
     _, x = long_div_poly(a, mod_poly, m)
     if x == 'ERROR':
         return 'ERROR'
     x = clear_leading_zeroes(x)
+
     if x == [0]:
         return 'FALSE'
 
-    q = m ** (len(mod_poly_clean) - 1)
+    q = m ** (len(mod_poly) - 1)
     factors = find_prime_factors(q - 1)
     i = 1
     for factor in reversed(factors):

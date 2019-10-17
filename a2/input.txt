@@ -441,7 +441,6 @@
 [a]		{1,0,1}
 [answer] 	TRUE
 
-# Different Answer
 [mod]		7
 [mod-poly]	{1,0,6}
 [find-prim]

@@ -1,8 +1,8 @@
 import unittest
 
-from a2.polynomial import display_poly, add_poly, subtract_poly, long_div_poly, equals_poly_mod, mult, \
+from polynomial import display_poly, add_poly, subtract_poly, long_div_poly, equals_poly_mod, mult, \
     euclid_extended_poly, is_irreducible, find_irred, display_field, add_field, subtract_field, multiply_field, \
-    equals_field, inverse_field, is_primitive
+    equals_field, inverse_field, is_primitive, find_primitive, add_table_field
 from utils import set_to_array  # pylint: disable=no-name-in-module
 
 
@@ -407,55 +407,55 @@ class TestIsPrimitive(unittest.TestCase):
         m = 7
         mod_poly = [1, 0, 0, 2]
         a = [1, 0]
-        assert is_primitive(a, m, mod_poly) == False
+        assert is_primitive(a, m, mod_poly) == 'FALSE'
 
     def test2(self):
         m = 7
         mod_poly = [1, 0, 0, 2]
         a = [1, 0, 1]
-        assert is_primitive(a, m, mod_poly)
+        assert is_primitive(a, m, mod_poly) == 'TRUE'
 
     def test3(self):
         m = 2
         mod_poly = [1, 0, 1, 1]
         a = [1, 0, 0]
-        assert is_primitive(a, m, mod_poly)
+        assert is_primitive(a, m, mod_poly) == 'TRUE'
 
     def test4(self):
         m = 2
         mod_poly = [1, 0, 1, 1]
         a = [1, 1]
-        assert is_primitive(a, m, mod_poly)
+        assert is_primitive(a, m, mod_poly) == 'TRUE'
 
     def test5(self):
         m = 2
         mod_poly = [1, 0, 1, 1]
         a = [1]
-        assert not is_primitive(a, m, mod_poly)
+        assert is_primitive(a, m, mod_poly) == 'FALSE'
 
     def test6(self):
         m = 2
         mod_poly = [1, 1, 1]
         a = [1, 0]
-        assert is_primitive(a, m, mod_poly)
+        assert is_primitive(a, m, mod_poly) == 'TRUE'
 
     def test7(self):
         m = 3
         mod_poly = [1, 0, 1]
         a = [1, 0]
-        assert not is_primitive(a, m, mod_poly)
+        assert is_primitive(a, m, mod_poly) == 'FALSE'
 
     def test8(self):
         m = 7
         mod_poly = [1, 0, 6]
         a = [0, 0]
-        assert not is_primitive(a, m, mod_poly)
+        assert is_primitive(a, m, mod_poly) == 'FALSE'
 
     def test9(self):
         m = 7
         mod_poly = [1, 0, 1]
         a = [2, 6]
-        assert is_primitive(a, m, mod_poly)
+        assert is_primitive(a, m, mod_poly) == 'TRUE'
 
 
 class TestFindPrimitive(unittest.TestCase):
@@ -463,9 +463,6 @@ class TestFindPrimitive(unittest.TestCase):
         assert find_primitive(7, [1, 0, 6]) == 'ERROR'
 
     def test2(self):
-        assert find_primitive(7, [1, 0, 1]) == [2, 6]
-
-    def test3(self):
         assert find_primitive(7, [1, 0, 1]) == [1, 2]
 
 
