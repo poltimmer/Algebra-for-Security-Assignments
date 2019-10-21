@@ -187,7 +187,7 @@ def generate_answer(obj):
         elif additional_data == 'inverse-field':  # Luke
             answer = inverse_field(a, m, poly_mod)
         elif additional_data == 'division-field':  # Pol
-            answer = [1]
+            answer = division_field(a, b, m, poly_mod)
         elif additional_data == 'equals-field':  # Luke
             answer = equals_field(a, b, m, poly_mod)
         elif additional_data == 'primitive':  # Pol# Different Answer
