@@ -618,7 +618,7 @@ def division_field(a_remote, b_remote, m, mod_poly):
     while len(a) < len(b):
         a = add_poly(a, mod_poly, m)
 
-    x, y = long_div_poly(a, b, m)
+    x, _ = long_div_poly(a, b, m)
     if x == 'ERROR':
         return x
     _, x = long_div_poly(x, mod_poly, m)
