@@ -336,13 +336,13 @@ def mult(a, b, m):
     return clear_leading_zeroes(result)
 
 
+# Division with remainder for polynomials. Follows algorithm 2.2.6
 def long_div_poly(a_remote, b_remote, m):
-    a = a_remote.copy()
-    b = b_remote.copy()
+    # Reduce and clone input.
+    a = reduce_poly(a_remote, m)
+    b = reduce_poly(b_remote, m)
 
-    a = reduce_poly(a, m)
-    b = reduce_poly(b, m)
-
+    # Can't divide by 0
     if b_remote == [0]:
         return 'ERROR', 'ERROR'
 
@@ -350,6 +350,7 @@ def long_div_poly(a_remote, b_remote, m):
     r = a
     while len(r) >= len(b) and r != [0]:
         try:
+            # catch possible Exception from mod_div
             div = mod_div(r[0], b[0], m)
         except:
             return 'ERROR', 'ERROR'
@@ -372,15 +373,19 @@ def mod_div(a, b, m):
     b = b % m
     i = 0
 
+    # Add modulus to a until b | a
     while a % b != 0:
         a += m
         i += 1
         if i > b:
+            # If m has already been added to a b times, and b still doesn't divide a, it never will.
+            # This never happens if m is prime.
             raise Exception
 
     return int((a / b) % m)
 
 
+# Euclid's extended algorithm for polynomials. Exactly follows algorithm 2.2.11
 def euclid_extended_poly(a_remote, b_remote, m):
     a = reduce_poly(a_remote, m)
     b = reduce_poly(b_remote, m)
@@ -391,6 +396,7 @@ def euclid_extended_poly(a_remote, b_remote, m):
     u = [0]
     while b != [0]:
         q, r = long_div_poly(a, b, m)
+        # Error handling
         if q and r == 'ERROR':
             return 'ERROR', 'ERROR', 'ERROR'
         a = b
@@ -608,23 +614,28 @@ def multiply_field(poly_mod, m, a, b):
         return answer
 
 
+# Checks whether an element is primitive in the submitted field.
 def is_primitive(a, m, mod_poly_remote):
     mod_poly = clear_leading_zeroes(mod_poly_remote)
+    # Check if the field is valid by checking if mod_poly is irreducible
     if is_irreducible(mod_poly, m) != 'TRUE':
         return 'FALSE'
 
+    # Reduce input element for field, and clear leading zeroes.
     _, x = long_div_poly(a, mod_poly, m)
     if x == 'ERROR':
         return 'ERROR'
     x = clear_leading_zeroes(x)
-
+    # Exclude zero as possible primitive element.
     if x == [0]:
         return 'FALSE'
 
+    # Establish field order and get prime factors.
     q = m ** (len(mod_poly) - 1)
     factors = find_prime_factors(q - 1)
     i = 1
     for factor in reversed(factors):
+        # Exponentiate to target exponent (q-1)/factor
         while i * 2 <= (q - 1) / factor:
             x = multiply_field(mod_poly, m, x, x)
             i = i * 2
@@ -650,17 +661,20 @@ def find_primitive(m, mod_poly):
     return 'ERROR'
 
 
+# Divides elements within a finite field.
 def division_field(a_remote, b_remote, m, mod_poly):
+    # Prepare input for long_div_poly
     a = clear_leading_zeroes(reduce_poly(a_remote.copy(), m))
     b = clear_leading_zeroes(reduce_poly(b_remote.copy(), m))
 
     while len(a) < len(b):
         a = add_poly(a, mod_poly, m)
 
+    # Take quotient of long_div_poly as answer
     x, _ = long_div_poly(a, b, m)
     if x == 'ERROR':
         return x
-    _, x = long_div_poly(x, mod_poly, m)
+    _, x = long_div_poly(x, mod_poly, m)  # Reduce answer for finite field
 
     return x
 
