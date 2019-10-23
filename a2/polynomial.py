@@ -19,7 +19,8 @@ def main():
             obj = generate_answer(obj)
         except Exception:
             # If an error might occur that is not covered, catch it here! Continue where left off
-            print('ERROR: An unrecoverable error occured during the processing of ' + obj.get('operation') + '. Continuing...')
+            print('ERROR: An unrecoverable error occured during the processing of ' + obj.get(
+                'operation') + '. Continuing...')
             obj['answer'] = 'ERROR'
 
         print(obj)  # TODO: Remove before production
@@ -86,7 +87,7 @@ def read_input():
                     deg_original = current_line[:-1]
                 elif '[' not in key and key != '' and key != 'answer':
                     additional_data = key
-            
+
             # Convert given values to arrays, keeping the old values
             if a_original:
                 a = set_to_array(a_original.split()[1])
@@ -154,11 +155,11 @@ def generate_answer(obj):
 
     # Operation switch
     if op == "display-poly":
-        answer = f # Luke
+        answer = f  # Luke
     elif op == "add-poly":
-        answer = add_poly(f, g, m) # Luke
+        answer = add_poly(f, g, m)  # Luke
     elif op == "subtract-poly":
-        answer = subtract_poly(f, g, m) # Luke
+        answer = subtract_poly(f, g, m)  # Luke
     elif op == "multiply-poly":
         answer = mult(f, g, m)  # Janneke
     elif op == "long-div-poly":
@@ -226,9 +227,9 @@ def print_output(objects):
 
     for obj in objects:
         output_file.write("[mod] {}\n".format(obj['mod']))
-        
+
         # If mod_poly then also output the polynomial behind it
-        if obj['operation'] == "mod-poly":            
+        if obj['operation'] == "mod-poly":
             output_file.write("[{}]\t{}\n".format(obj['operation'], obj['operation_values_original']))
             output_file.write("[{}]\n".format(obj['additional_data']))
         else:
@@ -437,21 +438,21 @@ def is_irreducible(a_remote, m):
     # Define t and n
     t = 1
     n = len(a_remote) - 1
-    
+
     # Check if degree is larger than 1
     if n <= 1:
         return 'DEGREE OF F IS TOO SMALL'
-    
+
     # Define polynomial b
     b = [0] * ((m ** t) + 1)
     b[0] = 1
     b[-2] = -1
     _, _, euclid = euclid_extended_poly(a_remote, b, m)
-    
+
     # Return error when euclid_extended_poly is not possible
     if euclid == 'ERROR':
         return 'ERROR'
-    
+
     # Increase t by 1 when gcd of a and b is 1
     while euclid == [1]:
         t = t + 1
@@ -474,25 +475,26 @@ def find_irred(d, m):
     """
     # Define l
     l = d + 1
-    
+
     # Initialize list
     result = []
     # Fill list with random numbers between 0 and m
     for _ in range(l):
         result.append(random.randrange(0, m))
-        
+
     # Make sure first number is not a 0    
     result[0] = random.randrange(1, m)
-    
+
     # If result is not irreducible, create new list
     while is_irreducible(result, m) == 'FALSE':
         result = []
         for _ in range(l):
             result.append(random.randrange(0, m))
         result[0] = random.randrange(1, m)
-        
+
     # Clear leading zeroes of the result
     return clear_leading_zeroes(result)
+
 
 ### FIELD SECTION
 def display_field(a_remote, m, poly_mod):
@@ -501,6 +503,7 @@ def display_field(a_remote, m, poly_mod):
     """
     _, r = long_div_poly(a_remote, poly_mod, m)
     return r
+
 
 def display_table(a, m):
     """
@@ -526,6 +529,7 @@ def display_table(a, m):
 
     return result
 
+
 def inverse_field(a_remote, m, poly_mod):
     """
     Calculates the inverse of a field, ERROR if it does not exist
@@ -542,10 +546,10 @@ def add_table_field(m, poly_mod):
     """
     # Find all elements of a field
     x = find_all_elements_field(m, poly_mod)
-    
+
     # Initialize 3D list
     f = [[[] for a in range(len(x))] for b in range(len(x))]
-    
+
     # Use add_field to calculate the additions
     for i in range(len(x)):
         for j in range(len(x)):
@@ -559,10 +563,10 @@ def multiply_table_field(m, poly_mod):
     """
     # Find all elements of a field
     x = find_all_elements_field(m, poly_mod)
-    
+
     # Initialize 3D list
     f = [[[] for a in range(len(x))] for b in range(len(x))]
-    
+
     # Use multiply_field to calculate the multiplications
     for i in range(len(x)):
         for j in range(len(x)):
