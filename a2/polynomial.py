@@ -431,20 +431,28 @@ def equals_poly_mod(f_remote, g_remote, h_remote, m):
 
 
 def is_irreducible(a_remote, m):
+    """
+    Checks if a polynomial modulo m is irreducible
+    """
+    # Define t and n
     t = 1
     n = len(a_remote) - 1
-
+    
+    # Check if degree is larger than 1
     if n <= 1:
         return 'DEGREE OF F IS TOO SMALL'
-
+    
+    # Define polynomial b
     b = [0] * ((m ** t) + 1)
     b[0] = 1
     b[-2] = -1
     _, _, euclid = euclid_extended_poly(a_remote, b, m)
-
+    
+    # Return error when euclid_extended_poly is not possible
     if euclid == 'ERROR':
         return 'ERROR'
-
+    
+    # Increase t by 1 when gcd of a and b is 1
     while euclid == [1]:
         t = t + 1
         b = [0] * ((m ** t) + 1)
@@ -461,18 +469,29 @@ def is_irreducible(a_remote, m):
 
 
 def find_irred(d, m):
+    """
+    finds an irreducible polynomial for a given degree d
+    """
+    # Define l
     l = d + 1
+    
+    # Initialize list
     result = []
+    # Fill list with random numbers between 0 and m
     for _ in range(l):
         result.append(random.randrange(0, m))
+        
+    # Make sure first number is not a 0    
     result[0] = random.randrange(1, m)
-
+    
+    # If result is not irreducible, create new list
     while is_irreducible(result, m) == 'FALSE':
         result = []
         for _ in range(l):
             result.append(random.randrange(0, m))
         result[0] = random.randrange(1, m)
-
+        
+    # Clear leading zeroes of the result
     return clear_leading_zeroes(result)
 
 ### FIELD SECTION
