@@ -323,16 +323,21 @@ def subtract_poly(a_remote, b_remote, m):
     return clear_leading_zeroes(result)
 
 
-def mult(a, b, m):
+# Multiplication for polynomials
+def mult(a, b, m)
+    #create list result
     result = [0] * (len(a) + len(b) - 1)
 
     for i in range(0, len(a)):
         for j in range(0, len(b)):
+            # Update result[i+j] by adding the multiplication of a[i] and b[j]
             result[i + j] = result[i + j] + (a[i] * b[j])
             while result[i + j] < 0:
+                # While te result is negative, add the modulo
                 result[i + j] = result[i + j] + m
             result[i + j] = result[i + j] % m
 
+    # Clear leading zeroes of the result
     return clear_leading_zeroes(result)
 
 
@@ -588,6 +593,7 @@ def equals_field(a_remote, b_remote, m, poly_mod):
 
 
 def add_field(poly_mod, m, a, b):
+    # Add two polynomials in a field
     a_and_b = add_poly(a, b, m)
     _, answer = long_div_poly(a_and_b, poly_mod, m)
     if answer == 'ERROR':
@@ -597,6 +603,7 @@ def add_field(poly_mod, m, a, b):
 
 
 def subtract_field(poly_mod, m, a, b):
+    # Subtract two polynomials in a field
     a_and_b = subtract_poly(a, b, m)
     _, answer = long_div_poly(a_and_b, poly_mod, m)
     if answer == 'ERROR':
@@ -606,6 +613,7 @@ def subtract_field(poly_mod, m, a, b):
 
 
 def multiply_field(poly_mod, m, a, b):
+    # Multiply two polynomials in a field
     a_and_b = mult(a, b, m)
     _, answer = long_div_poly(a_and_b, poly_mod, m)
     if answer == 'ERROR':
